@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const router = require('./routes');
+const cors = require('cors');
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const server = express();
+
+server.use(cors());
+server.use(bodyParser.urlencoded({ extended: true, limit: '50Mb' }));
+server.use(bodyParser.json({ limit: '50Mb' }));
+server.use(cookieParser());
+server.use(morgan('dev'));
+server.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // update to match the domain you will make the request from
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
   );
-}
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  next();
+});
 
-export default App;
+// console.log('server is running in port ');
+
+server.use('/', router);
+
+// server.listen(3001);
+
+module.exports = server;
