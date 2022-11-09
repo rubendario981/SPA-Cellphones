@@ -3,46 +3,46 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('cellphone', {
-    name: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
+  sequelize.define(
+    'cellphone',
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      image: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      cpu: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      ram: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      screen: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      price: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      front_camera: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      rear_camera: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      internal_storage: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    brand: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    image: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    cpu: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    ram: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    screen: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    front_camera: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    rear_camera: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-    internal_storage: {
-      type: DataTypes.STRING(45),
-      allowNull: false,
-    },
-  });
+    { timestamp: flase }
+  );
 };
