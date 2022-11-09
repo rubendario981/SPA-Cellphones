@@ -13,14 +13,6 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   native: false,
 });
 
-// const sequelize = new Sequelize(
-//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-//   {
-//     logging: false,
-//     native: false,
-//   }
-// );
-
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
@@ -43,7 +35,7 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const {} = sequelize.models;
+const { Cellphone } = sequelize.models;
 
 // Aca vendrian las relaciones
 
