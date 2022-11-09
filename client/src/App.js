@@ -1,17 +1,23 @@
-import './App.css';
+import "./App.css";
+import React, { useEffect } from "react";
+import Home from "./views/Home/Products/Products";
+import { useDispatch } from "react-redux";
+import { getProducts } from "./redux/actions";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p className="bg-green-600 text-black">
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <h1 className="text-3xl font-bold underline">
-          Hello world!
-        </h1>        
-      </header>
-    </div>
+    <React.Fragment>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+      </Routes>
+    </React.Fragment>
   );
 }
 
