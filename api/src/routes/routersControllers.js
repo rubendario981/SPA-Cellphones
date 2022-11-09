@@ -1,19 +1,28 @@
-const { Router } = require("express");
-const { getAllProducts } = require("../controllers");
+const { Router } = require('express');
+const {
+  getAllProducts,
+  getProductById,
+  getProductByName,
+} = require('../controllers');
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const name = req.query.name;
-  const respuesta = await getAllProducts();
-  if (name) {
-    let productName = await respuesta.filter((e) =>
-      e.name.toLowerCase().includes(name.toLowerCase())
-    );
-    productName.length
-      ? res.status(200).send(productName)
-      : res.status(404).send("Product not found");
-  }else {
-    res.status(200).send(respuesta)
+
+  try {
+    if (name) return res.json(await getProductByName(name));
+    return res.json(await getAllProducts());
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    return res.json(await getProductById(id));
+  } catch (error) {
+    res.json(error);
   }
 });
 
