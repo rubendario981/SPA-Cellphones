@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { Cellphone } = require('../db.js');
 
 async function getAllProducts() {
   try {
@@ -40,8 +41,34 @@ async function getProductByName(name) {
   }
 }
 
+async function createProduct(product) {
+  try {
+    let [producto, creado] = await Cellphone.findOrCreate({
+      where: {
+        name: product.name,
+        image: product.image,
+        cpu: product.cpu,
+        ram: product.ram,
+        screen: product.screen,
+        price: product.price,
+        front_camera: product.front_camera,
+        rear_camera: product.rear_camera,
+        internal_storage: product.internal_storage,
+      },
+      defaults: {
+        product,
+      },
+    });
+
+    return creado ? 'Se creo' : 'Ya existe ese celular';
+  } catch (error) {
+    return error;
+  }
+}
+
 module.exports = {
   getAllProducts,
   getProductById,
   getProductByName,
+  createProduct,
 };
