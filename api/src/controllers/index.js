@@ -1,5 +1,8 @@
 const axios = require('axios');
 
+
+function getProductById() {} 
+
 async function getAllProducts() {
   try {
     let ApiUrl = await axios.get(
@@ -24,4 +27,5 @@ async function getAllProducts() {
 
 module.exports = {
   getAllProducts,
+  getProductById,
 };
