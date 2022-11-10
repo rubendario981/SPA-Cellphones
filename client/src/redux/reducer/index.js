@@ -1,5 +1,6 @@
 const initialState = {
   products: [],
+  detail: [],
   brands: [],
 };
 
@@ -23,11 +24,19 @@ const rootReducer = (state = initialState, action) => {
         products: action.payload,
         brands: devolverMarcas(action.payload),
       };
+
     case "CREATE_PRODUCT":
       return {
         ...state,
         products: state.products.concat(action.payload)
       }
+
+      case 'CLEAN_DETAIL':
+        return{
+            ...state,
+            detail: []
+        }
+
     default:
       return state;
   }
