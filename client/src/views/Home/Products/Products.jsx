@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -8,6 +9,7 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
+import ProductCard from "../ProductCard/ProductCard";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -65,7 +67,8 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Products() {
+  const products = useSelector((state) => state.products);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
@@ -118,10 +121,7 @@ export default function Example() {
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
+                    <ul className="px-2 py-3 font-medium text-gray-900">
                       {subCategories.map((category) => (
                         <li key={category.name}>
                           <a href={category.href} className="block px-2 py-3">
@@ -270,14 +270,11 @@ export default function Example() {
               Products
             </h2>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+            <div className="flex flex-flow gap-x-8 gap-y-10 lg:grid-cols-2">
               {/* Filters */}
-              <form className="hidden lg:block">
+              <form className="hidden lg:block basis-1/3">
                 <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
+                <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                   {subCategories.map((category) => (
                     <li key={category.name}>
                       <a href={category.href}>{category.name}</a>
@@ -344,11 +341,21 @@ export default function Example() {
                 ))}
               </form>
 
-              {/* Product grid */}
-              <div className="lg:col-span-3">
-                {/* Replace with your content */}
-                <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" />
-                {/* /End replace */}
+              <div className="bg-white">
+                <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                  {products.map((product) => {
+                    return (
+                      <ProductCard
+                        key={product.id}
+                        image={product.image}
+                        name={product.name}
+                        rom={product.name}
+                        price={product.brand}
+                        id={product.id}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </section>
