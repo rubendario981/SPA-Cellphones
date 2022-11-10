@@ -1,5 +1,6 @@
 const initialState = {
   products: [],
+  detail: [],
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -9,6 +10,11 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         products: action.payload,
       };
+      case 'CLEAN_DETAIL':
+        return{
+            ...state,
+            detail: []
+        }
     default:
       return state;
   }

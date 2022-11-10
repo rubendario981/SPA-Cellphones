@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import Products from "./views/Home/Products/Products";
 import ProductCard from "./views/Home/ProductCard/ProductCard";
 import Header from "./views/Home/Header/Header";
+import Detail from "./views/Detail/Detail";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,11 +20,11 @@ function App() {
     <React.Fragment>
       <Routes>
         <Route exact path={"/"} element={<Header />} />
-        <Route exact path={"/home"} component={<Home />} />
-        <Route path={"productos"} component={Products}/>
-        <Route path={"detalleProducto/:id"} component={ProductCard}/>
-        <Route path={"filters"} component={Header}/>
-        <Route path={"createProduct"}/>
+        <Route exact path={"/home"} element={<Home />} />
+        {/* <Route path={"productos"} element={Products}/>  */}
+        <Route path={"/detalleProducto/:id"} element={Detail}/>
+        <Route path={"/filters"} element={Header}/>
+        {/* <Route path={"/createProduct"}/> */}
       </Routes>
     </React.Fragment>
   );
