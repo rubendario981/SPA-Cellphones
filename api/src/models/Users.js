@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
       },
       card_number: {
-        type: DataTypes.STRING,
+        type: DataTypes.NUMBER,
       },
       status: {
         type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado"),

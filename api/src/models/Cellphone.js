@@ -43,7 +43,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       idUser: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

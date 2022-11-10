@@ -7,11 +7,11 @@ module.exports = (sequelize) => {
     "brand",
     {
       name: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       idCellphone: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

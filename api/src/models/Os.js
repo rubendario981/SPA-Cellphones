@@ -10,8 +10,8 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      idCellphone: {
-        type: DataTypes.NUMBER,
+      idBrand: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

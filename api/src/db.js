@@ -1,14 +1,14 @@
-require('dotenv').config();
-const { Sequelize } = require('sequelize');
-const fs = require('fs');
-const path = require('path');
+require("dotenv").config();
+const { Sequelize } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: 5432,
-  dialect: 'postgres',
+  dialect: "postgres",
   logging: false,
   native: false,
 });
@@ -17,13 +17,13 @@ const basename = path.basename(__filename);
 
 const modelDefiners = [];
 
-fs.readdirSync(path.join(__dirname, '/models'))
+fs.readdirSync(path.join(__dirname, "/models"))
   .filter(
     (file) =>
-      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
   )
   .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, '/models', file)));
+    modelDefiners.push(require(path.join(__dirname, "/models", file)));
   });
 
 modelDefiners.forEach((model) => model(sequelize));
@@ -35,9 +35,33 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Cellphone } = sequelize.models;
+const { Cellphone, Bill, brand, Os, Cart, Users } = sequelize.models;
 
 // Aca vendrian las relaciones
+Users.hasMany(Cellphone, {
+  foreignKey: "idUser",
+});
+Cellphone.belongsTo(Users);
+
+Users.hasMany(Bill, {
+  foreignKey: "idUser",
+});
+Bill.belongsTo(Users);
+
+Users.hasOne(Cart, {
+  foreignKey: "idUser",
+});
+Cart.belongsTo(Users);
+
+Cellphone.hasOne(brand, {
+  foreignKey: "idCellphone",
+});
+brand.belongsTo(Cellphone);
+
+brand.hasOne(Os, {
+  foreignKey: "idBrand",
+});
+Os.belongsTo(brand);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
