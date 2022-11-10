@@ -1,4 +1,6 @@
 import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -6,8 +8,9 @@ import {
   FunnelIcon,
   MinusIcon,
   PlusIcon,
-  Squares2X2Icon,
 } from "@heroicons/react/20/solid";
+import ProductCard from "../ProductCard/ProductCard";
+import NavBar from "../NavBar/NavBar";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -16,21 +19,15 @@ const sortOptions = [
   { name: "Price: Low to High", href: "#", current: false },
   { name: "Price: High to Low", href: "#", current: false },
 ];
-const subCategories = [
-  { name: "Totes", href: "#" },
-  { name: "Backpacks", href: "#" },
-  { name: "Travel Bags", href: "#" },
-  { name: "Hip Bags", href: "#" },
-  { name: "Laptop Sleeves", href: "#" },
-];
+
 const filters = [
   {
     id: "color",
-    name: "Color",
+    name: "Almacenamiento",
     options: [
       { value: "white", label: "White", checked: false },
       { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
+      { value: "blue", label: "Blue", checked: false },
       { value: "brown", label: "Brown", checked: false },
       { value: "green", label: "Green", checked: false },
       { value: "purple", label: "Purple", checked: false },
@@ -38,25 +35,25 @@ const filters = [
   },
   {
     id: "category",
-    name: "Category",
+    name: "Memoria Ram",
     options: [
       { value: "new-arrivals", label: "New Arrivals", checked: false },
       { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
+      { value: "travel", label: "Travel", checked: false },
       { value: "organization", label: "Organization", checked: false },
       { value: "accessories", label: "Accessories", checked: false },
     ],
   },
   {
     id: "size",
-    name: "Size",
+    name: "Precio",
     options: [
       { value: "2l", label: "2L", checked: false },
       { value: "6l", label: "6L", checked: false },
       { value: "12l", label: "12L", checked: false },
       { value: "18l", label: "18L", checked: false },
       { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
+      { value: "40l", label: "40L", checked: false },
     ],
   },
 ];
@@ -65,7 +62,38 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function Products() {
+  const products = useSelector((state) => state.products);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  let firstPage = () => {
+    setCurrentPage(0);
+  };
+
+  let nextPage = () => {
+    if (products.length <= currentPage + 8) {
+      setCurrentPage(currentPage);
+    } else setCurrentPage(currentPage + 8);
+  };
+
+  let previousPage = () => {
+    if (currentPage < 8) {
+      setCurrentPage(0);
+    } else setCurrentPage(currentPage - 8);
+  };
+
+  let selectPage = (event) => {
+    setCurrentPage(parseInt(event.target.value));
+  };
+
+  useEffect(() => {
+    firstPage();
+  }, [products]);
+
+  const showProducts = products.slice(currentPage, currentPage + 8);
+
+  const subCategories = useSelector((state) => state.brands);
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
@@ -118,15 +146,10 @@ export default function Example() {
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
+                    <ul className="px-2 py-3 font-medium text-gray-900">
                       {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
+                        <li key={category}>
+                          <button>{category}</button>
                         </li>
                       ))}
                     </ul>
@@ -198,14 +221,14 @@ export default function Example() {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
+              Nuestros productos
             </h1>
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    Sort
+                    Ordenar
                     <ChevronDownIcon
                       className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
@@ -249,13 +272,6 @@ export default function Example() {
 
               <button
                 type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
                 onClick={() => setMobileFiltersOpen(true)}
               >
@@ -270,17 +286,14 @@ export default function Example() {
               Products
             </h2>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+            <div className="flex flex-flow gap-x-8 gap-y-10 lg:grid-cols-2">
               {/* Filters */}
-              <form className="hidden lg:block">
+              <form className="hidden lg:block basis-1/3">
                 <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
+                <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                   {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
+                    <li key={category}>
+                      <button>{category}</button>
                     </li>
                   ))}
                 </ul>
@@ -344,11 +357,27 @@ export default function Example() {
                 ))}
               </form>
 
-              {/* Product grid */}
-              <div className="lg:col-span-3">
-                {/* Replace with your content */}
-                <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" />
-                {/* /End replace */}
+              <div className="bg-white">
+                <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                  {showProducts.map((product) => {
+                    return (
+                      <ProductCard
+                        key={product.id}
+                        image={product.image}
+                        name={product.brand}
+                        rom={product.name}
+                        price={product.price}
+                        id={product.id}
+                      />
+                    );
+                  })}
+                </div>
+                <NavBar
+                  length={Math.ceil(products.length / 10)}
+                  set={selectPage}
+                  prev={previousPage}
+                  next={nextPage}
+                />
               </div>
             </div>
           </section>
