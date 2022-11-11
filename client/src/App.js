@@ -4,12 +4,9 @@ import { useDispatch } from "react-redux";
 import { getProducts } from "./redux/actions";
 import { Route, Routes } from "react-router-dom";
 import Products from "./views/Home/Products/Products";
-import FormProduct from "./views/FormProduct/FormProduct";
-import ProductCard from "./views/Home/ProductCard/ProductCard";
-import Detail from "./views/Detail/Detail";
+import Detail from "./views/Detail/DetailPhones";
 
-
-function App() {
+export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,15 +16,8 @@ function App() {
   return (
     <React.Fragment>
       <Routes>
-
         <Route exact path={"/"} element={<Products />} />
-        <Route exact path={"/create"} element={<FormProduct />} />
-
-        <Route path={"productos"} element={Products}/>
-        <Route path={"/detalleProducto/:id"} element={Detail}/>
-        <Route path={"/filters"} element={Header}/>
-        {/* <Route path={"/createProduct"}/> */}
-
+        <Route exact path={"/product/:id"} element={<Detail />} />
       </Routes>
     </React.Fragment>
   );
