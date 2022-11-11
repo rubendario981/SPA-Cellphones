@@ -10,6 +10,12 @@ export function getProducts() {
   };
 }
 
+export function filterProduct(filtro) {
+  return {
+    type: "FILTER_PRODUCTS",
+    payload: filtro,
+  };
+}
 
 export const createCellPhone = (cell) =>{
   const data = cell
@@ -45,5 +51,4 @@ return async function (dispatch){
     }
 }
 }
-
 

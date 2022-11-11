@@ -5,9 +5,9 @@ export default function NavBar({ length, set, prev, next }) {
   for (let i = 0; i < length; i++) {
     buttons.push(
       <button
-        value={i * 10}
+        value={i * 8}
         onClick={(e) => set(e)}
-        key={i * 10}
+        key={i * 8}
         aria-current="page"
         className="relative z-10 inline-flex items-center border border-indigo-500 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-600 focus:z-20"
       >
