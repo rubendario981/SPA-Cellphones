@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 const ProductCard = ({ name, image, rom, price, id }) => {
   return (
     <div className="group relative">
-      <div className="min-h-40 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
+      <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">
         <img
           src={image}
           alt="Phone_image"
-          className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+          className="h-full w-full object-contain object-center lg:h-full lg:w-full"
         />
       </div>
       <div className="mt-4 flex justify-between">

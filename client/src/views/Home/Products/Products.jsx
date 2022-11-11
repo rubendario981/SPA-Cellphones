@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -12,6 +12,8 @@ import {
 import ProductCard from "../ProductCard/ProductCard";
 import NavBar from "../NavBar/NavBar";
 
+import Checkbox from "../Checkbox/Checkbox";
+
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
   { name: "Best Rating", href: "#", current: false },
@@ -22,30 +24,26 @@ const sortOptions = [
 
 const filters = [
   {
-    id: "color",
-    name: "Almacenamiento",
+    id: "marca",
+    name: "Marcas",
     options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: false },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "purple", label: "Purple", checked: false },
+      { value: "Apple", label: "Apple", checked: false },
+      { value: "Samsung", label: "Samsung", checked: false },
+      { value: "Huawei", label: "Huawei", checked: false },
     ],
   },
   {
-    id: "category",
+    id: "ram",
     name: "Memoria Ram",
     options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: false },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
+      { value: "4", label: "4Gb", checked: false },
+      { value: "6", label: "6Gb", checked: false },
+      { value: "8", label: "8Gb", checked: false },
+      { value: "12", label: "12Gb", checked: false },
     ],
   },
   {
-    id: "size",
+    id: "precio",
     name: "Precio",
     options: [
       { value: "2l", label: "2L", checked: false },
@@ -63,8 +61,9 @@ function classNames(...classes) {
 }
 
 export default function Products() {
-  const products = useSelector((state) => state.products);
+  const products = useSelector((state) => state.filtered);
   const [currentPage, setCurrentPage] = useState(0);
+  const dispatch = useDispatch();
 
   let firstPage = () => {
     setCurrentPage(0);
@@ -90,6 +89,12 @@ export default function Products() {
     firstPage();
   }, [products]);
 
+  function handleFilter(event) {
+    event.preventDefault();
+    // dispatch(filterProduct(event));
+    console.log(event.target.name, event.target.defaultValue);
+  }
+
   const showProducts = products.slice(currentPage, currentPage + 8);
 
   const subCategories = useSelector((state) => state.brands);
@@ -99,7 +104,6 @@ export default function Products() {
   return (
     <div className="bg-white">
       <div>
-        {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -286,14 +290,14 @@ export default function Products() {
               Products
             </h2>
 
-            <div className="flex flex-flow gap-x-8 gap-y-10 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
-              <form className="hidden lg:block basis-1/3">
+              <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
                 <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                   {subCategories.map((category) => (
-                    <li key={category}>
-                      <button>{category}</button>
+                    <li key={category.name}>
+                      <a href={category.href}>{category.name}</a>
                     </li>
                   ))}
                 </ul>
@@ -333,13 +337,10 @@ export default function Products() {
                                 key={option.value}
                                 className="flex items-center"
                               >
-                                <input
-                                  id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  defaultValue={option.value}
-                                  type="checkbox"
-                                  defaultChecked={option.checked}
-                                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                <Checkbox
+                                  name={option.label}
+                                  value={option.value}
+                                  type={option.id}
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -373,7 +374,7 @@ export default function Products() {
                   })}
                 </div>
                 <NavBar
-                  length={Math.ceil(products.length / 10)}
+                  length={Math.ceil(products.length / 8)}
                   set={selectPage}
                   prev={previousPage}
                   next={nextPage}
