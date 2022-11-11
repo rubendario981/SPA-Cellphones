@@ -6,39 +6,47 @@ module.exports = (sequelize) => {
   sequelize.define(
     'cellphone',
     {
+      brand: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       image: {
         type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      cpu: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      ram: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       screen: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
-      price: {
+      internal_storage: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
-      front_camera: {
+      font_camera: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       rear_camera: {
         type: DataTypes.STRING,
+      },
+      cpu: {
+        type: DataTypes.STRING,
+      },
+      ram: {
+        type: DataTypes.STRING,
+      },
+      SO: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      internal_storage: {
+      battery: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      color: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+      },
+      price: {
         type: DataTypes.STRING,
         allowNull: false,
       },
