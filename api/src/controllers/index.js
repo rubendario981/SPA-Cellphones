@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { Cellphone } = require('../db.js');
+const { Cellphone, Users } = require('../db.js');
 const { Op } = require('sequelize');
 
 //Trae todos los productos de la api y los vuelca a la base de datos
@@ -108,9 +108,22 @@ async function getProductsWithDB() {
   }
 }
 
+//Crear un usuario.
+async function createUser(user) {
+  try {
+    console.log(user);
+    await Users.create(user);
+
+    return `${user.name} creado.`;
+  } catch (error) {
+    return error;
+  }
+}
+
 module.exports = {
   getAllProducts,
   getProductById,
   getProductByName,
   createProduct,
+  createUser,
 };

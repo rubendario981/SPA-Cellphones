@@ -35,7 +35,7 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Cellphone } = sequelize.models;
+const { Cellphone, Users } = sequelize.models;
 
 // Aca vendrian las relaciones
 
