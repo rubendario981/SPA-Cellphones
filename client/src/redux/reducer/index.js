@@ -1,5 +1,6 @@
 const initialState = {
   products: [],
+  detail: [],
   brands: [],
   filtered: [],
 };
@@ -39,6 +40,19 @@ const rootReducer = (state = initialState, action) => {
           return e.contains(action.payload);
         }),
       };
+
+    case "CREATE_PRODUCT":
+      return {
+        ...state,
+        products: state.products.concat(action.payload)
+      }
+
+      case 'CLEAN_DETAIL':
+        return{
+            ...state,
+            detail: []
+        }
+
     default:
       return state;
   }
