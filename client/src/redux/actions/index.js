@@ -9,3 +9,10 @@ export function getProducts() {
     });
   };
 }
+
+export function filterProduct(filtro) {
+  return {
+    type: "FILTER_PRODUCTS",
+    payload: filtro,
+  };
+}

@@ -1,6 +1,7 @@
 const initialState = {
   products: [],
   brands: [],
+  filtered: [],
 };
 
 function devolverMarcas(productos) {
@@ -22,6 +23,21 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         products: action.payload,
         brands: devolverMarcas(action.payload),
+        filtered: action.payload,
+      };
+    case "FILTER_PRODUCTS":
+      return {
+        ...state,
+        filtered: state.products.filter((e) => {
+          return e.brand === action.payload;
+        }),
+      };
+    case "FILTER_ROM":
+      return {
+        ...state,
+        filtered: state.products.filter((e) => {
+          return e.contains(action.payload);
+        }),
       };
     default:
       return state;
