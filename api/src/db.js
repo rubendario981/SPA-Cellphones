@@ -35,33 +35,32 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Cellphone, Bill, brand, Os, Cart, Users } = sequelize.models;
+const { Cellphone, Bill, Brand, Os, Cart, Users } = sequelize.models;
 
 // Aca vendrian las relaciones
-Users.hasMany(Cellphone, {
-  foreignKey: "idUser",
-});
-Cellphone.belongsTo(Users);
+Users.hasMany(Bill, {   foreignKey: "idUser" });
+Bill.belongsTo(Users); // ok
 
-Users.hasMany(Bill, {
-  foreignKey: "idUser",
-});
-Bill.belongsTo(Users);
+Users.hasOne(Cart, { foreignKey: "idUser"});
+Cart.belongsTo(Users); // ok
 
-Users.hasOne(Cart, {
-  foreignKey: "idUser",
-});
-Cart.belongsTo(Users);
+Bill.belongsToMany(Cellphone, { through: "CellphoneUser"});
+Cellphone.belongsToMany(Bill, { through: "CellphoneUser"});
 
-Cellphone.hasOne(brand, {
-  foreignKey: "idCellphone",
-});
-brand.belongsTo(Cellphone);
+Os.hasMany(Cellphone, { foreignKey: "idOs"});
+Cellphone.belongsTo(Os);
 
-brand.hasOne(Os, {
-  foreignKey: "idBrand",
-});
-Os.belongsTo(brand);
+Brand.hasMany(Cellphone);
+Cellphone.belongsTo(Brand);
+
+// Users.hasMany(Cellphone, { foreignKey: "idUser" });
+// Cellphone.belongsTo(Users); // xxxx habia que establecer relacion muchos a muchos
+
+// Cellphone.hasOne(Brand, { foreignKey: "idCellphone" });
+// Brand.belongsTo(Cellphone); // xxx relacion uno a uno xxx
+
+// Brand.hasOne(Os, {   foreignKey: "idBrand" });
+// Os.belongsTo(Brand); // xxx relacion uno a uno xxx
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

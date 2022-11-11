@@ -6,10 +6,6 @@ module.exports = (sequelize) => {
   sequelize.define(
     "cellphone",
     {
-      brand: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -17,10 +13,17 @@ module.exports = (sequelize) => {
       image: {
         type: DataTypes.TEXT,
       },
+      price: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       screen: {
         type: DataTypes.STRING,
       },
       internal_storage: {
+        type: DataTypes.STRING,
+      },
+      ram: {
         type: DataTypes.STRING,
       },
       font_camera: {
@@ -32,13 +35,6 @@ module.exports = (sequelize) => {
       cpu: {
         type: DataTypes.STRING,
       },
-      ram: {
-        type: DataTypes.STRING,
-      },
-      SO: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       battery: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -46,14 +42,12 @@ module.exports = (sequelize) => {
       color: {
         type: DataTypes.ARRAY(DataTypes.STRING),
       },
-      price: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      desciption: {
+        type: DataTypes.STRING
       },
-      idUser: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+      stock:{ // se cambio el atributo quantity que hacia referencia al inventario de unidades
+        type: DataTypes.INTEGER
+      }
     },
     { timestamps: false }
   );

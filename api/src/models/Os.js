@@ -9,11 +9,7 @@ module.exports = (sequelize) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      idBrand: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+      }
     },
     { timestamps: false }
   );
