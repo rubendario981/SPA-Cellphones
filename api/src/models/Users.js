@@ -14,11 +14,11 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      password: {
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      email: {
+      password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -32,11 +32,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
       },
       card_number: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.STRING,
       },
       status: {
-        type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado"),
-        defaultValue: false,
+        type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado")
       },
     },
     { timestamps: false }

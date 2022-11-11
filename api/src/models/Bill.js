@@ -21,15 +21,7 @@ module.exports = (sequelize) => {
       total: {
         type: DataTypes.FLOAT,
         allowNull: false,
-      },
-      idUser: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      idCellphone: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+      }
     },
     { timestamps: false }
   );
