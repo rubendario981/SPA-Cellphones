@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import logo from '../../../assests/LOGO.png'
 
 const Header = () => {
   const location = useLocation();
@@ -11,14 +12,13 @@ const Header = () => {
   }, [pathname])
 
   return (
-    <div className='flex py-12 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between'>
+    <div className='text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between'>
       <div className='w-2/5 cursor-pointer' onClick={()=> navigate('/')}>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-7XClzEGJQV62I4bKz3Jf3LqQ2dmG_oC_zA&usqp=CAU" width={'200px'} alt="Logo" />
-        <p>Fijar logo</p>
+        <img src={logo} width={'100px'} alt="Logo" />
       </div>
       <div className='flex'>
         {pathname === "/login" &&
-          <Link className='px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg' to={'register'}>Registrar</Link>
+          <Link className=' px-2 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg' to={'register'}>Registrar</Link>
         }
         {pathname === "/register" &&
           <Link className='px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg' to={'login'}>Login</Link>
