@@ -3,17 +3,20 @@ const { Cellphone, Users, Os, Brand } = require('../db.js');
 const { Op } = require('sequelize');
 
 //Trae todos los productos de la api y los vuelca a la base de datos
-async function getAllProducts() {
+async function getAllProducts(req, res) {
+  const name = req?.query.name;
+  if (name) return res.json(await getProductByName(name));
+
   try {
-    let products = await getProductsWithDB();
-    const brandsCell = []
-    const sysOperative = []
-    if (typeof products === 'string') {
-      products = await axios.get(
+    const listCellphones = await Cellphone.findAll()
+    // si no hay cellulares en la base de datos se procede a crearlos
+    if (listCellphones.length === 0) {
+      const brandsCell = []
+      const sysOperative = []
+      const products = await axios.get(
         `https://api-celulares-27ad3-default-rtdb.firebaseio.com/.json`
       );
-      products = products.data?.map((e) => ({
-        id: e.id,
+      const initialData = products.data?.map((e) => ({
         brand: e.brand,
         name: e.name,
         image: e.image,
@@ -28,26 +31,41 @@ async function getAllProducts() {
         color: e.Color,
         price: e.price,
       }));
-      
-      products.map(e => !brandsCell.includes(e.brand) && brandsCell.push(e.brand))
-      products.map(e => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim()))
-      
-      //Procede a crear las marcas en la base de datos
+
+      initialData.map(e => !brandsCell.includes(e.brand) && brandsCell.push(e.brand))
+      initialData.map(e => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim()))
+
+      // Procede a crear las marcas en la base de datos
       brandsCell.sort().map(async (brand) => {
-        await Brand.findOrCreate({ where: { name: brand }})
+        await Brand.findOrCreate({ where: { name: brand } })
       })
 
-      //Procede a crear los sistemas operativos
-      sysOperative.map(async(so)=>{
-        await Os.findOrCreate({ where: { name: so}})
+      // Procede a crear los sistemas operativos
+      sysOperative.map(async (so) => {
+        await Os.findOrCreate({ where: { name: so } })
       })
-      
 
-      await Cellphone.bulkCreate(products);
+      await Cellphone.bulkCreate(initialData)
+
+      // se actualizan la lista de celulares para incluir las relaciones de marca y sistema operativo
+      initialData.map(async el => {
+        const findIdOs = await Os.findOne({ where: { name: el.SO.trim() } })
+
+        const findIdBrand = await Brand.findOne({ where: { name: el.brand } })
+
+        await Cellphone.update({ idOs: findIdOs.id, brandId: findIdBrand.id }, { where: { name: el.name } })
+
+      });
+
+      const cellphonesCreated = await Cellphone.findAll()
+      return cellphonesCreated && res.json(cellphonesCreated)
+
+    } else {
+      return res.json(listCellphones)
     }
 
-    return products;
   } catch (error) {
+    console.log('Error on index controller')
     return error;
   }
 }
@@ -64,7 +82,7 @@ async function getProductById(id) {
     return product.length
       ? product
       : 'El ID no esta relacionado a ningun producto';
-  } catch (error) {}
+  } catch (error) { }
 }
 
 //Trae todos los productos que en su nombre incluyan el name que se busca
@@ -83,31 +101,20 @@ async function getProductByName(name) {
 }
 
 //Crea un producto en la base de datos
-async function createProduct(product) {
+async function createProduct(req, res) {
+  const { name, image, cpu, ram, screen, front_camera, rear_camera, internal_storage, battery, idOs, brandId, price } = req.body
+  
   try {
-    let [producto, creado] = await Cellphone.findOrCreate({
+    const createCell = await Cellphone.findOrCreate({
       where: {
-        brand: product.brand,
-        name: product.name,
-        image: product.image,
-        screen: product.screen,
-        internal_storage: product.internal_storage,
-        font_camera: 'asd',
-        rear_camera: product.rear_camera,
-        cpu: product.cpu,
-        ram: product.ram,
-        SO: product.SO,
-        battery: product.battery,
-        price: product.price,
-      },
-      defaults: {
-        product,
-      },
-    });
-
-    return creado ? 'Se creo' : 'Ya existe ese celular';
+        name, image, cpu, ram, screen, front_camera, rear_camera, internal_storage, battery, idOs, brandId, price
+      }
+    })
+    createCell ?
+      res.json(createCell) :
+      res.status(400).json({ error: 'No se pudo crear telefono' })
   } catch (error) {
-    return error;
+    res.status(500).json(error)
   }
 }
 

@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
       ram: {
         type: DataTypes.STRING,
       },
-      font_camera: {
+      front_camera: {
         type: DataTypes.STRING,
       },
       rear_camera: {
@@ -45,7 +45,7 @@ module.exports = (sequelize) => {
       desciption: {
         type: DataTypes.STRING
       },
-      stock:{ // se cambio el atributo quantity que hacia referencia al inventario de unidades
+      stock: { // se cambio el atributo quantity que hacia referencia al inventario de unidades
         type: DataTypes.INTEGER
       }
     },
