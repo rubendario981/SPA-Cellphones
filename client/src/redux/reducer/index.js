@@ -50,8 +50,17 @@ const rootReducer = (state = initialState, action) => {
       case 'CLEAN_DETAIL':
         return{
             ...state,
-            detail: []
+             detail: []
+            // products: []
+           
         }
+        case 'GET_PHONE_BY_ID':
+            return{
+                ...state,
+                detail: action.payload
+                // products: action.payload
+            }       
+//------------------
 
     default:
       return state;

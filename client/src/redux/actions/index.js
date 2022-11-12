@@ -39,11 +39,13 @@ export function cleanDetail(){
   }
 }
 export function getProductById(id){
+  console.log(id + 'ID ')
 return async function (dispatch){
     try {
-        let json = await axios.get(`http://localhost:3001/products/${id.id}`)
-        return dispatch({
-            type: 'GET_POKE_BY_ID',
+      // let json = await axios.get(`http://localhost:3001/products/${id.id}`)
+      let json = await axios.get('http://localhost:3001/products/' + id)
+      return dispatch({
+            type: 'GET_PHONE_BY_ID',
             payload: json.data
         })
     } catch (error) {
@@ -51,4 +53,6 @@ return async function (dispatch){
     }
 }
 }
+
+
 
