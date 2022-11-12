@@ -9,15 +9,15 @@ class Checkbox extends Component {
       type: this.props.type,
       value: this.props.value,
       name: this.props.name,
-      checked: false,
+      checked: this.props.checked,
     };
   }
 
-  handleFilter() {
-    this.setState({ checked: !this.state.checked });
-    this.props.filterProduct(this.state.name);
-    console.log(this.state.name);
-  }
+  //   handleFilter() {
+  //     this.setState({ checked: !this.state.checked });
+  //     this.props.filterProduct(this.state.name);
+  //     console.log(this.state.type);
+  //   }
 
   render() {
     return (
@@ -28,9 +28,7 @@ class Checkbox extends Component {
         type="checkbox"
         checked={this.state.checked}
         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-        onChange={(e) => {
-          this.handleFilter(e);
-        }}
+        onChange={(e) => this.props.function(e)}
       />
     );
   }
