@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCellPhone } from '../../redux/actions';
+import swal from '@sweetalert/with-react'
 
 const FormProduct = () => {
-	// const datosDePrueba = { name: 'Samsung s20', image: 'dae', cpu: 'Snapdragon 800', ram: '4', screen: '5.5', price: '700', front_camera: '20 mp', rear_camera: '200', internal_storage: '512' }
-	// const [input, setInput] = useState(datosDePrueba)
-	const [input, setInput] = useState({ name: '', image: '', cpu: '', ram: '', screen: '', price: '', front_camera: '', rear_camera: '', internal_storage: '' })
+	const datosDePrueba = { name: 'Samsung s20', image: 'dae', cpu: 'Snapdragon 800', ram: '4', screen: '5.5', price: '700', front_camera: '20 mp', rear_camera: '200', internal_storage: '512', battery: "2355", idOs: 2, brandId: 3, precio: "1500" }
+	const initialState = { name: '', image: '', cpu: '', ram: '', screen: '', price: '', front_camera: '', rear_camera: '', internal_storage: '', battery: '', idOs: '', brandId: '', precio: '' }
+
+	const [input, setInput] = useState(initialState)
 	const brands = useSelector(state => state.brands)
 
 	const dispatch = useDispatch()
 
 	const handleChanges = (e) => {
 		setInput({ ...input, [e.target.name]: e.target.value })
-		console.log(e.target.value);
 	}
 
-	const sendForm = (e) => {
+	const sendForm = async (e) => {
 		e.preventDefault()
-		console.log('values form', input);
-		dispatch(createCellPhone(input))
+		const response = await dispatch(createCellPhone(input))
+
+		response.payload.status === 200 ?
+			swal({ text: 'Producto creado satisfactoriamente, ', icon: 'success' }
+			) :
+			swal({ text: 'No se pudo crear producto', icon: 'error' })
 	}
 
 	return (
@@ -65,6 +70,20 @@ const FormProduct = () => {
 							placeholder="Ingresa imagen url"
 							name='image'
 							value={input.image}
+							onChange={handleChanges}
+							required
+						/>
+					</div>
+					<div className="mb-4">
+						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+							Precio
+						</label>
+						<input
+							type="text"
+							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							placeholder="Ingresa imagen url"
+							name='precio'
+							value={input.precio}
 							onChange={handleChanges}
 							required
 						/>
@@ -147,8 +166,22 @@ const FormProduct = () => {
 							type="text"
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							placeholder="Resolucion camara trasera"
-							name='front_camera'
+							name='rear_camera'
 							value={input.rear_camera}
+							onChange={handleChanges}
+							required
+						/>
+					</div>
+					<div className="mb-4">
+						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="rear_camera">
+							Capacidad bateria
+						</label>
+						<input
+							type="text"
+							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							placeholder="Ingresa capacidad bateria"
+							name='battery'
+							value={input.battery}
 							onChange={handleChanges}
 							required
 						/>
@@ -171,7 +204,14 @@ const FormProduct = () => {
 						<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
 							Crear producto
 						</button>
-						<button className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type='reset' >
+						<button type="button"
+							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+							onClick={() => setInput(datosDePrueba)} >
+							datos de prueba
+						</button>
+						<button type='reset'
+							className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+							onClick={() => setInput(initialState)} >
 							Limpiar campos
 						</button>
 					</div>
