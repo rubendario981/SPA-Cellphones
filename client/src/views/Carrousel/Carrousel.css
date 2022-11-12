@@ -1,0 +1,9 @@
+.mySwiper{
+    width: 50%;
+    height: 200px;
+}
+.swiper-button-next, .swiper-button-prev{
+    background-color: rgba(177, 177, 177, 0.63);
+    color: rgb(109, 109, 109);
+    border-radius: 2px;
+}
