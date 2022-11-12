@@ -4,12 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {  cleanDetail } from '../../redux/actions/index'
 import { useEffect } from "react";
 import { getProductById } from "../../redux/actions/index";
+import { useParams } from "react-router-dom";
 
 
-export default function Detail(id){
+export default function Detail(){
     const dispatch = useDispatch();
+    const {id}= useParams();
     const phones = useSelector(state => state.detail)
-    console.log(phones, 'Estado local')
+    // const phones = useSelector(state => state.products)
+    console.log(phones, 'Estado local , trae algo?')
+    console.log(id + 'ESTE ES EL ID')
     useEffect(() =>{
         dispatch(getProductById(id))
     },[dispatch])
@@ -25,6 +29,7 @@ export default function Detail(id){
     return (
         <div>
             <div><button><Link to='/home'>Volver</Link></button></div>
+            {/* <h2>Detail</h2> */}
             {
             phones.length > 0 ?
             
@@ -43,7 +48,7 @@ export default function Detail(id){
                 <h4>Camara Trasera:{ phones.map(e=> e.rear_camera)}</h4> 
                 <h4>Camara frontal:{ phones.map(e=> e.font_camera)}</h4> 
                 <h4>RAM:{ phones.map(e=> e.ram)}</h4> 
-                <h4>Memoria interna:{ phones.map(e=> e.rom)}</h4> 
+                <h4>Memoria interna:{ phones.map(e=> e.internal_storage)}</h4> 
                 <h4>Bateria:{ phones.map(e=> e.battery)}</h4> 
                  <h4>Sistema Opertivo: {phones.map(e=>e.SO) } </h4>
                  <h4>Pantalla: {phones.map(e=>e.screen)} </h4>
