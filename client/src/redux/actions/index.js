@@ -10,13 +10,6 @@ export function getProducts() {
   };
 }
 
-export function filterProduct(filtro) {
-  return {
-    type: "FILTER_PRUEBA",
-    payload: filtro,
-  };
-}
-
 export const createCellPhone = (cell) => {
   const data = cell;
   return async (dispatch) => {
@@ -56,4 +49,20 @@ export function getProductById(id) {
 
 export function resetFilter() {
   return { type: "RESET_FILTER" };
+}
+
+export function filterBrand(marca) {
+  if (marca !== "") return { type: "FILTER_BRAND", payload: marca };
+}
+
+export function filterStorage(storage) {
+  if (storage !== "") return { type: "FILTER_STORAGE", payload: storage };
+}
+
+export function getProductByName(name) {
+  return { type: "GET_NAME", payload: name };
+}
+
+export function orderMenMay() {
+  return { type: "ORDER_MEN_MAY" };
 }

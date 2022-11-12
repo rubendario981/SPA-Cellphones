@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -21,9 +21,8 @@ function classNames(...classes) {
 }
 
 export default function Products() {
-  const products = useSelector((state) => state.filtered);
+  const products = useSelector((state) => state.showProducts);
   const [currentPage, setCurrentPage] = useState(0);
-  // const dispatch = useDispatch();
 
   let firstPage = () => {
     setCurrentPage(0);
@@ -49,15 +48,7 @@ export default function Products() {
     firstPage();
   }, [products]);
 
-  // function handleFilter(event) {
-  //   event.preventDefault();
-  //   // dispatch(filterProduct(event));
-  //   console.log(event.target.name, event.target.defaultValue);
-  // }
-
   const showProducts = products.slice(currentPage, currentPage + 8);
-
-  // const subCategories = useSelector((state) => state.brands);
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 

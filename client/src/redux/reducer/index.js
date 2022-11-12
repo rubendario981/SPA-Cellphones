@@ -1,8 +1,9 @@
 const initialState = {
-  products: [],
+  allProducts: [],
+  showProducts: [],
+  filterProducts: [],
   detail: [],
   brands: [],
-  filtered: [],
 };
 
 function devolverMarcas(productos) {
@@ -17,64 +18,42 @@ function devolverMarcas(productos) {
   return marcasFiltradas;
 }
 
+function menorAMayor(a, b) {
+  return a.price.split(" ")[0] - b.price.split(" ")[0];
+}
+
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_PRODUCTS":
       return {
         ...state,
-        products: action.payload,
+        allProducts: action.payload,
+        showProducts: action.payload,
+        filterProducts: action.payload,
         brands: devolverMarcas(action.payload),
-        filtered: action.payload,
       };
-    case "FILTER_BRANDS":
+    case "FILTER_BRAND":
+      let filterMarca = state.filterProducts.filter((e) => {
+        return e.brand === action.payload;
+      });
       return {
         ...state,
-        filtered: state.filtered.filter((e) => {
-          return e.brand === action.payload;
-        }),
+        showProducts: filterMarca,
+        filterProducts: filterMarca,
       };
     case "FILTER_STORAGE":
-      return {
-        ...state,
-        filtered: state.filtered.filter((e) => {
-          return e.internal_storage === action.payload;
-        }),
-      };
-    case "FILTER_PRUEBA":
-      let aux = state.products;
-      console.log("aux :", action.payload.almacenamiento[0]);
-
-      if (action.payload.marca[0] !== "") {
-        aux = aux.filter((e) => e.brand === action.payload.marca[0]);
-      }
-
-      // if (action.payload.almacenamiento[0] !== "") {
-      //   aux2 = aux.filter(
-      //     (e) => e.internal_storage === action.payload.almacenamiento[0]
-      //   );
-      // }
-
-      console.log(aux);
-      aux = state.products.filter((e) => {
-        if (e.brand === action.payload.marca) {
-          if (
-            e.internal_storage === action.payload.almacenamiento &&
-            action.payload.almacenamiento !== ""
-          ) {
-            return e;
-          }
-        }
+      let filterStorage = state.filterProducts.filter((e) => {
+        return e.internal_storage === action.payload;
       });
-
       return {
         ...state,
-        filtered: aux,
+        showProducts: filterStorage,
+        filterProducts: filterStorage,
       };
-
     case "CREATE_PRODUCT":
       return {
         ...state,
-        products: state.products.concat(action.payload),
+        products: state.allProducts.concat(action.payload),
       };
 
     case "CLEAN_DETAIL":
@@ -86,9 +65,21 @@ const rootReducer = (state = initialState, action) => {
     case "RESET_FILTER":
       return {
         ...state,
-        filtered: state.products,
+        filterProducts: state.allProducts,
+        showProducts: state.allProducts,
       };
-
+    case "GET_NAME":
+      return {
+        ...state,
+        showProducts: state.allProducts.filter((e) => {
+          return e.name.toLowerCase().includes(action.payload.toLowerCase());
+        }),
+      };
+    case "ORDER_MEN_MAY":
+      return {
+        ...state,
+        showProducts: state.filtered.sort(menorAMayor),
+      };
     default:
       return state;
   }
