@@ -35,33 +35,23 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Cellphone, Bill, brand, Os, Cart, Users } = sequelize.models;
+const { Cellphone, Bill, Brand, Os, Cart, Users } = sequelize.models;
 
 // Aca vendrian las relaciones
-Users.hasMany(Cellphone, {
-  foreignKey: "idUser",
-});
-Cellphone.belongsTo(Users);
-
-Users.hasMany(Bill, {
-  foreignKey: "idUser",
-});
+Users.hasMany(Bill, {   foreignKey: "idUser" });
 Bill.belongsTo(Users);
 
-Users.hasOne(Cart, {
-  foreignKey: "idUser",
-});
+Users.hasOne(Cart, { foreignKey: "idUser"});
 Cart.belongsTo(Users);
 
-Cellphone.hasOne(brand, {
-  foreignKey: "idCellphone",
-});
-brand.belongsTo(Cellphone);
+Bill.belongsToMany(Cellphone, { through: "CellphoneBill"});
+Cellphone.belongsToMany(Bill, { through: "CellphoneBill"});
 
-brand.hasOne(Os, {
-  foreignKey: "idBrand",
-});
-Os.belongsTo(brand);
+Os.hasMany(Cellphone, { foreignKey: "idOs"});
+Cellphone.belongsTo(Os);
+
+Brand.hasMany(Cellphone);
+Cellphone.belongsTo(Brand);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
