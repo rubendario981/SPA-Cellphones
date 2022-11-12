@@ -10,6 +10,7 @@ import FormUser from "./views/FormUser/FormUser";
 import LoginForm from "./views/Home/Login/LoginForm"
 import Header from "./views/Home/Header/Header";
 import Footer from "./views/Home/Footer/Footer";
+import Landing from './views/Landing/Landing'
 
 export default function App() {
   const dispatch = useDispatch();
@@ -22,7 +23,8 @@ export default function App() {
     <React.Fragment>
       <Header />
       <Routes>
-        <Route exact path={"/"} element={<Products />} />
+        <Route exact path={"/"} element={<Landing />} />
+        <Route exact path={"/home"} element={<Products />} />
         <Route exact path={"/product/:id"} element={<Detail />} />
         <Route exact path={"/create"} element={<FormProduct />} />
         <Route exact path={"/register"} element={<FormUser />} />
