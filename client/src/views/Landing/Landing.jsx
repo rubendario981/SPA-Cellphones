@@ -6,6 +6,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import './Landing.css'
+import descuento from '../../assests/Landing/descuento.jpg'
+import cuotas from '../../assests/Landing/cuotas.jpg'
+import envio from '../../assests/Landing/envio.jpg'
+
 
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper";
@@ -31,21 +35,21 @@ export default function Landing() {
                 <SwiperSlide>
                     <img
                         className="object-fill w-full h-full"
-                        src="https://cdn.pixabay.com/photo/2022/03/20/15/40/nature-7081138__340.jpg"
+                        src={descuento}
                         alt="image slide 1"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img
                         className="object-fill w-full h-full"
-                        src="https://cdn.pixabay.com/photo/2022/07/24/17/55/wind-energy-7342177__340.jpg"
+                        src={cuotas}
                         alt="image slide 2"
                     />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img
                         className="object-fill w-full h-full"
-                        src="https://cdn.pixabay.com/photo/2022/07/26/03/35/jogger-7344979__340.jpg"
+                        src={envio}
                         alt="image slide 3"
                     />
                 </SwiperSlide>
