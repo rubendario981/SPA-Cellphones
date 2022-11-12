@@ -1,10 +1,10 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define(
-    'users',
+    "users",
     {
       name: {
         type: DataTypes.STRING,
@@ -32,10 +32,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
       },
       card_number: {
-        type: DataTypes.STRING,
+        type: DataTypes.NUMBER,
       },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
+      status: {
+        type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado"),
         defaultValue: false,
       },
     },
