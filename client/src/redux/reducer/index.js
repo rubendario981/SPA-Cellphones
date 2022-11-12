@@ -75,10 +75,15 @@ const rootReducer = (state = initialState, action) => {
           return e.name.toLowerCase().includes(action.payload.toLowerCase());
         }),
       };
-    case "ORDER_MEN_MAY":
+    case "PREC_ASC":
       return {
         ...state,
-        showProducts: state.filtered.sort(menorAMayor),
+        showProducts: state.filterProducts.slice().sort(menorAMayor),
+      };
+    case "PREC_DES":
+      return {
+        ...state,
+        showProducts: state.filterProducts.slice().sort(menorAMayor).reverse(),
       };
     default:
       return state;

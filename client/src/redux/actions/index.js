@@ -63,6 +63,6 @@ export function getProductByName(name) {
   return { type: "GET_NAME", payload: name };
 }
 
-export function orderMenMay() {
-  return { type: "ORDER_MEN_MAY" };
+export function ordenar(orden) {
+  return { type: orden };
 }
