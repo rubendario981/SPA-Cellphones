@@ -26,6 +26,7 @@ export default function App() {
         <Route exact path={"/"} element={<Landing />} />
         <Route exact path={"/home"} element={<Products />} />
         <Route exact path={"/product/:id"} element={<Detail />} />
+        {/* <Route exact path='/product/:id' render={({ match }) => <Detail id={match.params.id} />} /> */}
         <Route exact path={"/create"} element={<FormProduct />} />
         <Route exact path={"/register"} element={<FormUser />} />
         <Route exact path={"/login"} element={<LoginForm />} />
