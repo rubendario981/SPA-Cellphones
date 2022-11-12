@@ -60,7 +60,15 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         detail: [],
+        // products: []
       };
+    case "GET_PHONE_BY_ID":
+      return {
+        ...state,
+        detail: action.payload,
+        // products: action.payload
+      };
+    //------------------
 
     case "RESET_FILTER":
       return {
