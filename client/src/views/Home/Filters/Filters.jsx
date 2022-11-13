@@ -88,16 +88,16 @@ const Filters = () => {
                 {marcas.map((option, optionIdx) => (
                   <div key={optionIdx} className="flex items-center">
                     <input
-                      id={option}
-                      name={option}
+                      id={option.id}
+                      name={option.name}
                       value={"marca"}
                       type="checkbox"
-                      checked={option === marca ? true : false}
+                      checked={option.name === marca ? true : false}
                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       onChange={(e) => handleMarca(e)}
                     />
                     <label className="ml-3 text-sm text-gray-600">
-                      {option}
+                      {option.name}
                     </label>
                   </div>
                 ))}

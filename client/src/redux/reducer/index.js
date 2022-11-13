@@ -4,6 +4,7 @@ const initialState = {
   filterProducts: [],
   detail: [],
   brands: [],
+  os: []
 };
 
 function devolverMarcas(productos) {
@@ -29,9 +30,18 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         allProducts: action.payload,
         showProducts: action.payload,
-        filterProducts: action.payload,
-        brands: devolverMarcas(action.payload),
+        filterProducts: action.payload
       };
+    case "LIST_BRANDS":
+      return {
+        ...state,
+        brands: action.payload
+      }
+    case "LIST_OS":
+      return {
+        ...state,
+        os: action.payload
+      }
     case "FILTER_BRAND":
       let filterMarca = state.filterProducts.filter((e) => {
         return e.brand === action.payload;
@@ -53,7 +63,7 @@ const rootReducer = (state = initialState, action) => {
     case "CREATE_PRODUCT":
       return {
         ...state,
-        products: state.allProducts.concat(action.payload),
+        products: state.allProducts.concat(action.payload.data),
       };
 
     case "CLEAN_DETAIL":

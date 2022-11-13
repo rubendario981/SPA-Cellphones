@@ -10,6 +10,34 @@ export function getProducts() {
   };
 }
 
+export const getListBrands = () =>{
+  return async (dispatch) =>{
+    try {
+      const response = await axios.get(`http://localhost:3001/products/brands`);
+      return dispatch({
+        type: "LIST_BRANDS",
+        payload: response.data
+      })
+    } catch (error) {
+      console.log("No se pudieron traer las marcas");
+    }
+  }
+}
+
+export const getListOs = () =>{
+  return async (dispatch) =>{
+    try {
+      const response = await axios.get(`http://localhost:3001/products/os`);
+      return dispatch({
+        type: "LIST_OS",
+        payload: response.data
+      })
+    } catch (error) {
+      console.log("No se pudieron traer las sistemas operativos");
+    }
+  }
+}
+
 export const createCellPhone = (cell) => {
   const data = cell;
   return async (dispatch) => {

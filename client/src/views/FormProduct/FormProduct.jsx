@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCellPhone } from '../../redux/actions';
-import swal from '@sweetalert/with-react'
 
 const FormProduct = () => {
-	const datosDePrueba = { name: 'Samsung s20', image: 'dae', cpu: 'Snapdragon 800', ram: '4', screen: '5.5', price: '700', front_camera: '20 mp', rear_camera: '200', internal_storage: '512', battery: "2355", idOs: 2, brandId: 3, precio: "1500" }
-	const initialState = { name: '', image: '', cpu: '', ram: '', screen: '', price: '', front_camera: '', rear_camera: '', internal_storage: '', battery: '', idOs: '', brandId: '', precio: '' }
+	const datosDePrueba = { name: 'Samsung s20', image: 'https://www.centropolismedellin.com/wp-content/uploads/2021/11/Hombre-cargando-celular.jpg', cpu: 'Snapdragon 800', ram: '4', screen: '5.5', price: '700', front_camera: '20 mp', rear_camera: '200', internal_storage: '512', battery: "2355", precio: "1500" }
+
+	const initialState = { name: '', image: '', cpu: '', ram: '', screen: '', price: '', front_camera: '', rear_camera: '', internal_storage: '', battery: '', oId: '', brandId: '', precio: '' }
 
 	const [input, setInput] = useState(initialState)
 	const brands = useSelector(state => state.brands)
+	const os = useSelector(state => state.os)
 
 	const dispatch = useDispatch()
 
@@ -18,12 +19,9 @@ const FormProduct = () => {
 
 	const sendForm = async (e) => {
 		e.preventDefault()
-		const response = await dispatch(createCellPhone(input))
+		console.log('sending values', input.brandId, input.oId);
+		await dispatch(createCellPhone(input))
 
-		response.payload.status === 200 ?
-			swal({ text: 'Producto creado satisfactoriamente, ', icon: 'success' }
-			) :
-			swal({ text: 'No se pudo crear producto', icon: 'error' })
 	}
 
 	return (
@@ -52,11 +50,30 @@ const FormProduct = () => {
 							Marca celular
 						</label>
 						<select
-							className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							onChange={handleChanges}>
-							<option defaultValue hidden>Selecciona una opcion (Agregar normalizacion a base de datos)</option>
+							className="shadow border rounded w-full py-2 px-3 bg-white text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+							onChange={handleChanges}
+							name="brandId"
+							value={input.brandId}
+							>
+							<option defaultValue hidden>Selecciona una opcion </option>
 							{brands.map((brand, index) => {
-								return (<option key={index} value={input.brand}>{brand}</option>)
+								return (<option key={index} value={brand.id} >{brand.name}</option>)
+							})}
+						</select>
+					</div>
+					<div className="mb-4">
+						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
+							Seleccione sistema operativo
+						</label>
+						<select
+							className="shadow border rounded w-full py-2 px-3  bg-white text-gray-400 leading-tight focus:outline-none focus:shadow-outline"
+							onChange={handleChanges}
+							name="oId"
+							value={input.oId}
+							>
+							<option defaultValue hidden>Selecciona una opcion </option>
+							{os.map((os, index) => {
+								return (<option key={index} value={os.id}>{os.name}</option>)
 							})}
 						</select>
 					</div>
@@ -207,7 +224,7 @@ const FormProduct = () => {
 						<button type="button"
 							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 							onClick={() => setInput(datosDePrueba)} >
-							datos de prueba
+							Datos de prueba
 						</button>
 						<button type='reset'
 							className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
