@@ -42,11 +42,11 @@ module.exports = (sequelize) => {
       color: {
         type: DataTypes.ARRAY(DataTypes.STRING),
       },
-      desciption: {
+      description: {
         type: DataTypes.STRING
       },
       stock: { // se cambio el atributo quantity que hacia referencia al inventario de unidades
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER 
       }
     },
     { timestamps: false }

@@ -22,7 +22,7 @@ async function getAllProducts(req, res) {
         image: e.image,
         screen: e.screen,
         internal_storage: e.internal_storage,
-        font_camera: e.font_camera,
+        front_camera: e.font_camera,
         rear_camera: e.rear_camera,
         cpu: e.cpu,
         ram: e.ram,
@@ -53,22 +53,42 @@ async function getAllProducts(req, res) {
 
         const findIdBrand = await Brand.findOne({ where: { name: el.brand } })
 
-        await Cellphone.update({ idOs: findIdOs.id, brandId: findIdBrand.id }, { where: { name: el.name } })
-
+        findIdOs && findIdBrand && await Cellphone.update({ oId: findIdOs.id, brandId: findIdBrand.id }, { where: { name: el.name } })
       });
 
       const cellphonesCreated = await Cellphone.findAll()
+      console.log(cellphonesCreated[0]);
+      console.log("cellphonesCreated");
       return cellphonesCreated && res.json(cellphonesCreated)
 
     } else {
       return res.json(listCellphones)
     }
-
+    
   } catch (error) {
     console.log('Error on index controller')
     return error;
   }
 }
+
+const getListBrands = async(req, res) =>{
+  try {
+    const listBrands = await Brand.findAll()
+    return res.json(listBrands.length > 0 ? listBrands : "No hay marcas disponibles")
+  } catch (error) {
+    return res.json(error)
+  }
+}
+
+const getListOs = async(req, res) =>{
+  try {
+    const listOs = await Os.findAll()
+    return res.json(listOs.length > 0 ? listOs : "No hay marcas disponibles")
+  } catch (error) {
+    return res.json(error)
+  }
+}
+
 
 //Trae un producto segun su id
 async function getProductById(id) {
@@ -102,12 +122,12 @@ async function getProductByName(name) {
 
 //Crea un producto en la base de datos
 async function createProduct(req, res) {
-  const { name, image, cpu, ram, screen, front_camera, rear_camera, internal_storage, battery, idOs, brandId, price } = req.body
+  const { name, image, cpu, ram, screen, front_camera, rear_camera, internal_storage, battery, oId, brandId, price } = req.body
   
   try {
     const createCell = await Cellphone.findOrCreate({
       where: {
-        name, image, cpu, ram, screen, front_camera, rear_camera, internal_storage, battery, idOs, brandId, price
+        name, image, cpu, ram, screen, front_camera, rear_camera, internal_storage, battery, oId, brandId, price
       }
     })
     createCell ?
@@ -149,4 +169,6 @@ module.exports = {
   getProductByName,
   createProduct,
   createUser,
+  getListBrands,
+  getListOs
 };

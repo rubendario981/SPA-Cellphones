@@ -38,20 +38,20 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Cellphone, Bill, Brand, Os, Cart, Users } = sequelize.models;
 
 // Aca vendrian las relaciones
-Users.hasMany(Bill, {   foreignKey: "idUser" });
+Users.hasMany(Bill);
 Bill.belongsTo(Users);
 
-Users.hasOne(Cart, { foreignKey: "idUser"});
+Users.hasOne(Cart);
 Cart.belongsTo(Users);
 
 Bill.belongsToMany(Cellphone, { through: "CellphoneBill"});
 Cellphone.belongsToMany(Bill, { through: "CellphoneBill"});
 
-Os.hasMany(Cellphone, { foreignKey: "idOs"});
-Cellphone.belongsTo(Os);
-
+Os.hasMany(Cellphone);
 Brand.hasMany(Cellphone);
+
 Cellphone.belongsTo(Brand);
+Cellphone.belongsTo(Os);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
