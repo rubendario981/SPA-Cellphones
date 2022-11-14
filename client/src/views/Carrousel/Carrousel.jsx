@@ -4,9 +4,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import './Carrousel.css'
-import descuento from '../../assests/Landing/descuento.jpg'
-import cuotas from '../../assests/Landing/cuotas.jpg'
-import envio from '../../assests/Landing/envio.jpg'
+import descuento from '../../assests/Carrousel/descuento.jpg'
+import cuotas from '../../assests/Carrousel/cuotas.jpg'
+import envio from '../../assests/Carrousel/envio.jpg'
 import { Autoplay, Pagination, Navigation } from "swiper";
 
 export default function Carrousel() {
