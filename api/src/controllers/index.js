@@ -6,8 +6,8 @@ const { Op } = require('sequelize');
 async function getAllProducts() {
   try {
     let products = await getProductsWithDB();
-    const brandsCell = []
-    const sysOperative = []
+    const brandsCell = [];
+    const sysOperative = [];
     if (typeof products === 'string') {
       products = await axios.get(
         `https://api-celulares-27ad3-default-rtdb.firebaseio.com/.json`
@@ -27,21 +27,26 @@ async function getAllProducts() {
         battery: e.battery,
         color: e.Color,
         price: e.price,
+        stock: Math.round(Math.random() * 50), //Se modifica el stock de esta forma, para poder hacer la funcionalidad en el carrito de compras.
       }));
-      
-      products.map(e => !brandsCell.includes(e.brand) && brandsCell.push(e.brand))
-      products.map(e => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim()))
-      
+
+      products.map(
+        (e) => !brandsCell.includes(e.brand) && brandsCell.push(e.brand)
+      );
+      products.map(
+        (e) =>
+          !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
+      );
+
       //Procede a crear las marcas en la base de datos
       brandsCell.sort().map(async (brand) => {
-        await Brand.findOrCreate({ where: { name: brand }})
-      })
+        await Brand.findOrCreate({ where: { name: brand } });
+      });
 
       //Procede a crear los sistemas operativos
-      sysOperative.map(async(so)=>{
-        await Os.findOrCreate({ where: { name: so}})
-      })
-      
+      sysOperative.map(async (so) => {
+        await Os.findOrCreate({ where: { name: so } });
+      });
 
       await Cellphone.bulkCreate(products);
     }

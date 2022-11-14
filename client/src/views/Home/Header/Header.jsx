@@ -11,6 +11,7 @@ const Header = () => {
 
   return (
     <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between">
+
       <div className="w-2/5 cursor-pointer" onClick={() => navigate("/home")}>
         <img src={logo} width={"100px"} alt="Logo" />
       </div>
