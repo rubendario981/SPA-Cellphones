@@ -1,19 +1,21 @@
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import s from './ProductCard.module.css'
+import s from './CarritoCard.module.css'
 
 
-const ProductCard = ({ name, image, rom, price, id, cant }) => {
+const CarritoCard = ({ name, image, rom, price, id, update, setUpdate }) => {
 
-  function addCarrito() {
-    cant++
-    localStorage.setItem(id, JSON.stringify({ name, image, rom, price, id, cant }))
+
+  function deletedCarrito() {
+    localStorage.removeItem(id)
+    setUpdate(!update)
   }
 
   return (
     <>
       <div className={s.containerCrad}>
-        <button className={s.buttonCarrito} onClick={() => addCarrito()} > 🛒 </button>
+        <button className={s.buttonCarrito} onClick={() => deletedCarrito()} > X </button>
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">
             <img
@@ -40,4 +42,4 @@ const ProductCard = ({ name, image, rom, price, id, cant }) => {
   );
 };
 
-export default ProductCard;
+export default CarritoCard;

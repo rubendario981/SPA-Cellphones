@@ -201,6 +201,7 @@ export default function Products() {
                         rom={product.name}
                         price={product.price}
                         id={product.id}
+                        cant={0}
                       />
                     );
                   })}
