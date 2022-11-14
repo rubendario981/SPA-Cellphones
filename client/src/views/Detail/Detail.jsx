@@ -8,8 +8,8 @@ import { getProductById } from "../../redux/actions/index";
 
 export default function Detail(id){
     const dispatch = useDispatch();
-    const phones = useSelector(state => state.detail)
-    console.log(phones, 'Estado local')
+    const phones = useSelector(state => state.products)
+    console.log(phones, 'Estado local' + "trae algo?")
     useEffect(() =>{
         dispatch(getProductById(id))
     },[dispatch])
@@ -48,8 +48,11 @@ export default function Detail(id){
                  <h4>Sistema Opertivo: {phones.map(e=>e.SO) } </h4>
                  <h4>Pantalla: {phones.map(e=>e.screen)} </h4>
                  <h3>Precio: {phones.map(e=>e.price)}</h3>
-                </div>  
-                <div><button><Link to='/home'>Comprar!</Link></button></div>
+                </div> 
+                <div>
+                   <div><button><Link to='/home'>Comprar!</Link></button></div> 
+                </div> 
+                
          
      </div> : (
         <div >

@@ -1,11 +1,13 @@
 const axios = require('axios');
-const { Cellphone, Users } = require('../db.js');
+const { Cellphone, Users, Os, Brand } = require('../db.js');
 const { Op } = require('sequelize');
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts() {
   try {
     let products = await getProductsWithDB();
+    const brandsCell = []
+    const sysOperative = []
     if (typeof products === 'string') {
       products = await axios.get(
         `https://api-celulares-27ad3-default-rtdb.firebaseio.com/.json`
@@ -26,6 +28,20 @@ async function getAllProducts() {
         color: e.Color,
         price: e.price,
       }));
+      
+      products.map(e => !brandsCell.includes(e.brand) && brandsCell.push(e.brand))
+      products.map(e => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim()))
+      
+      //Procede a crear las marcas en la base de datos
+      brandsCell.sort().map(async (brand) => {
+        await Brand.findOrCreate({ where: { name: brand }})
+      })
+
+      //Procede a crear los sistemas operativos
+      sysOperative.map(async(so)=>{
+        await Os.findOrCreate({ where: { name: so}})
+      })
+      
 
       await Cellphone.bulkCreate(products);
     }
