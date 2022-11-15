@@ -2,9 +2,11 @@ import React from "react";
 import { useState } from "react";
 import CarritoCard from "../CarritoCard/CarritoCard.jsx";
 
-export default function Carrito() {
 
+
+export default function Carrito() {
   const [update, setUpdate] = useState(false)
+
 
   function handelClear() {
     localStorage.clear()
@@ -21,6 +23,8 @@ export default function Carrito() {
   let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price.replace("$", "") * e.cant)
 
   total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
+
+
 
   return (
     <>

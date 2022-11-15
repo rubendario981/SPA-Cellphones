@@ -3,16 +3,17 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import ProductCard from "../ProductCard/ProductCard";
 import NavBar from "../NavBar/NavBar";
 import Filters from "../Filters/Filters";
-
 import Order from "../Order/Order";
+import Alert from "../../Modals/Alert.jsx";
 
 export default function Products() {
   const products = useSelector((state) => state.showProducts);
   const [currentPage, setCurrentPage] = useState(0);
+  const [dataModal, setDataModal] = useState({ show: false, title: '', message: '' });
 
   let firstPage = () => {
     setCurrentPage(0);
@@ -34,6 +35,8 @@ export default function Products() {
     setCurrentPage(parseInt(event.target.value));
   };
 
+
+
   useEffect(() => {
     firstPage();
   }, [products]);
@@ -44,11 +47,9 @@ export default function Products() {
 
   return (
     <div className="bg-white">
-      {/* <div className={s.alertAddCarrito}>
-        <h1>Producto agregado al carrito</h1>
-      </div> */}
       <div>
-        {/* <Transition.Root show={mobileFiltersOpen} as={Fragment}>
+        {/* { Responsive } */}
+        <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog
             as="div"
             className="relative z-40 lg:hidden"
@@ -89,17 +90,17 @@ export default function Products() {
                       <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
                   </div>
-                  {/* Filters
+                  Filters
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
-                    <ul className="px-2 py-3 font-medium text-gray-900">
-                      {subCategories.map((category) => (
+                    {/* <ul className="px-2 py-3 font-medium text-gray-900">
+                      {subCategories?.map((category) => (
                         <li key={category}>
                           <button>{category}</button>
                         </li>
                       ))}
-                    </ul>
-                    {filters.map((section) => (
+                    </ul> */}
+                    {/* {filters?.map((section) => (
                       <Disclosure
                         as="div"
                         key={section.id}
@@ -155,15 +156,16 @@ export default function Products() {
                           </>
                         )}
                       </Disclosure>
-                    ))}
+                    ))} */}
                   </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
           </Dialog>
-        </Transition.Root>*/}
+        </Transition.Root>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Alert show={dataModal.show} title={dataModal.title} message={dataModal.message} />
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Nuestros productos
@@ -201,6 +203,7 @@ export default function Products() {
                         name={product.name}
                         price={product.price}
                         stock={product.stock}
+                        setDataModal={setDataModal}
                       />
                     );
                   })}
@@ -216,6 +219,6 @@ export default function Products() {
           </section>
         </main>
       </div>
-    </div>
+    </div >
   );
 }

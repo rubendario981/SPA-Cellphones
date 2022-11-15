@@ -37,10 +37,14 @@ async function getAllProducts(req, res) {
       initialData.map(
         (e) => !brandsCell.includes(e.brand) && brandsCell.push(e.brand)
       );
+      console.log('marcas :', brandsCell);
 
       initialData.map(
-        (e) => !sysOperative.includes(e.SO.trim()) && e.SO.trim()
+        (e) =>
+          !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
       );
+
+      console.log('sistema :', sysOperative);
 
       // // Procede a crear las marcas en la base de datos
       brandsCell.sort().map(async (brand) => {
@@ -51,8 +55,6 @@ async function getAllProducts(req, res) {
       sysOperative.map(async (so) => {
         await Os.findOrCreate({ where: { name: so } });
       });
-
-      console.log('*-*', initialData);
 
       await Cellphone.bulkCreate(initialData);
 
