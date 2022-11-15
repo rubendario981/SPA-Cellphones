@@ -1,21 +1,16 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import './Landing.css'
-import descuento from '../../assests/Landing/descuento.jpg'
-import cuotas from '../../assests/Landing/cuotas.jpg'
-import envio from '../../assests/Landing/envio.jpg'
-
-
-// import required modules
+import './Carrousel.css'
+import descuento from '../../assests/Carrousel/descuento.jpg'
+import cuotas from '../../assests/Carrousel/cuotas.jpg'
+import envio from '../../assests/Carrousel/envio.jpg'
 import { Autoplay, Pagination, Navigation } from "swiper";
-   
-export default function Landing() {  
-    
+
+export default function Carrousel() {
+
     return (
         <>
             <Swiper
@@ -54,6 +49,8 @@ export default function Landing() {
                     />
                 </SwiperSlide>
             </Swiper>
+            
+            
         </>
     );
 };  

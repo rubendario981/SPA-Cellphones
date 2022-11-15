@@ -2,21 +2,18 @@ const { Router } = require('express');
 const {
   getAllProducts,
   getProductById,
-  getProductByName,
   createProduct,
+  getListBrands,
+  getListOs
 } = require('../controllers');
+const Cellphone = require('../models/Cellphone');
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const name = req.query.name;
+router.get("/", getAllProducts)
 
-  try {
-    if (name) return res.json(await getProductByName(name));
-    return res.json(await getAllProducts());
-  } catch (error) {
-    res.json(error);
-  }
-});
+router.get("/brands" ,getListBrands)
+
+router.get("/os" ,getListOs)
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -27,12 +24,15 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/create', async (req, res) => {
-  try {
-    res.json(await createProduct(req.body));
-  } catch (error) {
-    res.json(error);
-  }
-});
+router.post('/create', createProduct)
+
+router.get('/test', async (req, res)=>{
+  console.log('------');
+  const response = await Cellphone.findAll({
+    include: Brand
+  })
+  console.log(response[0], '***');
+  res.json(response)
+})
 
 module.exports = router;

@@ -7,7 +7,11 @@ import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import ProductCard from "../ProductCard/ProductCard";
 import NavBar from "../NavBar/NavBar";
 import Filters from "../Filters/Filters";
+
 import s from './Products.module.css'
+=======
+import Carrousel from "../../Carrousel/Carrousel";
+
 
 import Order from "../Order/Order";
 
@@ -44,10 +48,17 @@ export default function Products() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
+    
     <div className="bg-white">
+
       {/* <div className={s.alertAddCarrito}>
         <h1>Producto agregado al carrito</h1>
       </div> */}
+
+      
+      <Carrousel/>
+      
+
       <div>
         {/* <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog
