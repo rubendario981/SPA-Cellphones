@@ -7,7 +7,6 @@ import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import ProductCard from "../ProductCard/ProductCard";
 import NavBar from "../NavBar/NavBar";
 import Filters from "../Filters/Filters";
-import s from './Products.module.css'
 
 import Order from "../Order/Order";
 
