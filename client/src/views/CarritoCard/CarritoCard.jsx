@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import s from './CarritoCard.module.css'
 
 
 const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) => {
@@ -16,6 +15,12 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
   }
 
   function onHandelChange(e) {
+    if (e.target.value > stock) {
+      alert(`No hay suficiente stock de ${name} \nEl maximo es ${stock}`)
+      e.target.value = stock
+    }
+    if (e.target.value <= 0)
+      e.target.value = 1
     product.cant = e.target.value * 1
     localStorage.setItem(id, JSON.stringify(product))
     setUpdate(!update)
@@ -24,7 +29,7 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
 
   return (
     <>
-      <div className={s.containerCrad}>
+      <div>
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">
             <img
@@ -43,12 +48,12 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
               </h3>
               <p className="mt-1 text-sm text-gray-500">{rom}</p>
             </div>
-            <p className="text-sm font-medium text-gray-900">{price}</p>
+            <p className="text-sm font-medium text-gray-900">{price} C/u</p>
           </div>
         </div>
-        <div className="flex flex-col">
-          <input className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded w-20 justify-self-auto" type="number" onChange={(e) => onHandelChange(e)} min={1} max={stock} defaultValue={product.cant} />
-          <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => deletedCarrito()} > Eliminar del carrito </button>
+        <div className="flex flex-col items-center">
+          <input className="bg-transparent text-blue-700 text-center font-semibold py-2 px-4 my-2 border border-blue-500 rounded w-20 justify-self-auto" type="number" onChange={(e) => onHandelChange(e)} defaultValue={product.cant} />
+          <button className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-4 my-2 border border-blue-500 hover:border-transparent rounded" onClick={() => deletedCarrito()} > Eliminar del carrito </button>
           <label className="inline-block" htmlFor="Stcok"> Disponibles: {stock}</label>
         </div>
       </div>
