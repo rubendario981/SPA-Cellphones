@@ -7,7 +7,11 @@ import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import ProductCard from "../ProductCard/ProductCard";
 import NavBar from "../NavBar/NavBar";
 import Filters from "../Filters/Filters";
+
+import s from './Products.module.css'
+=======
 import Carrousel from "../../Carrousel/Carrousel";
+
 
 import Order from "../Order/Order";
 
@@ -46,9 +50,15 @@ export default function Products() {
   return (
     
     <div className="bg-white">
+
+      {/* <div className={s.alertAddCarrito}>
+        <h1>Producto agregado al carrito</h1>
+      </div> */}
+
       
       <Carrousel/>
       
+
       <div>
         {/* <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog
@@ -67,7 +77,6 @@ export default function Products() {
             >
               <div className="fixed inset-0 bg-black bg-opacity-25" />
             </Transition.Child>
-
             <div className="fixed inset-0 z-40 flex">
               <Transition.Child
                 as={Fragment}
@@ -92,7 +101,6 @@ export default function Products() {
                       <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
                   </div>
-
                   {/* Filters
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
@@ -103,7 +111,6 @@ export default function Products() {
                         </li>
                       ))}
                     </ul>
-
                     {filters.map((section) => (
                       <Disclosure
                         as="div"
@@ -200,12 +207,12 @@ export default function Products() {
                   {showProducts.map((product) => {
                     return (
                       <ProductCard
+                        id={product.id}
                         key={product.id}
                         image={product.image}
-                        name={product.brand}
-                        rom={product.name}
+                        name={product.name}
                         price={product.price}
-                        id={product.id}
+                        stock={product.stock}
                       />
                     );
                   })}

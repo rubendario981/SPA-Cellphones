@@ -1,0 +1,20 @@
+.buttonCarrito {
+  background-color: red;
+  z-index: 1;
+}
+
+.containerInforCarrito {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.inputCant {
+  border: 2px solid black;
+  border-radius: 5px;
+  width: 20%;
+  align-self: center;
+  z-index: 1;
+  text-align: center;
+}
