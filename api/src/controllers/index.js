@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { Cellphone, Users, Os, Brand } = require('../db.js');
+const { Cellphone, Os, Brand } = require('../db.js');
 const { Op } = require('sequelize');
 
 //Trae todos los productos de la api y los vuelca a la base de datos
@@ -57,17 +57,15 @@ async function getAllProducts(req, res) {
       });
 
       const cellphonesCreated = await Cellphone.findAll()
-      console.log(cellphonesCreated[0]);
-      console.log("cellphonesCreated");
-      return cellphonesCreated && res.json(cellphonesCreated)
+      
+      return res.json(cellphonesCreated.length > 0 ? cellphonesCreated : 'No se pudieron crear los telefonos')
 
     } else {
       return res.json(listCellphones)
     }
     
   } catch (error) {
-    console.log('Error on index controller')
-    return error;
+    return error
   }
 }
 
@@ -152,23 +150,22 @@ async function getProductsWithDB() {
 }
 
 //Crear un usuario.
-async function createUser(user) {
-  try {
-    console.log(user);
-    await Users.create(user);
+// async function createUser(user) {
+//   try {
+//     console.log(user);
+//     await Users.create(user);
 
-    return `${user.name} creado.`;
-  } catch (error) {
-    return error;
-  }
-}
+//     return `${user.name} creado.`;
+//   } catch (error) {
+//     return error;
+//   }
+// } //Proceso llevado al controlador de usuarios
 
 module.exports = {
   getAllProducts,
   getProductById,
   getProductByName,
   createProduct,
-  createUser,
   getListBrands,
   getListOs
 };

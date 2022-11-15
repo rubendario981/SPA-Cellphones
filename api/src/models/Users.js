@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const bcrypt = require('bcrypt')
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
@@ -17,6 +18,7 @@ module.exports = (sequelize) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true
       },
       password: {
         type: DataTypes.STRING,
@@ -38,6 +40,15 @@ module.exports = (sequelize) => {
         type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado")
       },
     },
-    { timestamps: false }
+    { timestamps: false,
+      hooks: {
+        beforeCreate: async(users)=>{
+          if(users.password){
+            const salt = await bcrypt.genSaltSync(10)
+            users.password = await bcrypt.hashSync(users.password, salt)
+          }
+        }
+      }
+    }
   );
 };

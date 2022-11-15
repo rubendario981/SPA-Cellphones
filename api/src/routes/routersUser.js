@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { createUser } = require('../controllers');
+const { registerUser, updateUser, login } = require('../controllers/user.controllers');
 const router = Router();
 
 router.post('/create', async (req, res) => {
@@ -9,5 +9,12 @@ router.post('/create', async (req, res) => {
     res.json(error);
   }
 });
+
+router.post('/register',  registerUser  )
+
+router.patch('/update/:id',  updateUser  )
+
+router.post('/login',  login  )
+
 
 module.exports = router;

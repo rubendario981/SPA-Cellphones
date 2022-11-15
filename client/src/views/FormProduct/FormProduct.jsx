@@ -3,23 +3,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createCellPhone } from '../../redux/actions';
 
 const FormProduct = () => {
-	const datosDePrueba = { name: 'Samsung s20', image: 'https://www.centropolismedellin.com/wp-content/uploads/2021/11/Hombre-cargando-celular.jpg', cpu: 'Snapdragon 800', ram: '4', screen: '5.5', price: '700', front_camera: '20 mp', rear_camera: '200', internal_storage: '512', battery: "2355", precio: "1500" }
+	const datosDePrueba = { name: 'Samsung s20', image: 'https://www.centropolismedellin.com/wp-content/uploads/2021/11/Hombre-cargando-celular.jpg', cpu: 'Snapdragon 800', ram: '4', screen: '5.5', price: '700', front_camera: '20 mp', rear_camera: '200', internal_storage: '512', battery: "2355", precio: "1500", oId: 1, brandId: 3 }
 
 	const initialState = { name: '', image: '', cpu: '', ram: '', screen: '', price: '', front_camera: '', rear_camera: '', internal_storage: '', battery: '', oId: '', brandId: '', precio: '' }
 
+	
+
 	const [input, setInput] = useState(initialState)
+	const [errors, setErrors] = useState({})
 	const brands = useSelector(state => state.brands)
 	const os = useSelector(state => state.os)
+	const products = useSelector(state => state.allProducts)
 
 	const dispatch = useDispatch()
 
+	const validateFields = (field)=>{
+		const errors = {}
+		if(field.name.length === 0 ){
+			errors.name = "Este campo es requerido"
+		}
+		return errors
+	}
+
 	const handleChanges = (e) => {
 		setInput({ ...input, [e.target.name]: e.target.value })
+
+		setErrors(validateFields({ ...input, [e.target.name]: e.target.value }))
+
+		if(e.target.name === 'name'){
+			if(products.find(data => data.name.toLowerCase() === e.target.value.toLowerCase())){
+				setErrors({...errors, name: "Este celular ya existe"})
+			}
+		}
 	}
 
 	const sendForm = async (e) => {
 		e.preventDefault()
-		console.log('sending values', input.brandId, input.oId);
 		await dispatch(createCellPhone(input))
 
 	}
@@ -44,6 +63,7 @@ const FormProduct = () => {
 							onChange={handleChanges}
 							required
 						/>
+						{errors.name && <span className='text-red-500'>{errors.name}</span>}
 					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
@@ -54,6 +74,7 @@ const FormProduct = () => {
 							onChange={handleChanges}
 							name="brandId"
 							value={input.brandId}
+							required
 							>
 							<option defaultValue hidden>Selecciona una opcion </option>
 							{brands.map((brand, index) => {
@@ -70,6 +91,7 @@ const FormProduct = () => {
 							onChange={handleChanges}
 							name="oId"
 							value={input.oId}
+							required
 							>
 							<option defaultValue hidden>Selecciona una opcion </option>
 							{os.map((os, index) => {
