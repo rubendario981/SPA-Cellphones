@@ -5,9 +5,10 @@ import s from './ProductCard.module.css'
 
 const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId, setDataModal }) => {
 
-  let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.id === id)
 
-
+  // Codigo viejo
+  let producto = Object.entries(localStorage).map(e => JSON.parse(e[1]).hasOwnProperty("battery") && JSON.parse(e[1])).filter(e => typeof e === "object").find(e => e.id === e)
+  console.log(producto);
   function addCarrito(producto) {
     if (producto) {
       producto.cant++

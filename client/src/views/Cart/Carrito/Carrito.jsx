@@ -23,11 +23,9 @@ export default function Carrito() {
     navigate("/detailCart")
   }
 
-  let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price.replace("$", "") * e.cant)
+  let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price?.replace("$", "") * e.cant)
 
   total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
-
-
 
   return (
     <>
@@ -40,16 +38,16 @@ export default function Carrito() {
             <div className="flex flex-col h-full w-full">
               {
 
-                Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => {
+                Object.entries(localStorage).map(e => JSON.parse(e[1]).hasOwnProperty("battery") && JSON.parse(e[1])).filter(e => typeof e === "object").map(e => {
                   return (
-                    <>
-                      <div className="flex justify-between my-1 w-full py-1">
+                    <div key={e.id}>
+                      <div className="flex justify-between my-1 w-full py-1" >
                         <div>
                           <h1>{e.name}</h1>
                         </div>
-                        <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price.replace("$", "")) * e.cant}` : e.price.replace("$", "")}</div>
+                        <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price?.replace("$", "")) * e.cant}` : e.price.replace("$", "")}</div>
                       </div>
-                    </>
+                    </div>
                   )
                 })
 
