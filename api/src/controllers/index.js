@@ -138,38 +138,13 @@ async function getProductByName(name) {
 }
 
 //Crea un producto en la base de datos
-async function createProduct(req, res) {
-  const {
-    name,
-    image,
-    cpu,
-    ram,
-    screen,
-    front_camera,
-    rear_camera,
-    internal_storage,
-    battery,
-    oId,
-    brandId,
-    price,
-  } = req.body;
+async function createProduct(req, res) {  
+  const { name } = req.body
 
   try {
     const createCell = await Cellphone.findOrCreate({
-      where: {
-        name,
-        image,
-        cpu,
-        ram,
-        screen,
-        front_camera,
-        rear_camera,
-        internal_storage,
-        battery,
-        oId,
-        brandId,
-        price,
-      },
+      where: { name },
+      defaults:{ ...req.body }
     });
     createCell
       ? res.json(createCell)

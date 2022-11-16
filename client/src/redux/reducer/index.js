@@ -7,18 +7,6 @@ const initialState = {
   os: []
 };
 
-function devolverMarcas(productos) {
-  let marcas = productos.map((e) => {
-    return e.brand;
-  });
-
-  let marcasFiltradas = marcas.filter((item, index) => {
-    return marcas.indexOf(item) === index;
-  });
-
-  return marcasFiltradas;
-}
-
 function menorAMayor(a, b) {
   return a.price.split(" ")[0] - b.price.split(" ")[0];
 }
@@ -63,7 +51,7 @@ const rootReducer = (state = initialState, action) => {
     case "CREATE_PRODUCT":
       return {
         ...state,
-        products: state.allProducts.concat(action.payload.data),
+        showProducts: state.showProducts.concat(action.payload[0]),
       };
 
     case "CLEAN_DETAIL":
