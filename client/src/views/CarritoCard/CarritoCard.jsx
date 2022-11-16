@@ -54,12 +54,12 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
         </div>
         <div className="flex flex-col items-center">
 
-          <input className="bg-transparent text-blue-700 text-center font-semibold py-2 px-4 my-2 border border-blue-500 rounded w-20 justify-self-auto"
+          <input className="bg-transparent text-blue-700 text-center font-semibold py-2 px-4 my-2 border border-slate-500 rounded w-20 justify-self-auto"
             type="number"
             onChange={(e) => onHandelChange(e)}
             defaultValue={product.cant} />
 
-          <button className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-4 my-2 border border-blue-500 hover:border-transparent rounded"
+          <button className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-4 my-2 border border-slate-500 hover:border-transparent rounded"
             onClick={() => deletedCarrito()} >
             Eliminar del carrito
           </button>
