@@ -11,26 +11,25 @@ export default function Carrito() {
 
 
   function handelClear() {
-    localStorage.clear()
-    setUpdate(!update)
+    let boolean = window.confirm("Desea vaciar todo el carrito?")
+    if (boolean) {
+      localStorage.clear()
+      setUpdate(!update)
+    }
   }
-  // localStorage.clear()
 
   function handelBuy() {
     setUpdate(!update)
-
     navigate("/detailCart")
   }
 
-  let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price.replace("$", "") * e.cant)
+  let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price?.replace("$", "") * e.cant)
 
   total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
 
-
-
   return (
     <>
-      <div className={Object.entries(localStorage).map(e => JSON.parse(e[1])).length > 3 ? "h-full flex pt-20 pb-5" : "h-full flex pt-20 pb-5 h-screen"}>
+      <div className={Object.entries(localStorage).map(e => JSON.parse(e[1])).length > 3 ? "h-full flex pb-5" : "h-full flex pb-5 h-screen"}>
         <div className="flex h-full bg-stone-300 mx-5 w-1/3 justify-center rounded-3xl px-5 border border-blue-500">
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
@@ -39,20 +38,23 @@ export default function Carrito() {
             <div className="flex flex-col h-full w-full">
               {
 
-                Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => {
+                Object.entries(localStorage).map(e => JSON.parse(e[1]).hasOwnProperty("battery") && JSON.parse(e[1])).filter(e => typeof e === "object").map(e => {
                   return (
-                    <>
-                      <div className="flex justify-between my-1 w-full py-1">
+                    <div key={e.id}>
+                      <div className="flex justify-between my-1 w-full py-1" >
                         <div>
                           <h1>{e.name}</h1>
                         </div>
-                        <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price.replace("$", "")) * e.cant}` : e.price.replace("$", "")}</div>
+                        <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price?.replace("$", "")) * e.cant}` : e.price.replace("$", "")}</div>
                       </div>
-                    </>
+                    </div>
                   )
                 })
 
               }
+            </div>
+            <div className="flex justify-between my-1 w-full py-1">
+              <h1>Total: </h1>{total}
             </div>
             <div className="flex justify-between py-5 w-full">
               <button onClick={() => handelClear()} className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded">
@@ -75,31 +77,3 @@ export default function Carrito() {
     </>
   )
 }
-
-
-
-// <div id="ContainerAllCarrito" className="flex pt-20">
-// {/* Sumary card */}
-// <div className="flex flex-col items-center fixed w-1/3">
-//   <div className="flex flex-col bg-blue-100 items-center px-20 rounded-3xl h-screen">
-//     <h1 className="text-4xl font-bold tracking-tight text-gray-900 pl-4">
-//       Carrito de compras
-//     </h1>
-//     <hr className="p-2" />
-//     <h1 className="pb-2">{`Total del carrito: ${total}`}</h1>
-//     <hr className="p-2" />
-//     <div className="flex justify-center gap-10">
-//
-//     </div>
-//   </div>
-// </div>
-
-// {/* List products card */}
-// <div className="flex justify-end ">
-//   <div className="flex w-2/3 justify-end">
-//     <div className="pl-5 flex justify-center flex-wrap gap-10">
-//       {Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
-//     </div>
-//   </div>
-// </div>
-// </div>

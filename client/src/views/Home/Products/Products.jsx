@@ -15,7 +15,7 @@ export default function Products() {
   const products = useSelector((state) => state.showProducts);
   const [currentPage, setCurrentPage] = useState(0);
   const [dataModal, setDataModal] = useState({ show: false, title: '', message: '' });
- 
+
 
   let firstPage = () => {
     setCurrentPage(0);
@@ -49,7 +49,7 @@ export default function Products() {
 
   return (
     <div className="bg-white">
-      <Carrousel/>
+      <Carrousel />
       <div>
         {/* { Responsive } */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -197,7 +197,7 @@ export default function Products() {
 
               <div className="bg-white">
                 <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                  {products.map((product) => {
+                  {showProducts.map((product) => {
                     return (
                       <ProductCard
                         id={product.id}

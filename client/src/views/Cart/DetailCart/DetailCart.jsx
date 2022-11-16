@@ -15,12 +15,12 @@ export default function DetailCart() {
 
   return (
     <div className="h-screen">
-      <div className="flex w-full h-full pl-5 mr-20 pt-20 pb-5">
-        <div className="flex w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
-          <div className="flex flex-col justify-center w-full m-5">
+      <div className="flex flex-col w-full h-full pl-5 mr-20 pb-5">
+        <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
+          <div className="flex flex-col justify-center w-full py-4">
             {storage.map(e =>
             (
-              <div className="h-30 mb-2 bg-white border rounded-xl">
+              <div className="h-30 mx-4 mb-2 bg-white border rounded-xl">
                 <div className="flex h-20 flex-row">
                   <div className="flex">
                     <Link to={`/product/${e.id}`} className='w-10 object-contain'>
@@ -43,10 +43,12 @@ export default function DetailCart() {
             ))
             }
           </div>
+          <div className="flex w-full flex-row-reverse">
+            <button onClick={() => navigate("/envio")} className="bg-transparent bg-green-500 text-white font-semibold hover:text-white py-2 px-2 mr-4 mb-4 border border-blue-500 hover:border-transparent rounded ">
+              Continuar compra
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="flex bg-red-500 w-full">
-        <button onClick={() => navigate("/envio")}> Continuar compra</button>
       </div>
     </div>
   )

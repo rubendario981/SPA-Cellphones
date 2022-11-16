@@ -13,6 +13,7 @@ import Footer from './views/Home/Footer/Footer';
 import Carrito from './views/Cart/Carrito/Carrito';
 import DetailCart from './views/Cart/DetailCart/DetailCart';
 import Perfil from './views/Perfil/Perfil';
+import Envio from './views/Cart/Envio/Envio';
 // import Landing from './views/Landing/Landing';
 
 export default function App() {
@@ -28,19 +29,17 @@ export default function App() {
     <React.Fragment>
       <Header />
       <Routes>
-        {/* <Route exact path={'/'} element={<Landing />} /> */}
-        <Route exact path={'/home'} element={<Products />} />
-        <Route exact path={'/product/:id'} element={<Detail />} />
-
+        {/* Productos */}
         <Route exact path={'/'} element={<Products />} />
         <Route exact path={'/product/:id'} element={<Detail />} />
-
-        {/* <Route exact path='/product/:id' render={({ match }) => <Detail id={match.params.id} />} /> */}
         <Route exact path={'/create'} element={<FormProduct />} />
-        <Route exact path={'/register'} element={<FormUser />} />
-        <Route exact path={'/login'} element={<LoginForm />} />
+        {/* Carrito */}
         <Route exact path={'/carrito'} element={<Carrito />} />
         <Route exact path={'/detailCart'} element={<DetailCart />} />
+        <Route exact path={'/envio'} element={<Envio />} />
+        {/* Usuario */}
+        <Route exact path={'/register'} element={<FormUser />} />
+        <Route exact path={'/login'} element={<LoginForm />} />
         <Route exact path={'/perfil'} element={<Perfil />} />
       </Routes>
       <Footer />
