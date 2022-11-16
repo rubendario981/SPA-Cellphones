@@ -37,7 +37,8 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
       },
       status: {
-        type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado")
+        type: DataTypes.ENUM("Admin", "User", "Suspendido", "Eliminado"),
+        defaultValue: "User"
       },
     },
     { timestamps: false,
