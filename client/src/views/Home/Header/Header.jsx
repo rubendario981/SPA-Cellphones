@@ -10,11 +10,11 @@ const Header = () => {
   useEffect(() => { }, [pathname]);
 
   return (
-    <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between fixed w-screen z-10">
-
-      <div className="w-2/5 cursor-pointer" onClick={() => navigate("/home")}>
+    <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between sticky top-0 w-screen z-10">
+      <Link to={"/"} >
         <img src={logo} width={"100px"} alt="Logo" />
-      </div>
+      </Link>
+
       <div className="flex">
         {pathname === "/login" && (
           <Link
@@ -38,6 +38,12 @@ const Header = () => {
           <>
             <Link
               className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
+              to={"carrito"}
+            >
+              Carrito
+            </Link>
+            <Link
+              className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
               to={"register"}
             >
               Registrar
@@ -50,6 +56,9 @@ const Header = () => {
             </Link>
           </>
         )}
+
+
+        {/* Solamente para administrador */}
         <Link
           className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
           to={"create"}
@@ -57,14 +66,7 @@ const Header = () => {
           Crear producto
         </Link>
 
-        {pathname === "/home" && (
-          <Link
-            className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
-            to={"carrito"}
-          >
-            Carrito
-          </Link>
-        )}
+
       </div>
     </div>
   );

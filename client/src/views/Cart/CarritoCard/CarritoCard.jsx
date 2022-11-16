@@ -30,7 +30,7 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
 
   return (
     <>
-      <div className="border border-blue-500 w-80 pb-2 rounded-lg">
+      <div className="border border-blue-500 w-80 pb-2 rounded-lg bg-white">
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60 bg-white py-1 rounded-lg">
             <img
