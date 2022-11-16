@@ -1,11 +1,13 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CarritoCard from "../CarritoCard/CarritoCard.jsx";
 
 
 
 export default function Carrito() {
   const [update, setUpdate] = useState(false)
+  const navigate = useNavigate();
 
 
   function handelClear() {
@@ -16,8 +18,8 @@ export default function Carrito() {
 
   function handelBuy() {
     setUpdate(!update)
-    localStorage.clear()
-    alert("Carrito comprado con exito")
+
+    navigate("/detailCart")
   }
 
   let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price.replace("$", "") * e.cant)

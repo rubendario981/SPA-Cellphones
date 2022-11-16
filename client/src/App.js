@@ -10,7 +10,8 @@ import FormUser from './views/FormUser/FormUser';
 import LoginForm from './views/Home/Login/LoginForm';
 import Header from './views/Home/Header/Header';
 import Footer from './views/Home/Footer/Footer';
-import Carrito from './views/Carrito/Carrito';
+import Carrito from './views/Cart/Carrito/Carrito';
+import DetailCart from './views/Cart/DetailCart/DetailCart';
 // import Landing from './views/Landing/Landing';
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
         <Route exact path={'/register'} element={<FormUser />} />
         <Route exact path={'/login'} element={<LoginForm />} />
         <Route exact path={'/carrito'} element={<Carrito />} />
+        <Route exact path={'/detailCart'} element={<DetailCart />} />
       </Routes>
       <Footer />
     </React.Fragment>
