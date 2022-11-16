@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import s from './ProductCard.module.css'
 
 
-const ProductCard = ({ name, image, rom, price, id, stock, setDataModal }) => {
+const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId, setDataModal }) => {
 
-  let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.name === name)
-  
+  let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.id === id)
+
 
   function addCarrito(producto) {
     if (producto) {
@@ -14,7 +14,7 @@ const ProductCard = ({ name, image, rom, price, id, stock, setDataModal }) => {
       localStorage.setItem(id, JSON.stringify(producto))
     } else {
       let cant = 1
-      localStorage.setItem(id, JSON.stringify({ name, image, rom, price, id, cant, stock }))
+      localStorage.setItem(id, JSON.stringify({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId, cant }))
     }
     setDataModal({
       show: true,
@@ -26,7 +26,7 @@ const ProductCard = ({ name, image, rom, price, id, stock, setDataModal }) => {
 
   return (
     <>
-      <div className={s.containerCrad}>
+      <div id={id}>
         <button className={s.buttonCarrito} onClick={() => addCarrito(producto)} > 🛒 </button>
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">
@@ -44,7 +44,7 @@ const ProductCard = ({ name, image, rom, price, id, stock, setDataModal }) => {
                   {name}
                 </Link>
               </h3>
-              <p className="mt-1 text-sm text-gray-500">{rom}</p>
+              {/* <p className="mt-1 text-sm text-gray-500">{rom}</p> */}
             </div>
             <p className="text-sm font-medium text-gray-900">{price}</p>
           </div>

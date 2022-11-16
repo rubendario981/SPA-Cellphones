@@ -202,10 +202,21 @@ export default function Products() {
                       <ProductCard
                         id={product.id}
                         key={product.id}
-                        image={product.image}
                         name={product.name}
+                        image={product.image}
                         price={product.price}
+                        screen={product.screen}
+                        internal_storage={product.internal_storage}
+                        ram={product.ram}
+                        front_camera={product.front_camera}
+                        rear_camera={product.rear_camera}
+                        cpu={product.cpu}
+                        battery={product.battery}
+                        color={product.color}
+                        description={product.description}
                         stock={product.stock}
+                        oId={product.oId}
+                        brandId={product.brandId}
                         setDataModal={setDataModal}
                       />
                     );
