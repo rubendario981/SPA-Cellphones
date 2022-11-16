@@ -25,7 +25,7 @@ const ProductCard = ({ name, image, rom, price, id, stock, setDataModal }) => {
 
   return (
     <>
-      <div className={s.containerCrad}>
+      <div id={id}>
         <button className={s.buttonCarrito} onClick={() => addCarrito(producto)} > 🛒 </button>
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">

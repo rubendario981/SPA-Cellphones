@@ -28,27 +28,76 @@ export default function Carrito() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold tracking-tight text-gray-900 pl-4">
-        Carrito de compras
-      </h1>
-      <hr className="p-2" />
-      <div className="p-5 flex justify-center flex-wrap gap-10">
-        {Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
-      </div>
-      <div>
-        <div className="flex justify-center">
-          <h1 className="pb-2">{`Total del carrito: ${total}`}</h1>
+      <div className={Object.entries(localStorage).map(e => JSON.parse(e[1])).length > 3 ? "h-full flex pt-20 pb-5" : "h-full flex pt-20 pb-5 h-screen"}>
+        <div className="flex h-full bg-stone-300 mx-5 w-1/3 justify-center rounded-3xl px-5 border border-blue-500">
+          <div className="flex flex-col items-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+              Carrito de compras
+            </h1>
+            <div className="flex flex-col h-full w-full">
+              {
+
+                Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => {
+                  return (
+                    <>
+                      <div className="flex justify-between my-1 w-full py-1">
+                        <div>
+                          <h1>{e.name}</h1>
+                        </div>
+                        <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price.replace("$", "")) * e.cant}` : e.price.replace("$", "")}</div>
+                      </div>
+                    </>
+                  )
+                })
+
+              }
+            </div>
+            <div className="flex justify-between py-5 w-full">
+              <button onClick={() => handelClear()} className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded">
+                Vaciar carrito
+              </button>
+              <button onClick={() => handelBuy()} className="bg-transparent hover:bg-green-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded">
+                Comprar carrito
+              </button>
+            </div>
+          </div>
         </div>
-        <hr className="p-2" />
-        <div className="flex justify-center gap-10">
-          <button onClick={() => handelClear()} className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-            Vaciar carrito
-          </button>
-          <button onClick={() => handelBuy()} className="bg-transparent hover:bg-green-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-            Comprar carrito
-          </button>
+
+        <div className="flex w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
+          <div className="flex justify-center flex-wrap gap-10 p-4">
+            {Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
+          </div>
         </div>
       </div>
+
     </>
   )
 }
+
+
+
+// <div id="ContainerAllCarrito" className="flex pt-20">
+// {/* Sumary card */}
+// <div className="flex flex-col items-center fixed w-1/3">
+//   <div className="flex flex-col bg-blue-100 items-center px-20 rounded-3xl h-screen">
+//     <h1 className="text-4xl font-bold tracking-tight text-gray-900 pl-4">
+//       Carrito de compras
+//     </h1>
+//     <hr className="p-2" />
+//     <h1 className="pb-2">{`Total del carrito: ${total}`}</h1>
+//     <hr className="p-2" />
+//     <div className="flex justify-center gap-10">
+//
+//     </div>
+//   </div>
+// </div>
+
+// {/* List products card */}
+// <div className="flex justify-end ">
+//   <div className="flex w-2/3 justify-end">
+//     <div className="pl-5 flex justify-center flex-wrap gap-10">
+//       {Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
+//     </div>
+//   </div>
+// </div>
+// </div>

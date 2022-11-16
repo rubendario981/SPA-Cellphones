@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) => {
 
-  let product = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.name === name)
+  let product = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.id === id)
 
   function deletedCarrito() {
     let confirm = window.confirm(`Esta seguro que desea eliminar ${name} x ${product.cant}?`)
@@ -15,7 +15,7 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
   }
 
   function onHandelChange(e) {
-    console.log(stock);
+    console.log(product);
     if (e.target.value > stock) {
       alert(`No hay suficiente stock de ${name} \nEl maximo es ${stock}`)
       e.target.value = stock
@@ -30,16 +30,16 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
 
   return (
     <>
-      <div>
+      <div className="border border-blue-500 w-80 pb-2 rounded-lg">
         <div className="group relative">
-          <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">
+          <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60 bg-white py-1 rounded-lg">
             <img
               src={image}
               alt="Phone_image"
               className="h-full w-full object-contain object-center lg:h-full lg:w-full"
             />
           </div>
-          <div className="mt-4 flex justify-between">
+          <div className="mt-4 flex justify-between px-2">
             <div>
               <h3 className="text-sm text-gray-700">
                 <Link to={`/product/${id}`}>
