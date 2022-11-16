@@ -48,7 +48,7 @@ export const createCellPhone = (cell) => {
       );
       return dispatch({
         type: "CREATE_PRODUCT",
-        payload: response,
+        payload: response.data,
       });
     } catch (error) {
       console.log("Error redux action file", error);

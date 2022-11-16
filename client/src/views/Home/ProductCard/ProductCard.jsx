@@ -7,6 +7,7 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
 
   let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.id === id)
 
+
   function addCarrito(producto) {
     if (producto) {
       producto.cant++

@@ -12,6 +12,7 @@ import Header from './views/Home/Header/Header';
 import Footer from './views/Home/Footer/Footer';
 import Carrito from './views/Cart/Carrito/Carrito';
 import DetailCart from './views/Cart/DetailCart/DetailCart';
+import Perfil from './views/Perfil/Perfil';
 // import Landing from './views/Landing/Landing';
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
         <Route exact path={'/login'} element={<LoginForm />} />
         <Route exact path={'/carrito'} element={<Carrito />} />
         <Route exact path={'/detailCart'} element={<DetailCart />} />
+        <Route exact path={'/perfil'} element={<Perfil />} />
       </Routes>
       <Footer />
     </React.Fragment>
