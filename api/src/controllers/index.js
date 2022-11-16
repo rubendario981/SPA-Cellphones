@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { Cellphone, Os, Brand } = require('../db.js');
 const { Op } = require('sequelize');
+const { usuariosPrueba } = require('./user.controllers.js');
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts(req, res) {
@@ -12,6 +13,8 @@ async function getAllProducts(req, res) {
 
     // si no hay cellulares en la base de datos se procede a crearlos
     if (!listCellphones.length) {
+      //creando usuario de prueba
+      usuariosPrueba()
       const brandsCell = [];
       const sysOperative = [];
       const products = await axios.get(
@@ -39,19 +42,19 @@ async function getAllProducts(req, res) {
 
       initialData.map(
         (e) => !brandsCell.includes(e.brand) && brandsCell.push(e.brand)
-      );
+      );      
+
 
       initialData.map(
-        (e) =>
-          !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
+        (e) => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
       );
 
-      // // Procede a crear las marcas en la base de datos
+      // Procede a crear las marcas en la base de datos
       brandsCell.sort().map(async (brand) => {
         await Brand.findOrCreate({ where: { name: brand } });
       });
 
-      // // Procede a crear los sistemas operativos
+      // Procede a crear los sistemas operativos
       sysOperative.map(async (so) => {
         await Os.findOrCreate({ where: { name: so } });
       });
