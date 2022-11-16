@@ -9,11 +9,13 @@ import NavBar from "../NavBar/NavBar";
 import Filters from "../Filters/Filters";
 import Order from "../Order/Order";
 import Alert from "../../Modals/Alert.jsx";
+import Carrousel from "../../Carrousel/Carrousel";
 
 export default function Products() {
   const products = useSelector((state) => state.showProducts);
   const [currentPage, setCurrentPage] = useState(0);
   const [dataModal, setDataModal] = useState({ show: false, title: '', message: '' });
+ 
 
   let firstPage = () => {
     setCurrentPage(0);
@@ -47,6 +49,7 @@ export default function Products() {
 
   return (
     <div className="bg-white">
+      <Carrousel/>
       <div>
         {/* { Responsive } */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -194,15 +197,26 @@ export default function Products() {
 
               <div className="bg-white">
                 <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                  {showProducts.map((product) => {
+                  {products.map((product) => {
                     return (
                       <ProductCard
                         id={product.id}
                         key={product.id}
-                        image={product.image}
                         name={product.name}
+                        image={product.image}
                         price={product.price}
+                        screen={product.screen}
+                        internal_storage={product.internal_storage}
+                        ram={product.ram}
+                        front_camera={product.front_camera}
+                        rear_camera={product.rear_camera}
+                        cpu={product.cpu}
+                        battery={product.battery}
+                        color={product.color}
+                        description={product.description}
                         stock={product.stock}
+                        oId={product.oId}
+                        brandId={product.brandId}
                         setDataModal={setDataModal}
                       />
                     );
