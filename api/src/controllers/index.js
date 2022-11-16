@@ -20,7 +20,8 @@ async function getAllProducts(req, res) {
       const products = await axios.get(
         `https://api-celulares-27ad3-default-rtdb.firebaseio.com/.json`
       );
-      const initialData = products.data?.map((e) => ({
+      let initialData = products.data?.map((e) => ({
+        id: e.id,
         brand: e.brand,
         name: e.name,
         image: e.image,
@@ -37,9 +38,12 @@ async function getAllProducts(req, res) {
         stock: Math.round(Math.random() * 50), //Se modifica el stock de esta forma, para poder hacer la funcionalidad en el carrito de compras.
       }));
 
+      // initialData = initialData.sort((a, b) => a.id - b.id);
+
       initialData.map(
         (e) => !brandsCell.includes(e.brand) && brandsCell.push(e.brand)
       );      
+
 
       initialData.map(
         (e) => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
@@ -55,7 +59,7 @@ async function getAllProducts(req, res) {
         await Os.findOrCreate({ where: { name: so } });
       });
 
-      await Cellphone.bulkCreate(initialData);
+      await Cellphone.bulkCreate(initialData.sort((a, b) => a.id - b.id));
 
       // se actualizan la lista de celulares para incluir las relaciones de marca y sistema operativo
       initialData.map(async (el) => {
@@ -72,7 +76,7 @@ async function getAllProducts(req, res) {
       });
 
       const cellphonesCreated = await Cellphone.findAll();
-
+      console.log(cellphonesCreated);
       return res?.json(
         cellphonesCreated.length > 0
           ? cellphonesCreated

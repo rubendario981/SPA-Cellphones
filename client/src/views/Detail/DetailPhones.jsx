@@ -11,6 +11,7 @@ export default function Detail(){
     const dispatch = useDispatch();
     const {id}= useParams();
     const phones = useSelector(state => state.detail)
+    
     // const phones = useSelector(state => state.products)
     console.log(phones, 'Estado local , trae algo?')
     console.log(id + 'ESTE ES EL ID')
@@ -40,7 +41,7 @@ export default function Detail(){
             </div>
             <br/>
             <div  >
-                <img  src={phones.map(e=>e.image) } alt="logoimg"  />
+                <img src={phones.map(e=>e.image)} alt="phone img" />
                </div>  
                <div><h2>Ficha Tecnica</h2></div>
                 <div >

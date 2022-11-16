@@ -29,7 +29,7 @@ const Header = () => {
   }
 
   return (
-    <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between">
+    <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between fixed w-screen z-10">
 
       <div className="w-2/5 cursor-pointer" onClick={() => navigate("/")}>
         <img src={logo} width={"100px"} alt="Logo" />
@@ -94,14 +94,12 @@ const Header = () => {
             Crear producto
           </Link>
         }
-
         <Link
           className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
           to={"carrito"}
         >
           Carrito
         </Link>
-
       </div>
     </div>
   );
