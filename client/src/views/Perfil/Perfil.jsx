@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react';
 
 const Perfil = () => {
 	const token = localStorage.getItem('token')
+	const [user, setUser] = useState()
 
-	const payloadUser = window.atob(token.split('.')[1])
-	const user = JSON.parse(payloadUser)
-
+	if(token){
+		const payloadUser = window.atob(token.split('.')[1])
+		setUser(JSON.parse(payloadUser))
+	}
+	
 	return (
 		<div className='mt-15 pt-15'>
-			{ token && user.email
+			{ token && user
 				? <p> usuario identificado con email {user.email}</p> :
-				<p> usuario desde la base de datos con id {user.id} </p>
+				<p> usuario desde la base de datos con id {user.id} y rol { user.status } </p>
 			}
+			
 		</div>
 	)
 }
