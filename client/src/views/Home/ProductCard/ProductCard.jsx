@@ -8,7 +8,7 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
 
   // Codigo viejo
   let producto = Object.entries(localStorage).map(e => JSON.parse(e[1]).hasOwnProperty("battery") && JSON.parse(e[1])).filter(e => typeof e === "object").find(e => e.id === e)
-  console.log(producto);
+
   function addCarrito(producto) {
     if (producto) {
       producto.cant++
