@@ -5,8 +5,9 @@ import s from './ProductCard.module.css'
 
 const ProductCard = ({ name, image, rom, price, id, stock, setDataModal }) => {
 
-  let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.name === name)
+  // let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.name === name)
 
+  const producto = {}
   function addCarrito(producto) {
     if (producto) {
       producto.cant++
