@@ -4,7 +4,8 @@ const initialState = {
   filterProducts: [],
   detail: [],
   brands: [],
-  os: []
+  os: [], 
+  user: {}
 };
 
 function menorAMayor(a, b) {
@@ -90,6 +91,24 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         showProducts: state.filterProducts.slice().sort(menorAMayor).reverse(),
+      };
+    case "CREATE_USER":
+      return{
+        ...state
+      };
+    case "LOGIN":
+      return{
+        ...state,
+      };
+    case "GET_PERFIL":
+      return{
+        ...state,
+        user: action.payload
+      };
+    case "CERRAR_SESION": // validar si es necesario!!!
+      return{
+        ...state,
+        user: {}
       };
     default:
       return state;

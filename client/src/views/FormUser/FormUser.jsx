@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { createUser } from '../../redux/actions';
 
 const FormUser = () => {
-	const initialState = { name: "", surname: "", email: "", password: "", retypepass: "", country: "", city: "", address: "", card_number: "", isAdmin: false }
+	const initialState = { name: "", email: "", password: "", retypepass: "", country: "", city: "", address: "", card_number: "", isAdmin: false }
 	const [user, setUser] = useState(initialState)
 	const [errors, setErrors] = useState({})
 	const [allFields, setAllFields] = useState(false)
-
+	const dispatch = useDispatch()
 	const navigate = useNavigate()
 
 	const validateFields = (field) => {
 		const errors = {}
 		if (!field.name || field.name.length < 3) {
 			errors.name = "El nombre es requerido y debe ser mayor a 3 caracteres"
-		}
-		if (!field.surname || field.surname.length < 3) {
-			errors.surname = "El apellido es requerido y debe ser mayor a 3 caracteres"
-		}
+		}		
 		if (!field.email) {
 			errors.email = "El campo de correo electronico es requerido"
 		}
@@ -70,15 +69,15 @@ const FormUser = () => {
 			alert("Algunos campos del formulario no cumplen con los requerimientos, por favor revisarlos e intente de nuevo")
 		} else {
 			try {
-				const createUser = await axios.post('http://localhost:3001/user/register', user)
-				if (createUser.status === 200) {
-					const token = await createUser.data.token
-					localStorage.setItem('token', token)
+				const response = await dispatch(createUser(user))				
+				if (response.payload) {					
 					alert(`${user.name} te has registrador en nuestra pagina correctamente`)
-					navigate('/')
+					navigate('/')					
+				} else if (response.response.data){
+					alert(`Algo salio mal al registrarse ` + response.response.data)
 				}
 			} catch (error) {
-				alert("Error al crear usuario " + error.message)
+				alert("Error al crear usuario " + error)
 			}
 		}
 
@@ -93,7 +92,7 @@ const FormUser = () => {
 				<form onSubmit={sendForm}>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
-							Nombres
+							Nombres completos
 						</label>
 						<input
 							type="text"
@@ -106,21 +105,6 @@ const FormUser = () => {
 							autoFocus
 						/>
 						{errors.name && <p className='text-red-600'>{errors.name}</p>}
-					</div>
-					<div className="mb-4">
-						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
-							Apellidos
-						</label>
-						<input
-							type="text"
-							className="shadow appearance-none border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							placeholder="Ingresa tus apellidos"
-							name='surname'
-							value={user.surname}
-							onChange={handleChanges}
-							required
-						/>
-						{errors.surname && <p className='text-red-600'>{errors.surname}</p>}
 					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
@@ -235,7 +219,7 @@ const FormUser = () => {
 						</button>
 						<button type='button'
 							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-							onClick={() => setUser({ name: "Scarlet", surname: "Jhohanson", email: "scarlet@henry.com", password: "12345", retypepass: "12345", country: "Colombia", city: "Cali", address: "", card_number: "", isAdmin: false })}
+							onClick={() => setUser({ name: "Scarlet Jhohanson", email: "scarlet@henry.com", password: "Hola5", retypepass: "Hola5", country: "Colombia", city: "Cali", address: "", card_number: "", isAdmin: false })}
 						>
 							Cargar datos de pueba
 						</button>

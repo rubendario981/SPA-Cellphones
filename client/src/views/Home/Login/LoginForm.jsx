@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom"
-import axios from "axios"
+import { useDispatch } from "react-redux"
 // Importar modulos de firebase
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { createUser, login } from '../../../redux/actions';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,6 +26,7 @@ const LoginForm = () => {
 
   const [input, setInput] = useState(initialState)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -38,32 +40,40 @@ const LoginForm = () => {
   const sendForm = async (e) => {
     e.preventDefault()
     try {
-      const login = await axios.post('http://localhost:3001/user/login', input)
-      login.status === 200 &&
-        localStorage.setItem('token', login.data.token)
-      alert("Bienvenio a nuestra pagina")
-      navigate('/perfil')
+      const response = await dispatch(login(input))
+      if (response.payload) {
+        alert("Bienvenio a nuestra pagina ")
+        navigate('/perfil')
+      } else if (response.response.data) {
+        alert("Algo ha salido mal, intenta de nuevo \n" + response.response.data)
+        localStorage.removeItem('token')
+      }
 
     } catch (error) {
-      alert("Algo ha salido mal, intenta de nuevo" + error)
+      alert("Error genearl \n " + error)
     }
   }
 
   const siginGoogle = async () => {
     try {
       const user = await signInWithPopup(auth, provider)
-      const token = await user.user.accessToken
-      localStorage.setItem('token', token)
-      alert("Inicio sesion correcto!! ")
-      navigate('/perfil')
+      const userData = { email: user.user.email, name: user.user.displayName }
+
+      const response = await dispatch(createUser(userData))
+      if (response.payload) {
+        alert(`Bienvenido a nuestra pagina ${userData.name}`)
+        navigate('/')
+      } else if (response.response.data) {
+        alert(`Algo salio mal al registrarse ` + response.response.data)
+      }
     } catch (error) {
       error.code
-        ? alert('Error en proceso de autenticacion ', error.code)
+        ? alert('Error en proceso de autenticacion \n ' + error.code)
         : error.message
-          ? alert("Autenticacion fallida ", error.message)
+          ? alert("Autenticacion fallida \n " + error.message)
           : error.customData.email
-            ? alert("Error con el email ", error.customData.email)
-            : alert("Error general", error)
+            ? alert("Error con el email \n " + error.customData.email)
+            : alert("Error general \n " + error)
     }
   }
   return (
