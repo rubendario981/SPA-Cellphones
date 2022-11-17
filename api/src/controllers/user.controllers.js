@@ -57,6 +57,16 @@ const login = async (req, res) => {
 	}
 }
 
+const userInfo = async (req, res) =>{
+	console.log(req.query.id);
+	try {
+		const findUser = await Users.findByPk( req.query.id )
+		return res.json(findUser ? findUser : "No se encontro usuario")
+	} catch (error) {
+		return res.status(500).json(error)
+	}
+}
+
 const usuariosPrueba = async (req, res) => {
 	const usuarios = [
 		{ id: 1, name: "Scarlet", surname: "Johanson", email: "scarlet@mail.com", password: "12345", status: "Admin" },
@@ -83,5 +93,6 @@ module.exports = {
 	registerUser,
 	updateUser,
 	login,
+	userInfo,
 	usuariosPrueba
 }

@@ -10,8 +10,8 @@ export function getProducts() {
   };
 }
 
-export const getListBrands = () =>{
-  return async (dispatch) =>{
+export const getListBrands = () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get(`http://localhost:3001/products/brands`);
       return dispatch({
@@ -24,8 +24,8 @@ export const getListBrands = () =>{
   }
 }
 
-export const getListOs = () =>{
-  return async (dispatch) =>{
+export const getListOs = () => {
+  return async (dispatch) => {
     try {
       const response = await axios.get(`http://localhost:3001/products/os`);
       return dispatch({
@@ -94,4 +94,59 @@ export function getProductById(id) {
       console.log(error);
     }
   };
+}
+
+export function createUser(dataUser) {
+  return async function (dispatch) {
+    try {
+      const response = await axios.post('http://localhost:3001/user/register', dataUser)
+      const token = JSON.stringify(response.data.token)
+      localStorage.setItem('token', token)
+      return dispatch({
+        type: "CREATE_USER",
+        payload: response
+      })
+    } catch (error) {
+      return error
+    }
+  }
+}
+
+export function login(dataUser) {
+  return async function (dispatch) {
+    try {
+      const response = await axios.post("http://localhost:3001/user/login", dataUser)
+      const token = JSON.stringify(response.data.token)
+      localStorage.setItem('token', token)
+      return dispatch({
+        type: "LOGIN",
+        payload: response
+      })
+    } catch (error) {
+      return error
+    }
+  }
+}
+
+export function getProfile(id){
+  return async function(dispatch){
+    try {
+      const profile = await axios.get(`http://localhost:3001/user/getProfile?id=${id}`)
+      return dispatch({
+        type: "GET_PERFIL",
+        payload: profile
+      })
+    } catch (error) {
+      
+    }
+  }
+}
+
+export const cerrarSesion = () => {
+  return async (dispatch) => {
+    localStorage.removeItem('token')
+    return dispatch({
+      type: "CERRAR_SESION"
+    })
+  }
 }
