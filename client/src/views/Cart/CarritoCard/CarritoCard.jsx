@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 
 const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) => {
 
-  const product = localStorage.getItem('products')
+  const product = JSON.parse(localStorage.getItem('products')).find(e => e.id === id)
 
   function deletedCarrito() {
     let confirm = window.confirm(`Esta seguro que desea eliminar ${name} x ${product.cant}?`)
     if (confirm) {
-      localStorage.removeItem(id)
+      let elementsCart = JSON.parse(localStorage.getItem("products"))
+      let index = elementsCart.findIndex(e => e.id === id)
+      elementsCart.splice(index, 1)
+      localStorage.setItem("products", JSON.stringify(elementsCart))
       setUpdate(!update)
     }
   }
@@ -22,8 +25,13 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
     }
     if (e.target.value <= 0)
       e.target.value = 1
-    product.cant = e.target.value * 1
-    localStorage.setItem(id, JSON.stringify(product))
+
+    let elementsCart = JSON.parse(localStorage.getItem("products"))
+    let producto = elementsCart.splice(elementsCart.indexOf(e => e.id === id), 1)[0]
+    producto.cant = e.target.value * 1
+    console.log("aumentado", producto);
+    elementsCart.push(producto)
+    localStorage.setItem("products", JSON.stringify(elementsCart))
     setUpdate(!update)
   }
 

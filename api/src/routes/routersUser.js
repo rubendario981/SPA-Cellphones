@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { registerUser, updateUser, login } = require('../controllers/user.controllers');
+const { registerUser, updateUser, login, userInfo } = require('../controllers/user.controllers');
 const router = Router();
 
 router.post('/create', async (req, res) => {
@@ -15,6 +15,8 @@ router.post('/register',  registerUser  )
 router.patch('/update/:id',  updateUser  )
 
 router.post('/login',  login  )
+
+router.get('/getProfile',  userInfo  )
 
 
 module.exports = router;

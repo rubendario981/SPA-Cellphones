@@ -6,20 +6,19 @@ const Header = () => {
   const location = useLocation();
   const { pathname } = location;
   const navigate = useNavigate();
-  const [user, setUser] = useState({})
 
   const token = localStorage.getItem('token')
-  if (token) {
-    // decodifico el token
-    const payloadUser = window.atob(token?.split('.')[1])
-    setUser(JSON.parse(payloadUser))
-
+  let user = {}
+  if (!token) {
+    localStorage.setItem('token', '')
+  } else {
+    // decodifico el token y lo guardo en un objeto
+    user = JSON.parse(window.atob(token?.split('.')[1]))
   }
-  //convierto el payload a objeto
+  
   useEffect(() => {
-    
   }, [pathname, user]);
-
+  
   const cerrarSesion = () => {
     const response = window.confirm("Estas seguro que quieres cerrar la sesion?")
     if (response) {
@@ -35,7 +34,7 @@ const Header = () => {
       </Link>
 
       <div className="flex">
-        {!user.id && pathname === "/login" && (
+        {!user && pathname === "/login" && (
           <Link
             className=" px-2 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
             to={"register"}
@@ -53,12 +52,6 @@ const Header = () => {
         )}
         {!user.id && pathname === "/" && (
           <>
-            <Link
-              className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
-              to={"carrito"}
-            >
-              Carrito
-            </Link>
             <Link
               className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
               to={"register"}

@@ -13,25 +13,29 @@ export default function Carrito() {
   function handelClear() {
     let boolean = window.confirm("Desea vaciar todo el carrito?")
     if (boolean) {
-      localStorage.removeItem("products")
+      localStorage.setItem("products", JSON.stringify([]))
       setUpdate(!update)
     }
   }
 
   function handelBuy() {
-    setUpdate(!update)
-    navigate("/detailCart")
+    let productsStorage = JSON.parse(localStorage.getItem("products"))
+    if (productsStorage.length) {
+      setUpdate(!update)
+      navigate("/detailCart")
+    } else {
+      alert("Para continuar con la compra, primero debes agregar productos a tu carrito.")
+    }
   }
   const elementsCart = JSON.parse(localStorage.getItem("products"))
 
-  let total = "arreglar" // elementsCart.map(e => )
+  let total = elementsCart?.map(e => e.price.replace("$", "") * 1)
 
-  // total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
-  console.log(elementsCart);
+  total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
 
   return (
     <>
-      <div className={elementsCart ? "h-full flex pb-5" : "flex pb-5 h-screen"}>
+      <div className={elementsCart.length > 3 ? "h-full flex pb-5" : "flex pb-5 h-screen"}>
         <div className="flex h-full bg-stone-300 mx-5 w-1/3 justify-center rounded-3xl px-5 border border-blue-500">
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
