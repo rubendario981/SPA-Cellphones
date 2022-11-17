@@ -13,7 +13,7 @@ export default function Carrito() {
   function handelClear() {
     let boolean = window.confirm("Desea vaciar todo el carrito?")
     if (boolean) {
-      localStorage.clear()
+      localStorage.removeItem("products")
       setUpdate(!update)
     }
   }
@@ -22,14 +22,16 @@ export default function Carrito() {
     setUpdate(!update)
     navigate("/detailCart")
   }
+  const elementsCart = JSON.parse(localStorage.getItem("products"))
 
-  let total = Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => 1 * e.price?.replace("$", "") * e.cant)
+  let total = "arreglar" // elementsCart.map(e => )
 
-  total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
+  // total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
+  console.log(elementsCart);
 
   return (
     <>
-      <div className={Object.entries(localStorage).map(e => JSON.parse(e[1])).length > 3 ? "h-full flex pb-5" : "h-full flex pb-5 h-screen"}>
+      <div className={elementsCart ? "h-full flex pb-5" : "flex pb-5 h-screen"}>
         <div className="flex h-full bg-stone-300 mx-5 w-1/3 justify-center rounded-3xl px-5 border border-blue-500">
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
@@ -38,9 +40,9 @@ export default function Carrito() {
             <div className="flex flex-col h-full w-full">
               {
 
-                Object.entries(localStorage).map(e => JSON.parse(e[1]).hasOwnProperty("battery") && JSON.parse(e[1])).filter(e => typeof e === "object").map(e => {
+                elementsCart?.map((e, index) => {
                   return (
-                    <div key={e.id}>
+                    <div key={index}>
                       <div className="flex justify-between my-1 w-full py-1" >
                         <div>
                           <h1>{e.name}</h1>
@@ -69,7 +71,7 @@ export default function Carrito() {
 
         <div className="flex w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
           <div className="flex justify-center flex-wrap gap-10 p-4">
-            {Object.entries(localStorage).map(e => JSON.parse(e[1])).map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
+            {elementsCart?.map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) => {
 
-  let product = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.id === id)
+  const product = localStorage.getItem('products')
 
   function deletedCarrito() {
     let confirm = window.confirm(`Esta seguro que desea eliminar ${name} x ${product.cant}?`)

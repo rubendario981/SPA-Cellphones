@@ -14,7 +14,7 @@ async function getAllProducts(req, res) {
     // si no hay cellulares en la base de datos se procede a crearlos
     if (!listCellphones.length) {
       //creando usuario de prueba
-      usuariosPrueba()
+      // usuariosPrueba()
       const brandsCell = [];
       const sysOperative = [];
       const products = await axios.get(
