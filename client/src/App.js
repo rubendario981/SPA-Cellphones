@@ -1,25 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getProducts, getListBrands, getListOs } from './redux/actions';
+import { Route, Routes } from 'react-router-dom';
+import Products from './views/Home/Products/Products';
+import Detail from './views/Detail/DetailPhones';
+import FormProduct from './views/FormProduct/FormProduct';
+import FormUser from './views/FormUser/FormUser';
+import LoginForm from './views/Home/Login/LoginForm';
+import Header from './views/Home/Header/Header';
+import Footer from './views/Home/Footer/Footer';
+import Carrito from './views/Cart/Carrito/Carrito';
+import DetailCart from './views/Cart/DetailCart/DetailCart';
+import Perfil from './views/Perfil/Perfil';
+import Envio from './views/Cart/Envio/Envio';
+// import Landing from './views/Landing/Landing';
 
-function App() {
+export default function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProducts());
+    dispatch(getListBrands());
+    dispatch(getListOs());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Header />
+      <Routes>
+        {/* Productos */}
+        <Route exact path={'/'} element={<Products />} />
+        <Route exact path={'/product/:id'} element={<Detail />} />
+        <Route exact path={'/create'} element={<FormProduct />} />
+        {/* Carrito */}
+        <Route exact path={'/carrito'} element={<Carrito />} />
+        <Route exact path={'/detailCart'} element={<DetailCart />} />
+        <Route exact path={'/envio'} element={<Envio />} />
+        {/* Usuario */}
+        <Route exact path={'/register'} element={<FormUser />} />
+        <Route exact path={'/login'} element={<LoginForm />} />
+        <Route exact path={'/perfil'} element={<Perfil />} />
+      </Routes>
+      <Footer />
+    </React.Fragment>
   );
 }
-
-export default App;

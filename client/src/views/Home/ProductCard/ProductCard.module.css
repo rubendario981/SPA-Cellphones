@@ -1,0 +1,9 @@
+.buttonCarrito {
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  display: flex;
+  justify-self: flex-end;
+  z-index: 1;
+  font-size: 25px;
+}
