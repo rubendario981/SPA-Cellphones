@@ -47,6 +47,8 @@ export default function Products() {
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
+  !localStorage.getItem("products") && localStorage.setItem("products", "[]")
+
   return (
     <div className="bg-white">
       <Carrousel />

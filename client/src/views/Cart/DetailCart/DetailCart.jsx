@@ -5,11 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 export default function DetailCart() {
 
   let navigate = useNavigate()
-  let storage = Object.entries(localStorage).map(e => JSON.parse(e[1]))
+  let storage = JSON.parse(localStorage.getItem("products"))
   const [update, setUpdate] = useState(false)
 
+  //cambiar
   function deletedProduct(id) {
-    localStorage.removeItem(id)
+    let elementsCart = JSON.parse(localStorage.getItem("products"))
+    let index = elementsCart.findIndex(e => e.id === id)
+    elementsCart.splice(index, 1)
+    localStorage.setItem("products", JSON.stringify(elementsCart))
     setUpdate(!update)
   }
 
@@ -18,9 +22,9 @@ export default function DetailCart() {
       <div className="flex flex-col w-full h-full pl-5 mr-20 pb-5">
         <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
           <div className="flex flex-col justify-center w-full py-4">
-            {storage.map(e =>
+            {storage?.map(e =>
             (
-              <div className="h-30 mx-4 mb-2 bg-white border rounded-xl">
+              <div className="h-30 mx-4 mb-2 bg-white border rounded-xl" key={e.id}>
                 <div className="flex h-20 flex-row">
                   <div className="flex">
                     <Link to={`/product/${e.id}`} className='w-10 object-contain'>
