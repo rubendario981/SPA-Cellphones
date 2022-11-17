@@ -10,7 +10,8 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
     let confirm = window.confirm(`Esta seguro que desea eliminar ${name} x ${product.cant}?`)
     if (confirm) {
       let elementsCart = JSON.parse(localStorage.getItem("products"))
-      elementsCart.splice(elementsCart.indexOf(e => e.id === id), 1)
+      let index = elementsCart.findIndex(e => e.id === id)
+      elementsCart.splice(index, 1)
       localStorage.setItem("products", JSON.stringify(elementsCart))
       setUpdate(!update)
     }
