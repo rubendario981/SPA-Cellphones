@@ -27,7 +27,6 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
       productos.push(producto)
       localStorage.setItem('products', JSON.stringify(productos))
     }
-
     let cantidad = productos.find(e => e.id === id).cant
     if (productos.map(p => p.id === id).length > 0) alert(`${name} agregado al carrito.\nUsted tiene ${cantidad} agregados al carrito.`)
   }

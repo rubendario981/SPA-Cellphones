@@ -28,9 +28,6 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
     let elementsCart = JSON.parse(localStorage.getItem("products"))
     let index = elementsCart.findIndex(e => e.id === id)
     let producto = elementsCart[index]
-    console.log("elementsCart", elementsCart);
-    console.log("index", index);
-    console.log("producto", producto);
     producto.cant = e.target.value * 1
     localStorage.setItem("products", JSON.stringify(elementsCart))
     setUpdate(!update)
