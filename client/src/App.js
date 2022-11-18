@@ -15,6 +15,7 @@ import DetailCart from './views/Cart/DetailCart/DetailCart';
 import Perfil from './views/Perfil/Perfil';
 import Envio from './views/Cart/Envio/Envio';
 import FormAddress from './views/Cart/FormAddress/FormAddress';
+import Pago from './views/Cart/Pago/Pago';
 // import Landing from './views/Landing/Landing';
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
         <Route exact path={'/carrito'} element={<Carrito />} />
         <Route exact path={'/detailCart'} element={<DetailCart />} />
         <Route exact path={'/envio'} element={<Envio />} />
+        <Route exact path={'/pago'} element={<Pago />} />
         {/* Usuario */}
         <Route exact path={'/register'} element={<FormUser />} />
         <Route exact path={'/login'} element={<LoginForm />} />

@@ -66,7 +66,8 @@ export default function Carrito() {
               <button onClick={() => handelClear()} className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded">
                 Vaciar carrito
               </button>
-              <button onClick={() => handelBuy()} className="bg-transparent hover:bg-green-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded">
+              <button onClick={() => handelBuy()} className="bg-transparent hover:bg-green-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded"
+                disabled={elementsCart.length ? false : true}>
                 Comprar carrito
               </button>
             </div>

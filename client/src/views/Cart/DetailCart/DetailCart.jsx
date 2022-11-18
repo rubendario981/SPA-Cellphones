@@ -7,6 +7,7 @@ export default function DetailCart() {
   let navigate = useNavigate()
   let storage = JSON.parse(localStorage.getItem("products"))
   const [update, setUpdate] = useState(false)
+  let elementsCart = JSON.parse(localStorage.getItem("products"))
 
   //cambiar
   function deletedProduct(id) {
@@ -48,7 +49,7 @@ export default function DetailCart() {
             }
           </div>
           <div className="flex w-full flex-row-reverse">
-            <button onClick={() => navigate("/envio")} className="bg-transparent bg-green-500 text-white font-semibold hover:text-white py-2 px-2 mr-4 mb-4 border border-blue-500 hover:border-transparent rounded ">
+            <button onClick={() => navigate("/envio")} className="bg-transparent bg-green-500 text-white font-semibold hover:text-white py-2 px-2 mr-4 mb-4 border border-blue-500 hover:border-transparent rounded " disabled={elementsCart.length ? false : true}>
               Continuar compra
             </button>
           </div>
