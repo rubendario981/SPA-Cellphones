@@ -18,7 +18,6 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
   }
 
   function onHandelChange(e) {
-    console.log(product);
     if (e.target.value > stock) {
       alert(`No hay suficiente stock de ${name} \nEl maximo es ${stock}`)
       e.target.value = stock
@@ -27,10 +26,12 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
       e.target.value = 1
 
     let elementsCart = JSON.parse(localStorage.getItem("products"))
-    let producto = elementsCart.splice(elementsCart.indexOf(e => e.id === id), 1)[0]
+    let index = elementsCart.findIndex(e => e.id === id)
+    let producto = elementsCart[index]
+    console.log("elementsCart", elementsCart);
+    console.log("index", index);
+    console.log("producto", producto);
     producto.cant = e.target.value * 1
-    console.log("aumentado", producto);
-    elementsCart.push(producto)
     localStorage.setItem("products", JSON.stringify(elementsCart))
     setUpdate(!update)
   }

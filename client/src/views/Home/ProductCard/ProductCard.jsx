@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import s from './ProductCard.module.css'
 
 
-// const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId, setDataModal }) => {
 const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }) => {
 
   const addCarrito = () => {
@@ -29,7 +28,8 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
       localStorage.setItem('products', JSON.stringify(productos))
     }
 
-    if (productos.map(p => p.id === id).length > 0) alert(`${name} agregado al carrito.`)
+    let cantidad = productos.find(e => e.id === id).cant
+    if (productos.map(p => p.id === id).length > 0) alert(`${name} agregado al carrito.\nUsted tiene ${cantidad} agregados al carrito.`)
   }
 
 
