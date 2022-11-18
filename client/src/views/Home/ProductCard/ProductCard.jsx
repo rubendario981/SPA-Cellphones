@@ -52,7 +52,7 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
                   {name}
                 </Link>
               </h3>
-              {/* <p className="mt-1 text-sm text-gray-500">{rom}</p> */}
+              <p className="mt-1 text-sm text-gray-500">{internal_storage}</p>
             </div>
             <p className="text-sm font-medium text-gray-900">{price}</p>
           </div>
