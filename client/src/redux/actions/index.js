@@ -75,11 +75,13 @@ export function getProductByName(name) {
 export function ordenar(orden) {
   return { type: orden };
 }
+
 export function cleanDetail() {
   return {
     type: 'CLEAN_DETAIL',
   };
 }
+
 export function getProductById(id) {
   console.log(id + 'ID ');
   return async function (dispatch) {
@@ -154,5 +156,12 @@ export const cerrarSesion = () => {
     return dispatch({
       type: 'CERRAR_SESION',
     });
+  };
+};
+
+export const udapteUser = (user) => {
+  console.log('Usuario actions', user);
+  return async (dispatch) => {
+    await axios.patch(`http://localhost:3001/user/update/${user.id}`, user);
   };
 };
