@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { udapteUser } from "../../../redux/actions";
 
-export default function FormAddress() {
-  const navigate = useNavigate()
+export default function FormAddress({ update, setUpdate }) {
+  // const navigate = useNavigate()
   const dispatch = useDispatch();
   const userInfo = useSelector(s => s.user)
   let user = userInfo?.data
@@ -16,7 +16,9 @@ export default function FormAddress() {
   function handleSubmit(e) {
     e.preventDefault()
     dispatch(udapteUser(user))
-    navigate("/envio")
+    // navigate("/envio")
+    setUpdate(!update)
+    console.log("asdasd");
   }
 
   return (
@@ -32,7 +34,7 @@ export default function FormAddress() {
               <input name={"city"} type="text" defaultValue={user?.city} onChange={(e) => handleEditUser(e)} />
               <label htmlFor="direccion">Direccion</label>
               <input name={"address"} type="text" defaultValue={user?.address} onChange={(e) => handleEditUser(e)} />
-              <button type="submit"> Continuar compra </button>
+              <button type="submit"> Agregar direccion </button>
             </form>
           </div>
         </div>

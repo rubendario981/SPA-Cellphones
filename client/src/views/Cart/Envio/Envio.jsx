@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getProfile, udapteUser } from "../../../redux/actions";
 import LoginForm from "../../Home/Login/LoginForm";
-
-
+import FormAddress from "../FormAddress/FormAddress";
 
 export default function Envio() {
   const navigate = useNavigate()
@@ -14,6 +13,8 @@ export default function Envio() {
   const userInfo = useSelector(s => s.user)
   let user = userInfo?.data
   const [checkbox, setCheckbox] = useState("")
+  const [boolean, setBoolean] = useState(false)
+  const [update, setUpdate] = useState(false)
 
   useEffect(() => {
     if (token) {
@@ -31,7 +32,7 @@ export default function Envio() {
   function handelDeletAddress() {
     user.address = ""
     dispatch(udapteUser(user))
-    navigate("/envio")
+    setUpdate(!update)
   }
 
   return (
@@ -74,27 +75,29 @@ export default function Envio() {
                       </button>
                     </div>
                   </>
-                  :
                   // No
-                  <>
-                    <div className="w-full px-5">
-                      <div className="flex flex-col w-full my-10 pl-5 bg-white border rounded-xl">
-                        <input className="mr-10 mt-5 w-5 h-5 absolute right-5 hover:cursor-pointer" type="checkbox" name="sucursal" onChange={(e) => handleChangeCheckbox(e)} checked={checkbox === "sucursal" ? true : false} />
-                        <h1 className="text-xl font-bold">Retiro en la sucursal</h1>
-                        <p>Pueyrredon al 1567,<br />de 9hs a 18hs,<br />Lunes a Viernes</p>
-                        <div className="flex w-full justify-end">
+                  : boolean
+                    ? <FormAddress update={update} setUpdate={setUpdate} />
+                    :
+                    <>
+                      <div className="w-full px-5">
+                        <div className="flex flex-col w-full my-10 pl-5 bg-white border rounded-xl">
+                          <input className="mr-10 mt-5 w-5 h-5 absolute right-5 hover:cursor-pointer" type="checkbox" name="sucursal" onChange={(e) => handleChangeCheckbox(e)} checked={checkbox === "sucursal" ? true : false} />
+                          <h1 className="text-xl font-bold">Retiro en la sucursal</h1>
+                          <p>Pueyrredon al 1567,<br />de 9hs a 18hs,<br />Lunes a Viernes</p>
+                          <div className="flex w-full justify-end">
+                          </div>
+                        </div>
+                        <button className="bg-transparent hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded" onClick={() => setBoolean(!boolean)}>
+                          Agregar una ubicaion para el envio
+                        </button>
+                        <div className="flex w-full flex-row-reverse mt-5">
+                          <button className="bg-transparent bg-green-500 text-white font-semibold hover:text-white py-2 px-2 mr-4 mb-4 border border-blue-500 hover:border-transparent rounded" onClick={() => navigate("/pago")} disabled={checkbox !== "" ? false : true}>
+                            Continuar compra
+                          </button>
                         </div>
                       </div>
-                      <button className="bg-transparent hover:bg-blue-700 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded" onClick={() => navigate("/user/createAddress")}>
-                        Agregar una ubicaion para el envio
-                      </button>
-                      <div className="flex w-full flex-row-reverse mt-5">
-                        <button className="bg-transparent bg-green-500 text-white font-semibold hover:text-white py-2 px-2 mr-4 mb-4 border border-blue-500 hover:border-transparent rounded" onClick={() => navigate("/pago")} disabled={checkbox !== "" ? false : true}>
-                          Continuar compra
-                        </button>
-                      </div>
-                    </div>
-                  </>
+                    </>
                 }
               </div>
             </div>
