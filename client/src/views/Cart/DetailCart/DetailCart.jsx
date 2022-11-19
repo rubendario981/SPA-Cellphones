@@ -36,7 +36,7 @@ export default function DetailCart() {
                     <h1 className="pl-4 pt-1 text-xl">{e.name}</h1>
                   </div>
                   <div className="flex w-full justify-end pt-2 pr-2 text-xl font-bold">
-                    <h1>$ {e.price.replace("$", "")}</h1>
+                    <h1>$ {e.price}</h1>
                   </div>
                 </div>
                 <hr />

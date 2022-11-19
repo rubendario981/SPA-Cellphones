@@ -29,7 +29,7 @@ export default function Carrito() {
   }
   const elementsCart = JSON.parse(localStorage.getItem("products"))
 
-  let total = elementsCart?.map(e => e.price.replace("$", "") * 1)
+  let total = elementsCart?.map(e => e.price)
 
   total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
 
@@ -50,7 +50,7 @@ export default function Carrito() {
                       <div>
                         <h1>{e.name}</h1>
                       </div>
-                      <div>{e.cant > 1 ? `${e.cant} x ${e.price.replace("$", "")}: ${JSON.parse(e.price?.replace("$", "")) * e.cant}` : e.price.replace("$", "")}</div>
+                      <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price) * e.cant}` : e.price}</div>
                     </div>
                   </div>
                 )
