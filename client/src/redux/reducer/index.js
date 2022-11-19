@@ -2,7 +2,7 @@ const initialState = {
   allProducts: [],
   showProducts: [],
   filterProducts: [],
-  detail: [],
+  detail: {},
   brands: [],
   os: [], 
   user: {}

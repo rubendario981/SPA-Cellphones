@@ -83,14 +83,15 @@ export function cleanDetail() {
 }
 
 export function getProductById(id) {
-  console.log(id + 'ID ');
   return async function (dispatch) {
     try {
       // let json = await axios.get(`http://localhost:3001/products/${id.id}`)
-      let json = await axios.get('http://localhost:3001/products/' + id);
+      // let json = await axios.get("http://localhost:3001/products/" + id);
+      const response = await axios.get(`http://localhost:3001/products`);
+      const detailProduct = response.data.filter(data => data.id === parseInt(id))
       return dispatch({
-        type: 'GET_PHONE_BY_ID',
-        payload: json.data,
+        type: "GET_PHONE_BY_ID",
+        payload: detailProduct
       });
     } catch (error) {
       console.log(error);
@@ -143,11 +144,13 @@ export function getProfile(id) {
         `http://localhost:3001/user/getProfile?id=${id}`
       );
       return dispatch({
-        type: 'GET_PERFIL',
-        payload: profile,
-      });
-    } catch (error) {}
-  };
+        type: "GET_PERFIL",
+        payload: profile
+      })
+    } catch (error) {
+
+    }
+  }
 }
 
 export const cerrarSesion = () => {

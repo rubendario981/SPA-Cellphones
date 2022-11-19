@@ -1,4 +1,4 @@
-const { Users } = require('../db.js');
+const { Users, Cart, Cellphone, DetailCart } = require('../db.js')
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Stripe = require('stripe');
@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
     if (findUser) return res.status(400).json('Usuario ya existe');
 
     const newUser = await Users.create(req.body);
-    console.log('nuevo usuario', newUser);
+ 
     const token = jwt.sign(
       { id: newUser.id, status: newUser.status },
       SECRET_KEY,
@@ -43,94 +43,103 @@ const updateUser = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const findUser = await Users.findOne({ where: { email } });
-    console.log('usuario encontrado', findUser);
+	const { email, password } = req.body
+	try {
+		const findUser = await Users.findOne({ where: { email } })
 
-    const validatePassword = await bcrypt.compareSync(
-      password,
-      findUser.password
-    );
+		const validatePassword = await bcrypt.compareSync(password, findUser.password)
 
-    if (validatePassword) {
-      const token = jwt.sign(
-        { id: findUser.id, status: findUser.status },
-        SECRET_KEY,
-        {
-          expiresIn: 7200, // 2 horas
-        }
-      );
-      console.log(token, 'token');
-      return res.json({ token });
-    } else {
-      return res.status(400).json('Contraseña incorrecta');
-    }
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+		if (validatePassword) {
+			const token = jwt.sign({ id: findUser.id, status: findUser.status }, SECRET_KEY, {
+				expiresIn: 7200 // 2 horas
+			})
+			console.log(token, 'token');
+			return res.json({ token })
+		} else {
+			return res.status(400).json('Contraseña incorrecta')
+		}
+
+	} catch (error) {
+		res.status(500).json(error)
+	}
+}
+
+const findOrCreateCart = async (req, res)=>{
+	console.log('creando Carriito', req.body);
+	try {
+		const findUser = await Users.findByPk(req.body.id)
+		if(!findUser) return res.status(404).json("Controlador para crear carrito no encontro usuario")
+		// encontrar carritos asociados al usuario......		
+	} catch (error) {
+		
+	}
+}
 
 const userInfo = async (req, res) => {
-  console.log(req.query.id);
-  console.log('asd');
-  try {
-    const findUser = await Users.findByPk(req.query.id);
-    return res.json(findUser ? findUser : 'No se encontro usuario');
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
+	try {
+		const findUser = await Users.findByPk(req.query.id)
+		if(!findUser) return res.json("No se encontro usuario")
+		const findCarts = await Cart.findAll({ 
+			where: { userId: req.query.id},
+			include: Cellphone
+		})
+		return res.json({findUser, findCarts})
+	} catch (error) {
+		return res.status(500).json(error)
+	}
+}
 
-const usuariosPrueba = async (req, res) => {
-  const usuarios = [
-    {
-      id: 1,
-      name: 'Scarlet',
-      surname: 'Johanson',
-      email: 'scarlet@mail.com',
-      password: '12345',
-      status: 'Admin',
-    },
-    {
-      id: 2,
-      name: 'Gal',
-      surname: 'Gadot',
-      email: 'gal@mail.com',
-      password: '12345',
-      status: 'Admin',
-    },
-    {
-      id: 3,
-      name: 'Dua',
-      surname: 'Lipa',
-      email: 'dua@mail.com',
-      password: '12345',
-      status: 'User',
-    },
-    {
-      id: 4,
-      name: 'Martina',
-      surname: 'Scomazon',
-      email: 'martina@mail.com',
-      password: '12345',
-      status: 'User',
-    },
-  ];
-  try {
-    const findUsers = await Users.findAll();
-    // console.log('primer find', findUsers.length);
-    if (findUsers.length === 0) {
-      const create = await Users.bulkCreate(usuarios);
-      console.log('usuarios creados', create.length);
-    } else {
-      console.log('No hay necesidad de crear usuarios', findUsers[0]);
-    }
-  } catch (error) {
-    console.log('Error al crear usuarios de prueba', error);
-  }
-};
+const creatDatosPrueba = async (req, res) => {	
+	const crearCarritos = [
+		{ userId: 1, status: "En proceso" },
+		{ userId: 1, status: "Entregado" },
+		{ userId: 2, status: "Por despachar" },
+		{ userId: 3, status: "Despachado" },
+		{ userId: 4, status: "Entregado" },
+	]
+
+	try {
+		// Se crean usuarios de prueba correctamente
+		await Users.create({ name: "Scarlet Johanson", email: "scarlet@mail.com", password: "12345", status: "Admin" })
+		await Users.create({ name: "Gal Gadot", email: "gal@mail.com", password: "12345", status: "Admin" })
+		await Users.create({ name: "Dua Lipa", email: "dua@mail.com", password: "12345", status: "User" })
+		await Users.create({ name: "Leo Messi", email: "leomessi@mail.com", password: "12345", status: "User" })
+		
+		// se crean carritos de compra, un carrito por cada usuario y uno adicional para el usuario 1 con estado entregado
+		await Cart.bulkCreate(crearCarritos)
+
+		// se agregan productos a los diferentes carritos
+		await DetailCart.create({ cartId: 1, cantidad: 5, valor_unitario: (await Cellphone.findByPk(8, { attributes: ['price'] })).price, cellphoneId: 8 })
+		await DetailCart.create({ cartId: 1, cantidad: 3, valor_unitario: (await Cellphone.findByPk(4, { attributes: ['price'] })).price, cellphoneId: 4 })
+		await DetailCart.create({ cartId: 1, cantidad: 2, valor_unitario: (await Cellphone.findByPk(2, { attributes: ['price'] })).price, cellphoneId: 2 })
+		await DetailCart.create({ cartId: 1, cantidad: 8, valor_unitario: (await Cellphone.findByPk(1, { attributes: ['price'] })).price, cellphoneId: 1 }) 
+		await DetailCart.create({ cartId: 2, cantidad: 3, valor_unitario: (await Cellphone.findByPk(1, { attributes: ['price'] })).price, cellphoneId: 8 })
+		await DetailCart.create({ cartId: 2, cantidad: 3, valor_unitario: (await Cellphone.findByPk(8, { attributes: ['price'] })).price, cellphoneId: 1 }) 
+		await DetailCart.create({ cartId: 3, cantidad: 2, valor_unitario: (await Cellphone.findByPk(8, { attributes: ['price'] })).price, cellphoneId: 8 })
+		await DetailCart.create({ cartId: 3, cantidad: 9, valor_unitario: (await Cellphone.findByPk(4, { attributes: ['price'] })).price, cellphoneId: 4 })
+		await DetailCart.create({ cartId: 3, cantidad: 1, valor_unitario: (await Cellphone.findByPk(2, { attributes: ['price'] })).price, cellphoneId: 2 })
+		await DetailCart.create({ cartId: 3, cantidad: 1, valor_unitario: (await Cellphone.findByPk(1, { attributes: ['price'] })).price, cellphoneId: 1 }) 
+		await DetailCart.create({ cartId: 4, cantidad: 2, valor_unitario: (await Cellphone.findByPk(8, { attributes: ['price'] })).price, cellphoneId: 8 })
+		await DetailCart.create({ cartId: 4, cantidad: 9, valor_unitario: (await Cellphone.findByPk(4, { attributes: ['price'] })).price, cellphoneId: 4 })
+		await DetailCart.create({ cartId: 4, cantidad: 1, valor_unitario: (await Cellphone.findByPk(2, { attributes: ['price'] })).price, cellphoneId: 2 })
+		await DetailCart.create({ cartId: 4, cantidad: 4, valor_unitario: (await Cellphone.findByPk(1, { attributes: ['price'] })).price, cellphoneId: 1 }) 
+		await DetailCart.create({ cartId: 5, cantidad: 3, valor_unitario: (await Cellphone.findByPk(8, { attributes: ['price'] })).price, cellphoneId: 8 })
+		await DetailCart.create({ cartId: 5, cantidad: 1, valor_unitario: (await Cellphone.findByPk(4, { attributes: ['price'] })).price, cellphoneId: 4 })
+		await DetailCart.create({ cartId: 5, cantidad: 1, valor_unitario: (await Cellphone.findByPk(2, { attributes: ['price'] })).price, cellphoneId: 2 })
+		await DetailCart.create({ cartId: 5, cantidad: 2, valor_unitario: (await Cellphone.findByPk(1, { attributes: ['price'] })).price, cellphoneId: 1 }) 
+		
+		// Se busca los detalles de todos los carritos y se confirman sus datos
+		const findAllCarts = await Cart.findAll({
+			include: Cellphone
+		})
+
+		return res.json({ findAllCarts })
+
+	} catch (error) {
+		console.log('Error al crear usuarios de prueba', error);
+		return res.status(500).json(error)
+	}
+}
 
 const registerBuy = async (req, res) => {
   try {
@@ -153,10 +162,12 @@ const registerBuy = async (req, res) => {
 };
 
 module.exports = {
-  registerUser,
-  updateUser,
-  login,
-  userInfo,
-  usuariosPrueba,
+	registerUser,
+	updateUser,
+	login,
+	userInfo,
+	creatDatosPrueba,
   registerBuy,
-};
+}
+
+

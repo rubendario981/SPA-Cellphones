@@ -9,19 +9,22 @@ async function getAllProducts(req, res) {
   if (name) return res.json(await getProductByName(name));
 
   try {
-    const listCellphones = await Cellphone.findAll();
+    const listCellphones = await Cellphone.findAll({
+      include: [
+        { model: Brand },
+        { model: Os }]
+    });
 
     // si no hay cellulares en la base de datos se procede a crearlos
     if (!listCellphones.length) {
-      //creando usuario de prueba
-      // usuariosPrueba()
       const brandsCell = [];
       const sysOperative = [];
       const products = await axios.get(
         `https://api-celulares-27ad3-default-rtdb.firebaseio.com/.json`
       );
       let initialData = products.data?.map((e) => ({
-        id: e.id,
+        //No podemos dejar el Id del prodcuto porque entonces no deja crear un0 nuevo producto que se le envie por formulario
+        // id: e.id, 
         brand: e.brand,
         name: e.name,
         image: e.image,
@@ -34,15 +37,13 @@ async function getAllProducts(req, res) {
         SO: e.SO,
         battery: e.battery,
         color: e.Color,
-        price: e.price,
+        price: parseInt(e.price.split(" ")[0]),
         stock: Math.round(Math.random() * 50), //Se modifica el stock de esta forma, para poder hacer la funcionalidad en el carrito de compras.
       }));
 
-      // initialData = initialData.sort((a, b) => a.id - b.id);
-
       initialData.map(
         (e) => !brandsCell.includes(e.brand) && brandsCell.push(e.brand)
-      );
+      );     
 
       initialData.map(
         (e) =>
@@ -59,7 +60,7 @@ async function getAllProducts(req, res) {
         await Os.findOrCreate({ where: { name: so } });
       });
 
-      await Cellphone.bulkCreate(initialData.sort((a, b) => a.id - b.id));
+      await Cellphone.bulkCreate(initialData);
 
       // se actualizan la lista de celulares para incluir las relaciones de marca y sistema operativo
       initialData.map(async (el) => {
@@ -75,8 +76,11 @@ async function getAllProducts(req, res) {
           ));
       });
 
-      const cellphonesCreated = await Cellphone.findAll();
-      console.log(cellphonesCreated);
+      const cellphonesCreated = await Cellphone.findAll({ 
+      include: [ 
+        { model: Brand }, 
+        { model: Os }]
+    });
       return res?.json(
         cellphonesCreated.length > 0
           ? cellphonesCreated
@@ -120,7 +124,7 @@ async function getProductById(id) {
     return product.length
       ? product
       : 'El ID no esta relacionado a ningun producto';
-  } catch (error) {}
+  } catch (error) { }
 }
 
 //Trae todos los productos que en su nombre incluyan el name que se busca
@@ -158,7 +162,11 @@ async function createProduct(req, res) {
 //Trae de la base de datos todos los productos
 async function getProductsWithDB() {
   try {
-    let DBInfo = await Cellphone.findAll();
+    let DBInfo = await Cellphone.findAll({
+      include: [
+        { model: Brand },
+        { model: Os }]
+    });
     if (!DBInfo.length) {
       return 'La base de datos se encuentra vacia.';
     }
