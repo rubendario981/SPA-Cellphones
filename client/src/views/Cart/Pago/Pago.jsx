@@ -38,7 +38,7 @@ export default function Pago() {
   return (
     <>
       <form onSubmit={handelSubmit}>
-        <CardElement classNamenameName="text-xl"></CardElement>
+        <CardElement></CardElement>
         <button disabled={!stripe}>
           {loading
             ?
