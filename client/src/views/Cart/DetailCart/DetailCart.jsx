@@ -20,15 +20,15 @@ export default function DetailCart() {
 
   return (
     <div className="h-screen">
-      <div className="flex flex-col w-full h-full pl-5 mr-20 pb-5">
-        <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
+      <div className="flex flex-col w-full h-full px-5 mr-20 pb-5">
+        <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500/20 bg-stone-300/40">
           <div className="flex flex-col justify-center w-full py-4">
             {storage?.map(e =>
             (
               <div className="h-30 mx-4 mb-2 bg-white border rounded-xl" key={e.id}>
                 <div className="flex h-20 flex-row">
                   <div className="flex">
-                    <Link to={`/product/${e.id}`} className='w-10 object-contain'>
+                    <Link to={`/product/${e.id}`} className='w-9 object-contain'>
                       <img src={`${e.image}`} />
                     </Link>
                   </div>
@@ -39,7 +39,8 @@ export default function DetailCart() {
                     <h1>$ {e.price.replace("$", "")}</h1>
                   </div>
                 </div>
-                <div className="flex w-2/4 justify-around">
+                <hr />
+                <div className="flex w-full justify-around">
                   <button className="text-cyan-500" onClick={() => deletedProduct(e.id)}> Eliminar </button>
                   <button className="text-cyan-500" onClick={() => navigate(`/product/${e.id}`)}> Detalles </button>
                 </div>

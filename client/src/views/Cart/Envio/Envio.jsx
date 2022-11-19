@@ -33,6 +33,7 @@ export default function Envio() {
     user.address = ""
     dispatch(udapteUser(user))
     setUpdate(!update)
+    setBoolean(false)
   }
 
   return (
@@ -44,7 +45,7 @@ export default function Envio() {
         <>
           <div className="h-screen">
             <div className="flex flex-col w-full h-full px-5 mr-20 pb-5">
-              <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
+              <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300/40 border border-blue-500/20">
                 {/* Con direccion? */}
                 {user?.address
                   ?
@@ -77,7 +78,7 @@ export default function Envio() {
                   </>
                   // No
                   : boolean
-                    ? <FormAddress update={update} setUpdate={setUpdate} />
+                    ? <FormAddress update={update} setUpdate={setUpdate} setBoolean={setBoolean} boolean={boolean} />
                     :
                     <>
                       <div className="w-full px-5">

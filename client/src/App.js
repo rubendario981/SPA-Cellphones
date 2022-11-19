@@ -14,9 +14,7 @@ import Carrito from './views/Cart/Carrito/Carrito';
 import DetailCart from './views/Cart/DetailCart/DetailCart';
 import Perfil from './views/Perfil/Perfil';
 import Envio from './views/Cart/Envio/Envio';
-import FormAddress from './views/Cart/FormAddress/FormAddress';
 import Pago from './views/Cart/Pago/Pago';
-// import Landing from './views/Landing/Landing';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -44,7 +42,6 @@ export default function App() {
         <Route exact path={'/register'} element={<FormUser />} />
         <Route exact path={'/login'} element={<LoginForm />} />
         <Route exact path={'/perfil'} element={<Perfil />} />
-        <Route exact path={'/user/createAddress'} element={<FormAddress />} />
       </Routes>
       <Footer />
     </React.Fragment>

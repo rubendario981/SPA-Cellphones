@@ -35,8 +35,8 @@ export default function Carrito() {
 
   return (
     <>
-      <div className={elementsCart.length > 3 ? "h-full flex pb-5" : "flex pb-5 h-screen"}>
-        <div className="flex h-full bg-stone-300 mx-5 w-1/3 justify-center rounded-3xl px-5 border border-blue-500">
+      <div className={"h-full flex pb-5 mt-5"}>
+        <div className="flex h-full bg-stone-300/40 border border-blue-500/20 mx-5 w-1/3 justify-center rounded-3xl px-5 sticky top-20">
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               Carrito de compras
@@ -74,7 +74,7 @@ export default function Carrito() {
           </div>
         </div>
 
-        <div className="flex w-full mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300">
+        <div className="flex w-full mr-5 justify-center rounded-3xl items-start bg-stone-300/40 border border-blue-500/20">
           <div className="flex justify-center flex-wrap gap-10 p-4">
             {elementsCart?.map(e => <CarritoCard update={update} setUpdate={setUpdate} image={e.image} rom={e.rom} price={e.price} id={e.id} name={e.name} key={e.id} stock={e.stock} />)}
           </div>
