@@ -1,7 +1,12 @@
 const { Users } = require('../db.js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const Stripe = require('stripe');
 const SECRET_KEY = 'PF-Henry'; //cambiar a una variable de entorno
+const SECRET_KEY_STRIPE =
+  'sk_test_51M5u48DvLT9vn19qTA8TOlOzuB26PmvGzIM0TQN5IJfC77HnAIMdmwfnWuQl9jRtQaapf1SKeMuQ4v1gaYOdvqjk00ak0cmM9Q'; //cambiar a una variable de entorno
+
+const stripe = new Stripe(SECRET_KEY_STRIPE);
 
 const registerUser = async (req, res) => {
   const { email } = req.body;
@@ -127,10 +132,31 @@ const usuariosPrueba = async (req, res) => {
   }
 };
 
+const registerBuy = async (req, res) => {
+  try {
+    const { id, amount } = req.body;
+
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      currency: 'USD',
+      description: 'Cell World',
+      payment_method: id,
+      confirm: true,
+    });
+
+    console.log(payment);
+
+    res.json({ message: 'succesFull payment' });
+  } catch (error) {
+    res.json({ message: error.raw.message });
+  }
+};
+
 module.exports = {
   registerUser,
   updateUser,
   login,
   userInfo,
   usuariosPrueba,
+  registerBuy,
 };
