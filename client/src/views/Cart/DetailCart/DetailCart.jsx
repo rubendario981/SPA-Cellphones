@@ -19,10 +19,10 @@ export default function DetailCart() {
   }
 
   return (
-    <div className="h-screen">
-      <div className="flex flex-col w-full h-full px-5 mr-20 pb-5">
-        <div className="flex flex-col w-full mr-5 justify-center rounded-3xl items-start border border-blue-500/20 bg-stone-300/40">
-          <div className="flex flex-col justify-center w-full py-4">
+    <div className=" mb-60">
+      <div className="flex flex-col w-full px-5 pb-5">
+        <div className="flex flex-col w-full justify-center rounded-3xl items-start border border-blue-500/20 bg-stone-300/40">
+          <div className="flex flex-col justify-center w-full">
             {storage?.map(e =>
             (
               <div className="h-30 mx-4 mb-2 bg-white border rounded-xl" key={e.id}>

@@ -15,10 +15,10 @@ const Header = () => {
     // decodifico el token y lo guardo en un objeto
     user = JSON.parse(window.atob(token?.split('.')[1]))
   }
-  
+
   useEffect(() => {
   }, [pathname, user]);
-  
+
   const cerrarSesion = () => {
     const response = window.confirm("Estas seguro que quieres cerrar la sesion?")
     if (response) {
@@ -28,7 +28,7 @@ const Header = () => {
   }
 
   return (
-    <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between sticky top-0 w-screen z-10">
+    <div className="text-xs flex mb-2 px-6 bg-gradient-to-t from-blue-200 to-sky-600 justify-between sticky top-0 z-10">
       <Link to={"/"} >
         <img src={logo} width={"100px"} alt="Logo" />
       </Link>
