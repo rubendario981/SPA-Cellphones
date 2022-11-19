@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
       },
       price: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       screen: {
@@ -47,7 +47,7 @@ module.exports = (sequelize) => {
       },
       stock: { // se cambio el atributo quantity que hacia referencia al inventario de unidades
         type: DataTypes.INTEGER 
-      }
+      }      
     },
     { timestamps: false }
   );

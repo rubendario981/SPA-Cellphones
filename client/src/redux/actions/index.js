@@ -81,14 +81,15 @@ export function cleanDetail() {
   };
 }
 export function getProductById(id) {
-  console.log(id + "ID ");
   return async function (dispatch) {
     try {
       // let json = await axios.get(`http://localhost:3001/products/${id.id}`)
-      let json = await axios.get("http://localhost:3001/products/" + id);
+      // let json = await axios.get("http://localhost:3001/products/" + id);
+      const response = await axios.get(`http://localhost:3001/products`);
+      const detailProduct = response.data.filter(data => data.id === parseInt(id))
       return dispatch({
         type: "GET_PHONE_BY_ID",
-        payload: json.data,
+        payload: detailProduct
       });
     } catch (error) {
       console.log(error);
@@ -128,8 +129,8 @@ export function login(dataUser) {
   }
 }
 
-export function getProfile(id){
-  return async function(dispatch){
+export function getProfile(id) {
+  return async function (dispatch) {
     try {
       const profile = await axios.get(`http://localhost:3001/user/getProfile?id=${id}`)
       return dispatch({
@@ -137,7 +138,7 @@ export function getProfile(id){
         payload: profile
       })
     } catch (error) {
-      
+
     }
   }
 }
