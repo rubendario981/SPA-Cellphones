@@ -1,40 +1,48 @@
 const { Users, Cart, Cellphone, DetailCart } = require('../db.js')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const SECRET_KEY = "PF-Henry"; //cambiar a una variable de entorno
+const Stripe = require('stripe');
+const SECRET_KEY = 'PF-Henry'; //cambiar a una variable de entorno
+const SECRET_KEY_STRIPE =
+  'sk_test_51M5u48DvLT9vn19qTA8TOlOzuB26PmvGzIM0TQN5IJfC77HnAIMdmwfnWuQl9jRtQaapf1SKeMuQ4v1gaYOdvqjk00ak0cmM9Q'; //cambiar a una variable de entorno
+
+const stripe = new Stripe(SECRET_KEY_STRIPE);
 
 const registerUser = async (req, res) => {
-	const { email } = req.body
-	try {
-		const findUser = await Users.findOne({ where: { email } })
-		if (findUser) return res.status(400).json('Usuario ya existe')
+  const { email } = req.body;
+  try {
+    const findUser = await Users.findOne({ where: { email } });
+    if (findUser) return res.status(400).json('Usuario ya existe');
 
-		const newUser = await Users.create(req.body)
-		
-		const token = jwt.sign({ id: newUser.id, status: newUser.status }, SECRET_KEY, {
-			expiresIn: 7200 // 2 horas
-		})
+    const newUser = await Users.create(req.body);
+ 
+    const token = jwt.sign(
+      { id: newUser.id, status: newUser.status },
+      SECRET_KEY,
+      {
+        expiresIn: 7200, // 2 horas
+      }
+    );
 
-		return res.json({ token })
-
-	} catch (error) {
-		res.status(500).json(error)
-	}
-}
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 const updateUser = async (req, res) => {
-	try {
-		const updateUser = await Users.update(
-			{ ...req.body }, { where: { id: req.params.id } }
-		)
+  try {
+    const updateUser = await Users.update(
+      { ...req.body },
+      { where: { id: req.params.id } }
+    );
 
-		return res.json(updateUser)
-	} catch (error) {
-		res.status(500).json(error)
-	}
-}
+    return res.json(updateUser);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
-const login = async (req, res) => {
 	const { email, password } = req.body
 	try {
 		const findUser = await Users.findOne({ where: { email } })
@@ -133,10 +141,33 @@ const creatDatosPrueba = async (req, res) => {
 	}
 }
 
+const registerBuy = async (req, res) => {
+  try {
+    const { id, amount } = req.body;
+
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      currency: 'USD',
+      description: 'Cell World',
+      payment_method: id,
+      confirm: true,
+    });
+
+    console.log(payment);
+
+    res.json({ message: 'succesFull payment' });
+  } catch (error) {
+    res.json({ message: error.raw.message });
+  }
+};
+
 module.exports = {
 	registerUser,
 	updateUser,
 	login,
 	userInfo,
-	creatDatosPrueba
+	creatDatosPrueba,
+  registerBuy,
 }
+
+

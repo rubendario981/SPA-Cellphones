@@ -3,17 +3,9 @@ import { Link } from "react-router-dom";
 import s from './ProductCard.module.css'
 
 
-// const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId, setDataModal }) => {
 const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }) => {
 
   const addCarrito = () => {
-    // ya no hace falta, pq la propiedad products se crea siempre que se renderize el componente Products
-    // const value = localStorage.getItem('products')
-    // if (!value) {
-    //   const arrayProd = []
-    //   localStorage.setItem('products', JSON.stringify(arrayProd))
-    // }
-
     const productos = JSON.parse(localStorage.getItem('products'))
     const producto = { id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }
     const index = productos.findIndex(p => p.id === id)
@@ -28,8 +20,8 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
       productos.push(producto)
       localStorage.setItem('products', JSON.stringify(productos))
     }
-
-    if (productos.map(p => p.id === id).length > 0) alert(`${name} agregado al carrito.`)
+    let cantidad = productos.find(e => e.id === id).cant
+    if (productos.map(p => p.id === id).length > 0) alert(`${name} agregado al carrito.\nUsted tiene ${cantidad} productos agregados al carrito.`)
   }
 
 
@@ -53,7 +45,7 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
                   {name}
                 </Link>
               </h3>
-              {/* <p className="mt-1 text-sm text-gray-500">{rom}</p> */}
+              <p className="mt-1 text-sm text-gray-500">{internal_storage}</p>
             </div>
             <p className="text-sm font-medium text-gray-900">{price}</p>
           </div>

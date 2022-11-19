@@ -46,7 +46,8 @@ async function getAllProducts(req, res) {
       );     
 
       initialData.map(
-        (e) => !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
+        (e) =>
+          !sysOperative.includes(e.SO.trim()) && sysOperative.push(e.SO.trim())
       );
 
       // Procede a crear las marcas en la base de datos
@@ -120,8 +121,6 @@ async function getProductById(id) {
 
     product = product.filter((e) => e.id == id);
 
-    return product;
-
     return product.length
       ? product
       : 'El ID no esta relacionado a ningun producto';
@@ -145,12 +144,12 @@ async function getProductByName(name) {
 
 //Crea un producto en la base de datos
 async function createProduct(req, res) {
-  const { name } = req.body
+  const { name } = req.body;
 
   try {
     const createCell = await Cellphone.findOrCreate({
       where: { name },
-      defaults: { ...req.body }
+      defaults: { ...req.body },
     });
     createCell
       ? res.json(createCell)
