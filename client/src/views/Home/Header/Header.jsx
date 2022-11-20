@@ -6,8 +6,6 @@ const Header = () => {
   const location = useLocation();
   const { pathname } = location;
   const navigate = useNavigate();
-  // const elementsCard = JSON.parse(localStorage.getItem('products'))
-  const [elemetsCard, setElemetsCard] = useState(0)
 
   const token = localStorage.getItem('token')
   let user = {}
@@ -19,7 +17,6 @@ const Header = () => {
   }
 
   useEffect(() => {
-
   }, [pathname, user]);
 
   const cerrarSesion = () => {
