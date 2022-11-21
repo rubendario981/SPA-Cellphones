@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const URL = "http://localhost:3001" 
+
 export function getProducts() {
   return async (dispatch) => {
     const response = await axios.get(`/products`);
@@ -133,14 +135,19 @@ export function login(dataUser) {
 export function getProfile(id) {
   return async function (dispatch) {
     try {
-      const profile = await axios.get(`/user/getProfile?id=${id}`);
-      console.log("profile ", profile);
+      const profile = await axios.get(
+        `/user/getProfile?id=${id}`
+      );
+      const token = JSON.stringify(profile.data.token);
+      localStorage.setItem('token', token);
       return dispatch({
         type: "GET_PERFIL",
-        payload: profile,
-      });
-    } catch (error) {}
-  };
+        payload: profile
+      })
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export const cerrarSesion = () => {

@@ -28,6 +28,8 @@ const Perfil = () => {
 		<div className='mt-45 pt-15'>
 			{!usuario?.name
 				? <p>No estas logeado en la pagina !!!</p>
+				: user.status === "Inactivo"
+				? <p>Debes activar tu cuenta</p>
 				: <div className='mb-14'>
 					<h3>Estas son tus credenciales de usuario</h3>
 					<p>{usuario?.name} </p>
@@ -61,7 +63,6 @@ const Perfil = () => {
 								)
 							})}
 						</div>
-
 					)
 				})
 			}
