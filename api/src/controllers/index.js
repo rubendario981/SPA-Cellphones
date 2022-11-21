@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { Cellphone, Os, Brand } = require('../db.js');
 const { Op } = require('sequelize');
-const { usuariosPrueba } = require('./user.controllers.js');
+const { usuariosPrueba, creatDatosPrueba } = require('./user.controllers.js');
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts(req, res) {
@@ -81,6 +81,7 @@ async function getAllProducts(req, res) {
         { model: Brand }, 
         { model: Os }]
     });
+      await creatDatosPrueba()
       return res?.json(
         cellphonesCreated.length > 0
           ? cellphonesCreated

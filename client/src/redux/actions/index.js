@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const URL = "http://localhost:3001" 
+
 export function getProducts() {
   return async (dispatch) => {
-    const response = await axios.get(`http://localhost:3001/products`);
+    const response = await axios.get(`${URL}/products`);
     return dispatch({
       type: 'GET_PRODUCTS',
       payload: response.data,
@@ -13,7 +15,7 @@ export function getProducts() {
 export const getListBrands = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://localhost:3001/products/brands`);
+      const response = await axios.get(`${URL}/products/brands`);
       return dispatch({
         type: 'LIST_BRANDS',
         payload: response.data,
@@ -27,7 +29,7 @@ export const getListBrands = () => {
 export const getListOs = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://localhost:3001/products/os`);
+      const response = await axios.get(`${URL}/products/os`);
       return dispatch({
         type: 'LIST_OS',
         payload: response.data,
@@ -43,7 +45,7 @@ export const createCellPhone = (cell) => {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://localhost:3001/products/create`,
+        `${URL}/products/create`,
         data
       );
       return dispatch({
@@ -85,9 +87,7 @@ export function cleanDetail() {
 export function getProductById(id) {
   return async function (dispatch) {
     try {
-      // let json = await axios.get(`http://localhost:3001/products/${id.id}`)
-      // let json = await axios.get("http://localhost:3001/products/" + id);
-      const response = await axios.get(`http://localhost:3001/products`);
+      const response = await axios.get(`${URL}/products`);
       const detailProduct = response.data.filter(data => data.id === parseInt(id))
       return dispatch({
         type: "GET_PHONE_BY_ID",
@@ -103,7 +103,7 @@ export function createUser(dataUser) {
   return async function (dispatch) {
     try {
       const response = await axios.post(
-        'http://localhost:3001/user/register',
+        `${URL}/user/register`,
         dataUser
       );
       const token = JSON.stringify(response.data.token);
@@ -122,7 +122,7 @@ export function login(dataUser) {
   return async function (dispatch) {
     try {
       const response = await axios.post(
-        'http://localhost:3001/user/login',
+        `${URL}/user/login`,
         dataUser
       );
       const token = JSON.stringify(response.data.token);
@@ -141,14 +141,16 @@ export function getProfile(id) {
   return async function (dispatch) {
     try {
       const profile = await axios.get(
-        `http://localhost:3001/user/getProfile?id=${id}`
+        `${URL}/user/getProfile?id=${id}`
       );
+      const token = JSON.stringify(profile.data.token);
+      localStorage.setItem('token', token);
       return dispatch({
         type: "GET_PERFIL",
         payload: profile
       })
     } catch (error) {
-
+      return error;
     }
   }
 }
@@ -165,6 +167,6 @@ export const cerrarSesion = () => {
 export const udapteUser = (user) => {
   console.log('Usuario actions', user);
   return async (dispatch) => {
-    await axios.patch(`http://localhost:3001/user/update/${user.id}`, user);
+    await axios.patch(`${URL}/user/update/${user.id}`, user);
   };
 };

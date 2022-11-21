@@ -75,6 +75,8 @@ const FormUser = () => {
 					navigate('/')					
 				} else if (response.response.data){
 					alert(`Algo salio mal al registrarse ` + response.response.data)
+				} else {
+					alert("Error general en proceso" + response)
 				}
 			} catch (error) {
 				alert("Error al crear usuario " + error)
