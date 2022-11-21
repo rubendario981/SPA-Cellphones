@@ -1,6 +1,6 @@
 import axios from "axios";
-
 const URL = process.env.REACT_APP_URL || "http://localhost:3001" 
+
 
 export function getProducts() {
   return async (dispatch) => {
@@ -84,7 +84,7 @@ export function cleanDetail() {
 export function getProductById(id) {
   return async function (dispatch) {
     try {
-      // let json = await axios.get(`/products/${id.id}`)
+      // let json = await axios.get(`${URL}/products/${id.id}`)
       // let json = await axios.get("/products/" + id);
       const response = await axios.get(`${URL}/products`);
       const detailProduct = response.data.filter(
@@ -103,7 +103,7 @@ export function getProductById(id) {
 export function createUser(dataUser) {
   return async function (dispatch) {
     try {
-      const response = await axios.post("/user/register", dataUser);
+      const response = await axios.post(`${URL}/user/register`, dataUser);
       const token = JSON.stringify(response.data.token);
       localStorage.setItem("token", token);
       return dispatch({
@@ -139,15 +139,15 @@ export function getProfile(id) {
         `${URL}/user/getProfile?id=${id}`
       );
       const token = JSON.stringify(profile.data.token);
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       return dispatch({
         type: "GET_PERFIL",
-        payload: profile
-      })
+        payload: profile,
+      });
     } catch (error) {
       return error;
     }
-  }
+  };
 }
 
 export const cerrarSesion = () => {
