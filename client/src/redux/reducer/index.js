@@ -2,22 +2,11 @@ const initialState = {
   allProducts: [],
   showProducts: [],
   filterProducts: [],
-  detail: [],
+  detail: {},
   brands: [],
-  os: []
+  os: [], 
+  user: {}
 };
-
-function devolverMarcas(productos) {
-  let marcas = productos.map((e) => {
-    return e.brand;
-  });
-
-  let marcasFiltradas = marcas.filter((item, index) => {
-    return marcas.indexOf(item) === index;
-  });
-
-  return marcasFiltradas;
-}
 
 function menorAMayor(a, b) {
   return a.price.split(" ")[0] - b.price.split(" ")[0];
@@ -63,7 +52,7 @@ const rootReducer = (state = initialState, action) => {
     case "CREATE_PRODUCT":
       return {
         ...state,
-        products: state.allProducts.concat(action.payload.data),
+        showProducts: state.showProducts.concat(action.payload[0]),
       };
 
     case "CLEAN_DETAIL":
@@ -102,6 +91,24 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         showProducts: state.filterProducts.slice().sort(menorAMayor).reverse(),
+      };
+    case "CREATE_USER":
+      return{
+        ...state
+      };
+    case "LOGIN":
+      return{
+        ...state,
+      };
+    case "GET_PERFIL":
+      return{
+        ...state,
+        user: action.payload
+      };
+    case "CERRAR_SESION": // validar si es necesario!!!
+      return{
+        ...state,
+        user: {}
       };
     default:
       return state;

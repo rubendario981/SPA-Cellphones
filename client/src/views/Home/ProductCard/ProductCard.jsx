@@ -1,28 +1,43 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import s from './ProductCard.module.css'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
+const MySwal = withReactContent(Swal)
 
-const ProductCard = ({ name, image, rom, price, id, stock }) => {
+const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }) => {
 
-  let producto = Object.entries(localStorage).map(e => JSON.parse(e[1])).find(e => e.name === name)
+  const addCarrito = () => {
+    const productos = JSON.parse(localStorage.getItem('products'))
+    const producto = { id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }
+    const index = productos.findIndex(p => p.id === id)
 
-  function addCarrito(producto) {
-    if (producto) {
-      producto.cant++
-      localStorage.setItem(id, JSON.stringify(producto))
-      console.log(`Producto ${name} agregado al carrito con exito.`);
+    if (index < 0) {
+      producto.cant = 1
+      productos.push(producto)
+      localStorage.setItem('products', JSON.stringify(productos))
     } else {
-      let cant = 1
-      localStorage.setItem(id, JSON.stringify({ name, image, rom, price, id, cant, stock }))
-      console.log(`Producto ${name} agregado al carrito con exito.`);
+      let producto = productos.splice(index, 1)[0]
+      producto.cant = ++producto.cant
+      productos.push(producto)
+      localStorage.setItem('products', JSON.stringify(productos))
     }
+
+    Swal.fire({
+      position: 'top-end',
+      html: `<p>Producto agregado al carrito.</p>`,
+      showConfirmButton: false,
+      timer: 1000,
+      width: 300,
+    })
   }
+
 
   return (
     <>
-      <div className={s.containerCrad}>
-        <button className={s.buttonCarrito} onClick={() => addCarrito(producto)} > 🛒 </button>
+      <div id={id}>
+        <button className={s.buttonCarrito} onClick={() => addCarrito()} > 🛒 </button>
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60">
             <img
@@ -39,7 +54,7 @@ const ProductCard = ({ name, image, rom, price, id, stock }) => {
                   {name}
                 </Link>
               </h3>
-              <p className="mt-1 text-sm text-gray-500">{rom}</p>
+              <p className="mt-1 text-sm text-gray-500">{internal_storage}</p>
             </div>
             <p className="text-sm font-medium text-gray-900">{price}</p>
           </div>

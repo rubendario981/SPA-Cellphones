@@ -1,15 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
 import axios from 'axios';
-import Alert from '../Modals/Alert'
+import { useDispatch } from 'react-redux';
+import { createUser } from '../../redux/actions';
 
 const FormUser = () => {
-	const [user, setUser] = useState({ name: "", surname: "", email: "", password: "", retypepass: "", country: "", city: "", address: "", card_number: "", isAdmin: false })
+	const initialState = { name: "", email: "", password: "", retypepass: "", country: "", city: "", address: "", card_number: "", isAdmin: false }
+	const [user, setUser] = useState(initialState)
 	const [errors, setErrors] = useState({})
-	const [dataModal, setDataModal] = React.useState({ show:false, title: '', message: ''});
 	const [allFields, setAllFields] = useState(false)
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const validateFields = (field) => {
 		const errors = {}
+		if (!field.name || field.name.length < 3) {
+			errors.name = "El nombre es requerido y debe ser mayor a 3 caracteres"
+		}
+		if (!field.email) {
+			errors.email = "El campo de correo electronico es requerido"
+		}
+		if (!field.password.match(/[a-z]/g)) {
+			errors.password = "El campo de contraseña debe contener una minuscula"
+		}
+		if (!field.password.match(/[A-Z]/g)) {
+			errors.password = "El campo de contraseña debe contener una mayuscula"
+		}
+		if (!field.password.match(/[0-9]/g)) {
+			errors.password = "El campo de contraseña debe contener al menos un numero"
+		}
+		if (field.password.length < 5) {
+			errors.password = "El campo de contraseña debe contener al menos 5 caracteres"
+		}
 		if (field.password !== field.retypepass) {
 			errors.noMatchPass = "Las contraseñas no coinciden"
 		}
@@ -43,35 +65,40 @@ const FormUser = () => {
 
 	const sendForm = async (e) => {
 		e.preventDefault()
-		try {
-			const createUser = await axios.post('http://localhost:3001/user/register', user)
-			console.log(createUser, '*-*');
-			if (createUser.status === 200) {
-				const token = await createUser.data.token
-				localStorage.setItem('token', token)
-				setDataModal({ show: true, title: 'Usuario creado correctamente', message: `Se ha creado el usuario ${user.name} correctamente`})
-			} 
-		} catch (error) {
-			setDataModal({ show: true, title: 'Error al crear usuario', message: error.message})
+		if (Object.entries(errors).length > 0) {
+			alert("Algunos campos del formulario no cumplen con los requerimientos, por favor revisarlos e intente de nuevo")
+		} else {
+			try {
+				const response = await dispatch(createUser(user))
+				if (response.payload) {
+					alert(`${user.name} te has registrado en nuestra pagina correctamente`)
+					navigate('/')
+				} else if (response.response.data) {
+					alert(`Algo salio mal al registrarse ` + response.response.data)
+				} else {
+					alert("Error general en proceso" + response)
+				}
+			} catch (error) {
+				alert("Error al crear usuario " + error)
+			}
 		}
 
 	}
 
 	return (
 		<div className='flex justify-center py-6'>
-			<Alert show={dataModal.show} title={dataModal.title} message={dataModal.message} />
-			<div className="w-8/12 bg-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+			<div className="w-8/12 border-2 border-blue-300 shadow-md shadow-blue-300 rounded px-8 pt-6 pb-8 mb-4">
 				<div className='font-bold text-2xl pb-8'>
 					<h3>Registro usuario</h3>
 				</div>
 				<form onSubmit={sendForm}>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
-							Nombres
+							Nombres completos
 						</label>
 						<input
 							type="text"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							placeholder="Ingresa tus nombres "
 							name='name'
 							value={user.name}
@@ -79,20 +106,7 @@ const FormUser = () => {
 							required
 							autoFocus
 						/>
-					</div>
-					<div className="mb-4">
-						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
-							Apellidos
-						</label>
-						<input
-							type="text"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-							placeholder="Ingresa tus apellidos"
-							name='surname'
-							value={user.surname}
-							onChange={handleChanges}
-							required
-						/>
+						{errors.name && <p className='text-red-600'>{errors.name}</p>}
 					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
@@ -100,27 +114,29 @@ const FormUser = () => {
 						</label>
 						<input
 							type="email"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							placeholder="Ingresa tu correo"
 							name='email'
 							value={user.email}
 							onChange={handleChanges}
 							required
 						/>
+						{errors.email && <p className='text-red-600'>{errors.email}</p>}
 					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
-							Contraseña
+							Contraseña <small><i>(Incluir por lo menos una minuscula, una mayuscula y un numero)</i></small>
 						</label>
 						<input
 							type="password"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							placeholder="Asignar contraseña"
 							name='password'
 							value={user.password}
 							onChange={handleChanges}
 							required
 						/>
+						{errors.password && <p className='text-red-600'>{errors.password}</p>}
 					</div>
 					<div className="mb-4">
 						<label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="">
@@ -128,7 +144,7 @@ const FormUser = () => {
 						</label>
 						<input
 							type="password"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							placeholder="Repetir contraseña"
 							name='retypepass'
 							value={user.retypepass}
@@ -146,7 +162,7 @@ const FormUser = () => {
 								Pais
 							</label>
 							<select
-								className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								className="shadow border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 								name="country"
 								value={user.country}
 								onChange={handleChanges}>
@@ -161,7 +177,7 @@ const FormUser = () => {
 								Ciudad
 							</label>
 							<select
-								className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								className="shadow border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 								name="city"
 								value={user.city}
 								onChange={handleChanges}>
@@ -177,7 +193,7 @@ const FormUser = () => {
 							</label>
 							<input
 								type="text"
-								className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								className="shadow appearance-none border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 								placeholder="0000 - 0000 - 0000 - 0000 - 0000"
 								name='card_number'
 								value={user.card_number}
@@ -189,7 +205,7 @@ const FormUser = () => {
 								Rol <small> <i> (Solo disponible para administradores)</i></small>
 							</label>
 							<select
-								className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								className="shadow border rounded border-gray-500 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 								name="isAdmin"
 								value={user.isAdmin}
 								onChange={handleChanges}>
@@ -205,11 +221,17 @@ const FormUser = () => {
 						</button>
 						<button type='button'
 							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-							onClick={() => setUser({ name: "Scarlet", surname: "Jhohanson", email: "scarlet@henry.com", password: "12345", retypepass: "12345", country: "Colombia", city: "Cali", address: "", card_number: "", isAdmin: false })}
+							onClick={() => setUser({ name: "Scarlet Jhohanson", email: "scarlet@henry.com", password: "Hola5", retypepass: "Hola5", country: "Colombia", city: "Cali", address: "", card_number: "", isAdmin: false })}
 						>
 							Cargar datos de pueba
 						</button>
-						<button type='reset' className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
+						<button type='button'
+							className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+							onClick={() => {
+								setUser(initialState)
+								setErrors({})
+							}}
+						>
 							Limpiar campos
 						</button>
 					</div>
