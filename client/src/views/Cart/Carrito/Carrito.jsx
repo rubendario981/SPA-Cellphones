@@ -3,12 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CarritoCard from "../CarritoCard/CarritoCard.jsx";
 
-
-
 export default function Carrito() {
   const [update, setUpdate] = useState(false)
   const navigate = useNavigate();
-
 
   function handelClear() {
     let boolean = window.confirm("Desea vaciar todo el carrito?")

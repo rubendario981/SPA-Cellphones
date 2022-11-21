@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import s from './ProductCard.module.css'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
+const MySwal = withReactContent(Swal)
 
 const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }) => {
 
@@ -20,8 +23,14 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
       productos.push(producto)
       localStorage.setItem('products', JSON.stringify(productos))
     }
-    let cantidad = productos.find(e => e.id === id).cant
-    if (productos.map(p => p.id === id).length > 0) alert(`${name} agregado al carrito.\nUsted tiene ${cantidad} productos agregados al carrito.`)
+
+    Swal.fire({
+      position: 'top-end',
+      html: `<p>Producto agregado al carrito.</p>`,
+      showConfirmButton: false,
+      timer: 1000,
+      width: 300,
+    })
   }
 
 

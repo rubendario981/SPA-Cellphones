@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios"
-import { useState } from "react";
+import { getProfile } from "../../../redux/actions";
 
 export default function Pago() {
 
   const [loading, setloading] = useState(false)
+  const user = useSelector(s => s.user)
+  const dispatch = useDispatch()
 
   const stripe = useStripe() //Conexion a stripe
   const elements = useElements() //Seleccionador de elementos de stripe
+  const products = JSON.parse(localStorage.getItem("products"))
+  const total = products.map(e => e.price * e.cant).reduce((a, b) => a + b, 0)
+  const token = JSON.parse(localStorage.getItem("token"))
+  const idUser = (JSON.parse(window.atob(token?.split('.')[1]))).id
+
+  // console.log(user?.data.findUser);
+
+  useEffect(() => {
+    dispatch(getProfile(idUser))
+  }, [])
+
 
   async function handelSubmit(e) {
     e.preventDefault()
@@ -22,13 +36,24 @@ export default function Pago() {
     if (!error) { //Si no hay error en el pago
       const { id } = paymentMethod
 
+      setloading(false)
       const { data } = await axios.post(`http://localhost:3001/user/registerBuy`, {
         id,
-        amount: 100 * 100
+        amount: total * 100,
+        receipt_email: user?.data.findUser.email,
+        metadata: {
+          "id": user?.data.findUser.id,
+          "name": user?.data.findUser.name,
+          "email": user?.data.findUser.email,
+          "country": user?.data.findUser.country,
+          "city": user?.data.findUser.city,
+          "address": user?.data.findUser.address,
+          "card_number": user?.data.findUser.card_number,
+          "status": user?.data.findUser.status,
+        }
       })
 
       console.log(data);
-      setloading(false)
       alert(data.message)
 
       elements.getElement(CardElement).clear() //limpiando el input del cardNumber
