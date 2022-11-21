@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const URL = "https://proyecto-final-production-9840.up.railway.app";
 
 export function getProducts() {

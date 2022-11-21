@@ -1,28 +1,29 @@
-const { Users, Cart, Cellphone, DetailCart } = require('../db.js');
-const bcrypt = require('bcrypt');
-const Stripe = require('stripe');
+const { Users, Cart, Cellphone, DetailCart } = require("../db.js");
+const bcrypt = require("bcrypt");
+const Stripe = require("stripe");
 const SECRET_KEY_STRIPE =
   "sk_test_51M5u48DvLT9vn19qTA8TOlOzuB26PmvGzIM0TQN5IJfC77HnAIMdmwfnWuQl9jRtQaapf1SKeMuQ4v1gaYOdvqjk00ak0cmM9Q"; //cambiar a una variable de entorno
 
 const stripe = new Stripe(SECRET_KEY_STRIPE);
 
-const { mailActivateAccount } = require('../config/nodemailer.js');
-const { setToken } = require('../config/configToken.js');
+const { mailActivateAccount } = require("../config/nodemailer.js");
+const { setToken } = require("../config/configToken.js");
 
-const URL_SERVER = 'http://localhost:3001/user/'
-const URL_CLIENT = 'http://localhost:3000/'
+const URL_SERVER = "http://localhost:3001/user/";
+const URL_CLIENT = "http://localhost:3000/";
 
 const registerUser = async (req, res) => {
   const { email, name } = req.body;
+  console.log(email, name, "controllers");
   try {
     const findUser = await Users.findOne({ where: { email } });
     if (findUser) return res.status(400).json("Usuario ya existe");
 
     const newUser = await Users.create({ ...req.body, status: "Inactivo" });
 
-    const token = setToken(newUser.id, newUser.status)    
+    const token = setToken(newUser.id, newUser.status);
 
-    mailActivateAccount(name, email, URL_SERVER, token)
+    mailActivateAccount(name, email, URL_SERVER, token);
     return res.json({ token });
   } catch (error) {
     console.log("Error en controller registro usuario", error);
@@ -31,21 +32,23 @@ const registerUser = async (req, res) => {
 };
 
 const activateAccount = async (req, res) => {
-  const token = req.query.token
+  const token = req.query.token;
   try {
-    const decodeToken = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    const decodeToken = JSON.parse(
+      Buffer.from(token.split(".")[1], "base64").toString()
+    );
     const activateUser = await Users.update(
       { status: "User" },
       { where: { id: decodeToken.id } }
-    )
+    );
     return activateUser[0] === 0
-      ? res.json('No se pudo activar cuenta')
-      : res.redirect(`${URL_CLIENT}perfil`)
+      ? res.json("No se pudo activar cuenta")
+      : res.redirect(`${URL_CLIENT}perfil`);
   } catch (error) {
-    console.log("Error en controller usuario al activar cuenta", error)
-    return res.status(500).json(error)
+    console.log("Error en controller usuario al activar cuenta", error);
+    return res.status(500).json(error);
   }
-}
+};
 
 const updateUser = async (req, res) => {
   try {
@@ -71,7 +74,7 @@ const login = async (req, res) => {
     );
 
     if (validatePassword) {
-      const token = setToken(findUser.id, findUser.status)
+      const token = setToken(findUser.id, findUser.status);
       return res.json({ token });
     } else {
       return res.status(400).json("Contraseña incorrecta");
@@ -90,7 +93,7 @@ const findOrCreateCart = async (req, res) => {
         .status(404)
         .json("Controlador para crear carrito no encontro usuario");
     // encontrar carritos asociados al usuario......
-  } catch (error) { }
+  } catch (error) {}
 };
 
 const userInfo = async (req, res) => {
@@ -102,7 +105,7 @@ const userInfo = async (req, res) => {
       include: Cellphone,
     });
 
-    const token = setToken(findUser.id, findUser.status)
+    const token = setToken(findUser.id, findUser.status);
 
     return res.json({ token, findUser, findCarts });
   } catch (error) {
@@ -338,5 +341,5 @@ module.exports = {
   userInfo,
   creatDatosPrueba,
   registerBuy,
-  activateAccount
+  activateAccount,
 };
