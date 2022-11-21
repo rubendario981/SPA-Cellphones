@@ -44,6 +44,16 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   native: false,
 }); 
 
+const tryConnec = async ()=>{
+  try {
+    await sequelize.authenticate()
+    console.log('Connection succesfully 👍');    
+  } catch (e) {
+    console.log('error on connection 😢😢😢 ',e);
+  }
+}
+tryConnec()
+
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
