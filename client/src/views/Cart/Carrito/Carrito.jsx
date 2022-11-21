@@ -26,7 +26,7 @@ export default function Carrito() {
   }
   const elementsCart = JSON.parse(localStorage.getItem("products"))
 
-  let total = elementsCart?.map(e => e.price)
+  let total = elementsCart?.map(e => parseInt(e.price))
 
   total = total.length > 1 ? total.reduce((a, b) => a + b, 0) : total
 
@@ -43,11 +43,11 @@ export default function Carrito() {
               elementsCart?.map((e, index) => {
                 return (
                   <div key={index}>
-                    <div className="flex justify-between my-1 w-full py-1" >
+                    <div className="flex flex-col justify-between my-1 w-full py-1" >
                       <div>
                         <h1>{e.name}</h1>
                       </div>
-                      <div>{e.cant > 1 ? `${e.cant} x ${e.price}: ${JSON.parse(e.price) * e.cant}` : e.price}</div>
+                      <div>{e.cant > 1 ? `${e.cant} x ${e.price}= ${parseInt(e.price) * e.cant}` : e.price}</div>
                     </div>
                   </div>
                 )

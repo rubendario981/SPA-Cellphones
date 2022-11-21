@@ -9,12 +9,11 @@ const Perfil = () => {
 	const dispatch = useDispatch()
 	let user = {}
 
-	if (!token) {
-		localStorage.setItem('token', '')
-	} else {
+	if (token) {
 		// decodifico el token y lo guardo en un objeto
 		user = JSON.parse(window.atob(token?.split('.')[1]))
-	}
+	} else localStorage.removeItem('token')
+
 	useEffect(() => {
 		async function perfilUser() {
 			const perfil = await dispatch(getProfile(user.id))

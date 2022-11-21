@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const URL = "http://localhost:3001" 
+const URL = process.env.REACT_APP_URL || "http://localhost:3001" 
 
 export function getProducts() {
   return async (dispatch) => {
-    const response = await axios.get(`/products`);
+    const response = await axios.get(`${URL}/products`);
     return dispatch({
       type: "GET_PRODUCTS",
       payload: response.data,
@@ -15,7 +15,7 @@ export function getProducts() {
 export const getListBrands = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`/products/brands`);
+      const response = await axios.get(`${URL}/products/brands`);
       return dispatch({
         type: "LIST_BRANDS",
         payload: response.data,
@@ -29,7 +29,7 @@ export const getListBrands = () => {
 export const getListOs = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`/products/os`);
+      const response = await axios.get(`${URL}/products/os`);
       return dispatch({
         type: "LIST_OS",
         payload: response.data,
@@ -44,7 +44,7 @@ export const createCellPhone = (cell) => {
   const data = cell;
   return async (dispatch) => {
     try {
-      const response = await axios.post(`/products/create`, data);
+      const response = await axios.post(`${URL}/products/create`, data);
       return dispatch({
         type: "CREATE_PRODUCT",
         payload: response.data,
@@ -86,7 +86,7 @@ export function getProductById(id) {
     try {
       // let json = await axios.get(`/products/${id.id}`)
       // let json = await axios.get("/products/" + id);
-      const response = await axios.get(`/products`);
+      const response = await axios.get(`${URL}/products`);
       const detailProduct = response.data.filter(
         (data) => data.id === parseInt(id)
       );
@@ -119,7 +119,7 @@ export function createUser(dataUser) {
 export function login(dataUser) {
   return async function (dispatch) {
     try {
-      const response = await axios.post("/user/login", dataUser);
+      const response = await axios.post(`${URL}/user/login`, dataUser);
       const token = JSON.stringify(response.data.token);
       localStorage.setItem("token", token);
       return dispatch({
@@ -136,7 +136,7 @@ export function getProfile(id) {
   return async function (dispatch) {
     try {
       const profile = await axios.get(
-        `/user/getProfile?id=${id}`
+        `${URL}/user/getProfile?id=${id}`
       );
       const token = JSON.stringify(profile.data.token);
       localStorage.setItem('token', token);
@@ -162,6 +162,6 @@ export const cerrarSesion = () => {
 export const udapteUser = (user) => {
   console.log("Usuario actions", user);
   return async (dispatch) => {
-    await axios.patch(`/user/update/${user.id}`, user);
+    await axios.patch(`${URL}/user/update/${user.id}`, user);
   };
 };
