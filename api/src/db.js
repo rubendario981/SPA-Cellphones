@@ -1,17 +1,48 @@
-require('dotenv').config();
+require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  host: DB_HOST,
-  port: 5432,
-  dialect: "postgres",
-  logging: false,
-  native: false,
-});
+let sequelize =
+  process.env.NODE_ENV === "production"
+    ? new Sequelize({
+        database: DB_NAME,
+        dialect: "postgres",
+        host: DB_HOST,
+        port: 5432,
+        username: DB_USER,
+        password: DB_PASSWORD,
+        pool: {
+          max: 3,
+          min: 1,
+          idle: 10000,
+        },
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+          keepAlive: true,
+        },
+        ssl: true,
+      })
+    : new Sequelize(
+        `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+        {
+          logging: false,
+          native: false,
+        }
+      );
+
+// const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+//   host: DB_HOST,
+//   port: 5432,
+//   dialect: "postgres",
+//   logging: false,
+//   native: false,
+// });
 
 const basename = path.basename(__filename);
 
@@ -35,7 +66,8 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Cellphone, Bill, Brand, Os, Cart, Users, DetailCart } = sequelize.models;
+const { Cellphone, Bill, Brand, Os, Cart, Users, DetailCart } =
+  sequelize.models;
 
 // Aca vendrian las relaciones
 Users.hasMany(Bill);
@@ -44,11 +76,11 @@ Bill.belongsTo(Users);
 Users.hasMany(Cart);
 Cart.belongsTo(Users);
 
-Cart.belongsToMany(Cellphone, { through: DetailCart })
-Cellphone.belongsToMany(Cart, { through: DetailCart })
+Cart.belongsToMany(Cellphone, { through: DetailCart });
+Cellphone.belongsToMany(Cart, { through: DetailCart });
 
-Bill.belongsToMany(Cellphone, { through: "CellphoneBill"});
-Cellphone.belongsToMany(Bill, { through: "CellphoneBill"});
+Bill.belongsToMany(Cellphone, { through: "CellphoneBill" });
+Cellphone.belongsToMany(Bill, { through: "CellphoneBill" });
 
 Os.hasMany(Cellphone);
 Cellphone.belongsTo(Os);
