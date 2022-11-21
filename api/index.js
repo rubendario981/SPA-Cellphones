@@ -1,4 +1,4 @@
-const server = require("./src/app.js");
+const server = require("./src/App.js");
 const { conn } = require("./src/db.js");
 const { getAllProducts } = require("./src/controllers/index.js");
 
