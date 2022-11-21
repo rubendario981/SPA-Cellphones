@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 // Importar modulos de firebase
 import { initializeApp } from "firebase/app";
@@ -27,6 +27,7 @@ const LoginForm = () => {
   const [input, setInput] = useState(initialState)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const location = useLocation()
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
@@ -43,6 +44,8 @@ const LoginForm = () => {
       const response = await dispatch(login(input))
       if (response.payload) {
         alert("Bienvenio a nuestra pagina ")
+        if (location.pathname === "/envio")
+          return navigate('/envio')
         navigate('/perfil')
       } else if (response.response.data) {
         alert("Algo ha salido mal, intenta de nuevo \n" + response.response.data)

@@ -18,7 +18,6 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
   }
 
   function onHandelChange(e) {
-    console.log(product);
     if (e.target.value > stock) {
       alert(`No hay suficiente stock de ${name} \nEl maximo es ${stock}`)
       e.target.value = stock
@@ -27,10 +26,9 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
       e.target.value = 1
 
     let elementsCart = JSON.parse(localStorage.getItem("products"))
-    let producto = elementsCart.splice(elementsCart.indexOf(e => e.id === id), 1)[0]
+    let index = elementsCart.findIndex(e => e.id === id)
+    let producto = elementsCart[index]
     producto.cant = e.target.value * 1
-    console.log("aumentado", producto);
-    elementsCart.push(producto)
     localStorage.setItem("products", JSON.stringify(elementsCart))
     setUpdate(!update)
   }
@@ -38,7 +36,7 @@ const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) 
 
   return (
     <>
-      <div className="border border-blue-500 w-80 pb-2 rounded-lg bg-white">
+      <div className="border border-blue-500/20 w-80 pb-2 rounded-lg bg-white">
         <div className="group relative">
           <div className="min-h-[20%] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md  group-hover:opacity-75 lg:aspect-none lg:h-60 bg-white py-1 rounded-lg">
             <img

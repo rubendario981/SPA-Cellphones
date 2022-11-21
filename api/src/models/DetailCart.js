@@ -4,12 +4,13 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define(
-    "cart",
+    "detailCart",
     {
-      status: {
-        type: DataTypes.ENUM("En proceso", "Por despachar", "Despachado", "Entregado"),
-        allowNull: false,
-        defaultValue: "En proceso"
+      cantidad: {
+        type: DataTypes.INTEGER,
+      },
+      valor_unitario: {
+        type: DataTypes.INTEGER,
       },
     },
     { timestamps: false }
