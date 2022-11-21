@@ -5,6 +5,6 @@ const { getAllProducts } = require("./src/controllers/index.js");
 conn.sync({ force: true }).then(async () => {
   await getAllProducts();
   server.listen(process.env.PORT, () => {
-    console.log("Server listening at 3001");
+    console.log("Server listening at " + process.env.PORT);
   });
 });

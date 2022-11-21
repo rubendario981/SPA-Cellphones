@@ -1,10 +1,11 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-const router = require("./routes");
-const cors = require("cors");
-const session = require("express-session");
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const router = require('./routes');
+const cors = require('cors');
+const session = require('express-session');
+const URL_CLIENT = process.env.URL_CLIENT || 'http://localhost:3000'
 
 const server = express();
 

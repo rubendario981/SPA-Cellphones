@@ -16,7 +16,7 @@ const FormUser = () => {
 		const errors = {}
 		if (!field.name || field.name.length < 3) {
 			errors.name = "El nombre es requerido y debe ser mayor a 3 caracteres"
-		}		
+		}
 		if (!field.email) {
 			errors.email = "El campo de correo electronico es requerido"
 		}
@@ -69,11 +69,11 @@ const FormUser = () => {
 			alert("Algunos campos del formulario no cumplen con los requerimientos, por favor revisarlos e intente de nuevo")
 		} else {
 			try {
-				const response = await dispatch(createUser(user))				
-				if (response.payload) {					
-					alert(`${user.name} te has registrador en nuestra pagina correctamente`)
-					navigate('/')					
-				} else if (response.response.data){
+				const response = await dispatch(createUser(user))
+				if (response.payload) {
+					alert(`${user.name} te has registrado en nuestra pagina correctamente`)
+					navigate('/')
+				} else if (response.response.data) {
 					alert(`Algo salio mal al registrarse ` + response.response.data)
 				} else {
 					alert("Error general en proceso" + response)
