@@ -6,17 +6,14 @@ const SECRET_KEY_STRIPE =
 
 const stripe = new Stripe(SECRET_KEY_STRIPE);
 
-const { mailActivateAccount } = require("../config/nodemailer.js");
+const { mailActivateAccount, BuyCart } = require("../config/nodemailer.js");
 const { setToken } = require("../config/configToken.js");
 
-
-const URL_SERVER = process.env.URL_SERVER || 'http://localhost:3001/user/'
-const URL_CLIENT = process.env.URL_CLIENT || 'http://localhost:3000/'
-
+const URL_SERVER = process.env.URL_SERVER || "http://localhost:3001/user/";
+const URL_CLIENT = process.env.URL_CLIENT || "http://localhost:3000/";
 
 const registerUser = async (req, res) => {
   const { email, name } = req.body;
-  console.log(email, name, "controllers");
   try {
     const findUser = await Users.findOne({ where: { email } });
     if (findUser) return res.status(400).json("Usuario ya existe");
@@ -44,8 +41,8 @@ const activateAccount = async (req, res) => {
       { where: { id: decodeToken.id } }
     );
     return activateUser[0] === 0
-      ? res.status(400).json('No se pudo activar cuenta')
-      : res.redirect(`${URL_CLIENT}perfil`)
+      ? res.status(400).json("No se pudo activar cuenta")
+      : res.redirect(`${URL_CLIENT}perfil`);
   } catch (error) {
     console.log("Error en controller usuario al activar cuenta", error);
     return res.status(500).json(error);
@@ -69,7 +66,8 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const findUser = await Users.findOne({ where: { email } });
-    if(!findUser) return res.status(404).json("No estas registrado en la pagina")
+    if (!findUser)
+      return res.status(404).json("No estas registrado en la pagina");
 
     const validatePassword = await bcrypt.compareSync(
       password,
@@ -338,6 +336,15 @@ const registerBuy = async (req, res) => {
   }
 };
 
+const sendEmailBuy = async (req, res) => {
+  const { email, name, total } = req.body;
+  try {
+    res.json(await BuyCart(email, name, total));
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 module.exports = {
   registerUser,
   updateUser,
@@ -346,4 +353,5 @@ module.exports = {
   creatDatosPrueba,
   registerBuy,
   activateAccount,
+  sendEmailBuy,
 };
