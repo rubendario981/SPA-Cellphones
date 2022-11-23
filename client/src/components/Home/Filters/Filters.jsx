@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -37,29 +37,25 @@ const Filters = () => {
     dispatch(resetFilter());
     setTimeout(() => {
       dispatch(filterStorage(storage));
-    }, 500);
+    }, 0);
     if (marca === event.target.name) {
       setMarca("");
     } else {
       setMarca(event.target.name);
-      setTimeout(() => {
-        dispatch(filterBrand(event.target.name));
-      }, 500);
+      dispatch(filterBrand(event.target.name));
     }
   }
 
   function handleStorage(event) {
     dispatch(resetFilter());
-    setTimeout(() => {
-      dispatch(filterBrand(marca));
-    }, 500);
+    dispatch(filterBrand(marca));
     if (storage === event.target.name) {
       setStorage("");
     } else {
       setStorage(event.target.name);
       setTimeout(() => {
         dispatch(filterStorage(event.target.name));
-      }, 500);
+      }, 0);
     }
   }
 

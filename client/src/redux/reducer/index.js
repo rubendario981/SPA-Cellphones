@@ -33,7 +33,7 @@ const rootReducer = (state = initialState, action) => {
       };
     case "FILTER_BRAND":
       let filterMarca = state.filterProducts.filter((e) => {
-        return e.brand === action.payload;
+        return e.brand.name === action.payload;
       });
       return {
         ...state,
