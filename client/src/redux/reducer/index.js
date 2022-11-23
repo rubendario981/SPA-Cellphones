@@ -115,7 +115,6 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         allProducts: action.payload,
         showProducts: action.payload,
-        filterProducts: action.payload,
       };
     default:
       return state;
