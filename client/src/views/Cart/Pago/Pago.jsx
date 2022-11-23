@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios"
-import { getProfile } from "../../../redux/actions";
+import { getProfile, resetProducts } from "../../../redux/actions";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -59,7 +59,6 @@ export default function Pago() {
         //Se envia el mail
         await axios.post("http://localhost:3001/user/sendEmail", user.data.findUser)
         //Alerta de que su compra fue exitosa
-        // alert(data.message)
         Swal.fire({
           position: 'center',
           icon: 'success',
@@ -67,6 +66,14 @@ export default function Pago() {
           showConfirmButton: false,
           timer: 2000
         })
+        //Armo un objeto para mandarlo por body
+        let aux = user.data.findUser
+        let obj = { products, aux }
+        //Actualizo el stock de los telefonos en la base de datos
+        const listCellPhones = await axios.patch("http://localhost:3001/products/updateStock", obj.products)
+        dispatch(resetProducts(listCellPhones.data))
+        //Ejecuto ruta para crear el carrito en la base de datos
+        // await axios.post("http://localhost:3001/user/createdCartInDb", obj)
         //Reseteo el carrito
         localStorage.setItem("products", "[]")
         //Go to home

@@ -1,7 +1,8 @@
-const axios = require('axios');
-const { Cellphone, Os, Brand } = require('../db.js');
-const { Op } = require('sequelize');
-const { usuariosPrueba, creatDatosPrueba } = require('./user.controllers.js');
+const axios = require("axios");
+const { Cellphone, Os, Brand } = require("../db.js");
+const { Op } = require("sequelize");
+const { usuariosPrueba, creatDatosPrueba } = require("./user.controllers.js");
+const e = require("express");
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts(req, res) {
@@ -10,9 +11,7 @@ async function getAllProducts(req, res) {
 
   try {
     const listCellphones = await Cellphone.findAll({
-      include: [
-        { model: Brand },
-        { model: Os }]
+      include: [{ model: Brand }, { model: Os }],
     });
 
     // si no hay cellulares en la base de datos se procede a crearlos
@@ -24,7 +23,7 @@ async function getAllProducts(req, res) {
       );
       let initialData = products.data?.map((e) => ({
         //No podemos dejar el Id del prodcuto porque entonces no deja crear un0 nuevo producto que se le envie por formulario
-        // id: e.id, 
+        // id: e.id,
         brand: e.brand,
         name: e.name,
         image: e.image,
@@ -43,7 +42,7 @@ async function getAllProducts(req, res) {
 
       initialData.map(
         (e) => !brandsCell.includes(e.brand) && brandsCell.push(e.brand)
-      );     
+      );
 
       initialData.map(
         (e) =>
@@ -76,19 +75,17 @@ async function getAllProducts(req, res) {
           ));
       });
 
-      const cellphonesCreated = await Cellphone.findAll({ 
-      include: [ 
-        { model: Brand }, 
-        { model: Os }]
-    });
-      await creatDatosPrueba()
+      const cellphonesCreated = await Cellphone.findAll({
+        include: [{ model: Brand }, { model: Os }],
+      });
+      await creatDatosPrueba();
       return res?.json(
         cellphonesCreated.length > 0
-          ? cellphonesCreated
-          : 'No se pudieron crear los telefonos'
+          ? cellphonesCreated.sort((a, b) => a.id - b.id)
+          : "No se pudieron crear los telefonos"
       );
     } else {
-      return res?.json(listCellphones);
+      return res?.json(listCellphones.sort((a, b) => a.id - b.id));
     }
   } catch (error) {
     return error;
@@ -99,7 +96,7 @@ const getListBrands = async (req, res) => {
   try {
     const listBrands = await Brand.findAll();
     return res.json(
-      listBrands.length > 0 ? listBrands : 'No hay marcas disponibles'
+      listBrands.length > 0 ? listBrands : "No hay marcas disponibles"
     );
   } catch (error) {
     return res.json(error);
@@ -109,7 +106,7 @@ const getListBrands = async (req, res) => {
 const getListOs = async (req, res) => {
   try {
     const listOs = await Os.findAll();
-    return res.json(listOs.length > 0 ? listOs : 'No hay marcas disponibles');
+    return res.json(listOs.length > 0 ? listOs : "No hay marcas disponibles");
   } catch (error) {
     return res.json(error);
   }
@@ -124,8 +121,8 @@ async function getProductById(id) {
 
     return product.length
       ? product
-      : 'El ID no esta relacionado a ningun producto';
-  } catch (error) { }
+      : "El ID no esta relacionado a ningun producto";
+  } catch (error) {}
 }
 
 //Trae todos los productos que en su nombre incluyan el name que se busca
@@ -137,7 +134,7 @@ async function getProductByName(name) {
       },
     });
 
-    return product.length ? product : 'Product not found';
+    return product.length ? product : "Product not found";
   } catch (error) {
     return error;
   }
@@ -154,7 +151,7 @@ async function createProduct(req, res) {
     });
     createCell
       ? res.json(createCell)
-      : res.status(400).json({ error: 'No se pudo crear telefono' });
+      : res.status(400).json({ error: "No se pudo crear telefono" });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -164,16 +161,32 @@ async function createProduct(req, res) {
 async function getProductsWithDB() {
   try {
     let DBInfo = await Cellphone.findAll({
-      include: [
-        { model: Brand },
-        { model: Os }]
+      include: [{ model: Brand }, { model: Os }],
     });
     if (!DBInfo.length) {
-      return 'La base de datos se encuentra vacia.';
+      return "La base de datos se encuentra vacia.";
     }
     return DBInfo;
   } catch (error) {
     return error;
+  }
+}
+async function updateStock(req, res) {
+  const products = req.body;
+  try {
+    products.map(async (e) => {
+      let cellphone = await Cellphone.findOne({
+        where: { id: e.id },
+      });
+      cellphone.stock = e.stock - e.cant;
+      await cellphone.save({ fields: ["stock"] });
+      await cellphone.reload();
+    });
+
+    const listCellphones = await Cellphone.findAll();
+    res.json(listCellphones);
+  } catch (error) {
+    res.json(error.message);
   }
 }
 
@@ -196,4 +209,5 @@ module.exports = {
   createProduct,
   getListBrands,
   getListOs,
+  updateStock,
 };

@@ -1,25 +1,49 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 
 const CarritoCard = ({ name, image, rom, price, id, update, setUpdate, stock }) => {
 
   const product = JSON.parse(localStorage.getItem('products')).find(e => e.id === id)
 
-  function deletedCarrito() {
-    let confirm = window.confirm(`Esta seguro que desea eliminar ${name} x ${product.cant}?`)
-    if (confirm) {
+  async function deletedCarrito() {
+    let confirm = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    })
+    if (confirm.isConfirmed) {
       let elementsCart = JSON.parse(localStorage.getItem("products"))
       let index = elementsCart.findIndex(e => e.id === id)
       elementsCart.splice(index, 1)
       localStorage.setItem("products", JSON.stringify(elementsCart))
       setUpdate(!update)
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
     }
   }
 
   function onHandelChange(e) {
     if (e.target.value > stock) {
-      alert(`No hay suficiente stock de ${name} \nEl maximo es ${stock}`)
+      Swal.fire({
+        position: 'center',
+        html: `<p>No hay suficiente stock de ${name} <br/>El maximo es ${stock}</p>`,
+        showConfirmButton: false,
+        icon: "error",
+        timer: 3000,
+        width: 400,
+      })
       e.target.value = stock
     }
     if (e.target.value <= 0)

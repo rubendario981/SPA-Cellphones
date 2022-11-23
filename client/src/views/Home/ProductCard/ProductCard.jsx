@@ -12,25 +12,48 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
     const productos = JSON.parse(localStorage.getItem('products'))
     const producto = { id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }
     const index = productos.findIndex(p => p.id === id)
+    console.log(productos[index]);
 
-    if (index < 0) {
-      producto.cant = 1
-      productos.push(producto)
-      localStorage.setItem('products', JSON.stringify(productos))
+
+    if (stock > 0) {
+      if (index < 0) {
+        producto.cant = 1
+        productos.push(producto)
+        localStorage.setItem('products', JSON.stringify(productos))
+      } else {
+        let producto = productos.splice(index, 1)[0]
+        if (producto.cant >= stock) {
+          return Swal.fire({
+            position: 'center',
+            html: `<p>No hay mas stock de ${name}.</p>`,
+            showConfirmButton: false,
+            icon: "error",
+            timer: 3000,
+            width: 400,
+          })
+        }
+        producto.cant = ++producto.cant
+        productos.push(producto)
+        localStorage.setItem('products', JSON.stringify(productos))
+      }
+      Swal.fire({
+        position: 'top-end',
+        html: `<p>Producto agregado al carrito.</p>`,
+        showConfirmButton: false,
+        timer: 1000,
+        width: 300,
+      })
     } else {
-      let producto = productos.splice(index, 1)[0]
-      producto.cant = ++producto.cant
-      productos.push(producto)
-      localStorage.setItem('products', JSON.stringify(productos))
+      Swal.fire({
+        position: 'center',
+        html: `<p>No hay mas stock de ${name}.</p>`,
+        showConfirmButton: false,
+        icon: "error",
+        timer: 3000,
+        width: 400,
+      })
     }
 
-    Swal.fire({
-      position: 'top-end',
-      html: `<p>Producto agregado al carrito.</p>`,
-      showConfirmButton: false,
-      timer: 1000,
-      width: 300,
-    })
   }
 
 

@@ -4,8 +4,8 @@ const initialState = {
   filterProducts: [],
   detail: {},
   brands: [],
-  os: [], 
-  user: {}
+  os: [],
+  user: {},
 };
 
 function menorAMayor(a, b) {
@@ -19,18 +19,18 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         allProducts: action.payload,
         showProducts: action.payload,
-        filterProducts: action.payload
+        filterProducts: action.payload,
       };
     case "LIST_BRANDS":
       return {
         ...state,
-        brands: action.payload
-      }
+        brands: action.payload,
+      };
     case "LIST_OS":
       return {
         ...state,
-        os: action.payload
-      }
+        os: action.payload,
+      };
     case "FILTER_BRAND":
       let filterMarca = state.filterProducts.filter((e) => {
         return e.brand === action.payload;
@@ -93,22 +93,29 @@ const rootReducer = (state = initialState, action) => {
         showProducts: state.filterProducts.slice().sort(menorAMayor).reverse(),
       };
     case "CREATE_USER":
-      return{
-        ...state
+      return {
+        ...state,
       };
     case "LOGIN":
-      return{
+      return {
         ...state,
       };
     case "GET_PERFIL":
-      return{
+      return {
         ...state,
-        user: action.payload
+        user: action.payload,
       };
     case "CERRAR_SESION": // validar si es necesario!!!
-      return{
+      return {
         ...state,
-        user: {}
+        user: {},
+      };
+    case "RESET_PRODUCTS":
+      return {
+        ...state,
+        allProducts: action.payload,
+        showProducts: action.payload,
+        filterProducts: action.payload,
       };
     default:
       return state;

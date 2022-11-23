@@ -1,6 +1,5 @@
 import axios from "axios";
-const URL = process.env.REACT_APP_URL || "http://localhost:3001" 
-
+const URL = process.env.REACT_APP_URL || "http://localhost:3001";
 
 export function getProducts() {
   return async (dispatch) => {
@@ -135,9 +134,7 @@ export function login(dataUser) {
 export function getProfile(id) {
   return async function (dispatch) {
     try {
-      const profile = await axios.get(
-        `${URL}/user/getProfile?id=${id}`
-      );
+      const profile = await axios.get(`${URL}/user/getProfile?id=${id}`);
       const token = JSON.stringify(profile.data.token);
       localStorage.setItem("token", token);
       return dispatch({
@@ -163,5 +160,14 @@ export const udapteUser = (user) => {
   console.log("Usuario actions", user);
   return async (dispatch) => {
     await axios.patch(`${URL}/user/update/${user.id}`, user);
+  };
+};
+
+export const resetProducts = (products) => {
+  return async (dispatch) => {
+    return dispatch({
+      type: "RESET_PRODUCTS",
+      payload: products,
+    });
   };
 };

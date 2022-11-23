@@ -43,11 +43,11 @@ export default function Carrito() {
               elementsCart?.map((e, index) => {
                 return (
                   <div key={index}>
-                    <div className="flex flex-col justify-between my-1 w-full py-1" >
+                    <div className="flex justify-between my-1 w-full py-1" >
                       <div>
                         <h1>{e.name}</h1>
                       </div>
-                      <div>{e.cant > 1 ? `${e.cant} x ${e.price}= ${parseInt(e.price) * e.cant}` : e.price}</div>
+                      <div>{e.cant > 1 ? `${e.cant} x ${e.price} = $ ${parseInt(e.price) * e.cant}` : `$ ${e.price}`}</div>
                     </div>
                   </div>
                 )
@@ -56,7 +56,7 @@ export default function Carrito() {
             }
           </div>
           <div className="flex justify-between my-1 w-full py-1">
-            <h1>Total: </h1>{`${total} $`}
+            <h1>Total: </h1>{`$ ${total} `}
           </div>
           <div className="flex justify-between py-5 w-full">
             <button onClick={() => handelClear()} className="bg-transparent hover:bg-red-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded">

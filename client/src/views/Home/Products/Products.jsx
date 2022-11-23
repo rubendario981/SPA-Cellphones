@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -10,11 +10,13 @@ import Filters from "../Filters/Filters";
 import Order from "../Order/Order";
 import Alert from "../../Modals/Alert.jsx";
 import Carrousel from "../../Carrousel/Carrousel";
+import { getProducts } from "../../../redux/actions";
 
 export default function Products() {
-  const products = useSelector((state) => state.showProducts);
+  let products = useSelector((state) => state.showProducts);
   const [currentPage, setCurrentPage] = useState(0);
   const [dataModal, setDataModal] = useState({ show: false, title: '', message: '' });
+  const dispatch = useDispatch()
 
 
   let firstPage = () => {
@@ -37,11 +39,10 @@ export default function Products() {
     setCurrentPage(parseInt(event.target.value));
   };
 
-
-
   useEffect(() => {
     firstPage();
-  }, [products]);
+    dispatch(getProducts())
+  }, []);
 
   const showProducts = products.slice(currentPage, currentPage + 8);
 
