@@ -58,8 +58,8 @@ export function resetFilter() {
   return { type: "RESET_FILTER" };
 }
 
-export function filterBrand(marca) {
-  if (marca !== "") return { type: "FILTER_BRAND", payload: marca };
+export function filterBrand(payload) {
+  return { type: "FILTER_BRAND", payload };
 }
 
 export function filterStorage(storage) {

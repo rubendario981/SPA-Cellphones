@@ -8,6 +8,7 @@ const {
   registerBuy,
   activateAccount,
   sendEmailBuy,
+  createdCartInDb,
 } = require("../controllers/user.controllers");
 const router = Router();
 
@@ -34,5 +35,7 @@ router.post("/dataTest", creatDatosPrueba);
 router.get("/activateAccount", activateAccount);
 
 router.post("/sendEmail", sendEmailBuy);
+
+router.post("/createdCartInDb", createdCartInDb);
 
 module.exports = router;

@@ -151,6 +151,13 @@ const creatDatosPrueba = async (req, res) => {
       status: "User",
     });
 
+    await Users.create({
+      name: "Fermin Solaberrieta",
+      email: "fermin234@hotmail.com",
+      password: "$2b$10$i9r4a4bUo9l.MxQcZFjwg.GwWXtDB59poQa4Ce9RUERvpkRBECx.S",
+      status: "Inactivo",
+    });
+
     // se crean carritos de compra, un carrito por cada usuario y uno adicional para el usuario 1 con estado entregado
     await Cart.bulkCreate(crearCarritos);
 
@@ -345,6 +352,33 @@ const sendEmailBuy = async (req, res) => {
   }
 };
 
+const createdCartInDb = async (req, res) => {
+  //aux es toda la informacion del usuario que compro el carrito
+  //products array de objs de la compra que realizo
+  const { products, aux } = req.body;
+  console.log({ products, aux });
+  try {
+    //creo el carrito del usuario
+    let cart = await Cart.create({
+      userId: aux.id,
+      status: "Por despachar",
+    });
+
+    //agrego cada producto al carrito creado anteriormente
+    products.map(async (e) => {
+      await DetailCart.create({
+        cartId: cart.id,
+        cantidad: e.cant,
+        valor_unitario: e.price,
+        cellphoneId: e.id,
+      });
+    });
+    res.json({ products, aux });
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 module.exports = {
   registerUser,
   updateUser,
@@ -354,4 +388,5 @@ module.exports = {
   registerBuy,
   activateAccount,
   sendEmailBuy,
+  createdCartInDb,
 };

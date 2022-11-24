@@ -73,7 +73,7 @@ export default function Pago() {
         const listCellPhones = await axios.patch("http://localhost:3001/products/updateStock", obj.products)
         dispatch(resetProducts(listCellPhones.data))
         //Ejecuto ruta para crear el carrito en la base de datos
-        // await axios.post("http://localhost:3001/user/createdCartInDb", obj)
+        await axios.post("http://localhost:3001/user/createdCartInDb", obj)
         //Reseteo el carrito
         localStorage.setItem("products", "[]")
         //Go to home

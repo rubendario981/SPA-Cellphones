@@ -32,17 +32,14 @@ const rootReducer = (state = initialState, action) => {
         os: action.payload,
       };
     case "FILTER_BRAND":
-      let filterMarca = state.filterProducts.filter((e) => {
-        return e.brand.name === action.payload;
-      });
       return {
         ...state,
-        showProducts: filterMarca,
-        filterProducts: filterMarca,
+        showProducts: action.payload,
+        // filterProducts: filterMarca,
       };
     case "FILTER_STORAGE":
       let filterStorage = state.filterProducts.filter((e) => {
-        return e.internal_storage === action.payload;
+        return e.internal_storage.includes(action.payload);
       });
       return {
         ...state,
@@ -72,8 +69,8 @@ const rootReducer = (state = initialState, action) => {
     case "RESET_FILTER":
       return {
         ...state,
-        filterProducts: state.allProducts,
-        showProducts: state.allProducts,
+        filterProducts: [...state.allProducts],
+        showProducts: [...state.allProducts],
       };
     case "GET_NAME":
       return {
