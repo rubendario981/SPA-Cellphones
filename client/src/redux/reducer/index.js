@@ -4,8 +4,9 @@ const initialState = {
   filterProducts: [],
   detail: {},
   brands: [],
-  os: [], 
-  user: {}
+  os: [],
+  user: {},
+  historyCarts: []
 };
 
 function menorAMayor(a, b) {
@@ -93,20 +94,30 @@ const rootReducer = (state = initialState, action) => {
         showProducts: state.filterProducts.slice().sort(menorAMayor).reverse(),
       };
     case "CREATE_USER":
-      return{
+      return {
         ...state
       };
     case "LOGIN":
-      return{
+      console.log("Redux reducer login user", action.payload);
+      return {
         ...state,
+        user: action.payload.findUser,
+        historyCarts: action.payload.findCarts
       };
     case "GET_PERFIL":
-      return{
+      return {
         ...state,
-        user: action.payload
+        user: action.payload.findUser,
+        historyCarts: action.payload.findCarts
       };
+    case "UPDATE_USER":
+      console.log("Redux reducer uptade user", action.payload);
+      return {
+        ...state,
+        user: action.payload.findUser
+      }
     case "CERRAR_SESION": // validar si es necesario!!!
-      return{
+      return {
         ...state,
         user: {}
       };

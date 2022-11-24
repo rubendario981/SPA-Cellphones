@@ -17,6 +17,7 @@ import DetailCart from './views/Cart/DetailCart/DetailCart';
 import Perfil from './views/Perfil/Perfil';
 import Envio from './views/Cart/Envio/Envio';
 import Pago from './views/Cart/Pago/Pago';
+import RecoveryPassword from './views/RecoveryPassword/RecoveryPassword';
 
 const stripePromise = loadStripe(
   'pk_test_51M5u48DvLT9vn19qkH7KeTd6Ll4wZAhyGYTlYTLGsF2TVIUfRpl925HNDce6TS8kd4y3Exbei8G6W3NKhKqDmtIH00v4L6YcrT'
@@ -48,7 +49,9 @@ export default function App() {
           {/* Usuario */}
           <Route exact path={'/register'} element={<FormUser />} />
           <Route exact path={'/login'} element={<LoginForm />} />
-          <Route exact path={'/perfil'} element={<Perfil />} />
+          <Route exact path={'/perfil'} element={<Perfil />} > 
+          </Route> 
+          <Route exact path={'/setNewPassword'} element={<RecoveryPassword />} />
         </Routes>
         <Footer />
       </Elements>

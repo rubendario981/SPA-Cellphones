@@ -6,9 +6,8 @@ const SECRET_KEY_STRIPE =
 
 const stripe = new Stripe(SECRET_KEY_STRIPE);
 
-const { mailActivateAccount } = require("../config/nodemailer.js");
-const { setToken } = require("../config/configToken.js");
-
+const { mailActivateAccount, mailToRecoveryPassword } = require('../config/nodemailer.js');
+const { setToken, verifyToken } = require('../config/configToken.js');
 
 const URL_SERVER = process.env.URL_SERVER || 'http://localhost:3001/user/'
 const URL_CLIENT = process.env.URL_CLIENT || 'http://localhost:3000/'
@@ -54,14 +53,20 @@ const activateAccount = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const updateUser = await Users.update(
+    await Users.update(
       { ...req.body },
       { where: { id: req.params.id } }
     );
+    const findUser = await Users.findByPk(req.params.id)
+    const findCarts = await Cart.findAll({
+      where: { userId: req.params.id },
+      include: Cellphone,
+    });
 
-    return res.json(updateUser);
+    return res.json({findUser, findCarts});
   } catch (error) {
-    res.status(500).json(error);
+    console.log("Error en controler usuario al actualizar usuario", error);
+    return res.status(500).json(error);
   }
 };
 
@@ -77,8 +82,12 @@ const login = async (req, res) => {
     );
 
     if (validatePassword) {
-      const token = setToken(findUser.id, findUser.status);
-      return res.json({ token });
+      const token = setToken(findUser.id, findUser.status)
+      const findCarts = await Cart.findAll({
+        where: { userId: findUser.id },
+        include: Cellphone,
+      });
+      return res.json({ token, findCarts, findUser });
     } else {
       return res.status(400).json("Contraseña incorrecta");
     }
@@ -100,6 +109,48 @@ const findOrCreateCart = async (req, res) => {
   } catch (error) {}
 };
 
+const recoveryPassword = async(req, res) =>{
+  const { email } = req.body
+  if(!email) return res.status(400).json('Correo no identificado')
+  try {
+    const findUser = await Users.findOne({ where: { email }})
+    if(!findUser) {
+      return res.status(404).json({message: `El correo ${email} no esta registrado `})
+    } else {
+      const token = setToken(findUser.id, findUser.status, 600)
+
+      mailToRecoveryPassword(email, findUser.name, URL_CLIENT)
+      return res.json({ message: `Por favor revisa tu cuenta de correo ${email} para continuar el proceso de recuperacion de contraseña`, token})
+    }
+  } catch (error) {
+    console.log("Error controlador usuario recuperacion contraseña", error);
+    return res.status(500).json(error)
+  }
+}
+
+const setNewPasswordUser = async (req, res)=>{
+  const { password, token } = req.body
+  if(!token) return res.status(404).json("Sin token para procesar!!!")
+  try {    
+    const valitadeToken = await verifyToken(token);
+    
+    if(!valitadeToken) return res.status(400).json("Token expirado!!!")
+    const salt = await bcrypt.genSaltSync(10)
+    const cryptPasswd = await bcrypt.hashSync(password, salt)
+    
+    const findAndUpdateUser = await Users.update(
+      { password: cryptPasswd },
+      { where: { id: valitadeToken.id }}
+    )
+    return res.json(findAndUpdateUser[0] === 0 
+      ? "Fallo proceso asignacion nueva contraseña"
+      : "Contraseña actualizada correctamente")
+  } catch (error) {
+    console.log("Error en controlador establecer nueva contraseña usuario", error);
+    return res.status(500).json(error)    
+  }
+}
+
 const userInfo = async (req, res) => {
   try {
     const findUser = await Users.findByPk(req.query.id);
@@ -113,6 +164,7 @@ const userInfo = async (req, res) => {
 
     return res.json({ token, findUser, findCarts });
   } catch (error) {
+    console.log("Error controlador usuario al tener informacion usuario", error)
     return res.status(500).json(error);
   }
 };
@@ -151,6 +203,12 @@ const creatDatosPrueba = async (req, res) => {
       email: "leomessi@mail.com",
       password: "12345",
       status: "User",
+    });
+    await Users.create({
+      name: "Ruben Guzman",
+      email: "rubendario981@hotmail.com",
+      password: "12345",
+      status: "Admin",
     });
 
     // se crean carritos de compra, un carrito por cada usuario y uno adicional para el usuario 1 con estado entregado
@@ -346,4 +404,6 @@ module.exports = {
   creatDatosPrueba,
   registerBuy,
   activateAccount,
+  recoveryPassword,
+  setNewPasswordUser
 };

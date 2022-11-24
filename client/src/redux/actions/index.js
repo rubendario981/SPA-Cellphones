@@ -122,9 +122,10 @@ export function login(dataUser) {
       const response = await axios.post(`${URL}/user/login`, dataUser);
       const token = JSON.stringify(response.data.token);
       localStorage.setItem("token", token);
+      console.log("Redux actions login user", response);      
       return dispatch({
         type: "LOGIN",
-        payload: response,
+        payload: response.data,
       });
     } catch (error) {
       return error;
@@ -135,15 +136,14 @@ export function login(dataUser) {
 export function getProfile(id) {
   return async function (dispatch) {
     try {
-      const profile = await axios.get(
-        `${URL}/user/getProfile?id=${id}`
-      );
+      const profile = await axios.get(`${URL}/user/getProfile?id=${id}`);
+      console.log("Redux action get perfil", profile.data);
       const token = JSON.stringify(profile.data.token);
       localStorage.setItem("token", token);
       return dispatch({
         type: "GET_PERFIL",
-        payload: profile,
-      });
+        payload: profile.data
+      })
     } catch (error) {
       return error;
     }
@@ -165,3 +165,20 @@ export const udapteUser = (user) => {
     await axios.patch(`${URL}/user/update/${user.id}`, user);
   };
 };
+
+
+export const updateUser = (user) =>{
+  return async (dispatch) => {
+    try {
+      const updateUser = await axios.patch(`${URL}/user/update/${user.id}`, user);
+      console.log("Respuesta action redux update user", updateUser);
+      return dispatch({
+        type: "UPDATE_USER",
+        payload: updateUser.data
+      })
+    } catch (error) {
+      console.log("Error action actualizar usuario", error);    
+      return error
+    }
+  };
+}

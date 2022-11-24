@@ -49,7 +49,6 @@ const FormUser = () => {
 
 	}, [])
 
-
 	const handleChanges = (e) => {
 		setUser({ ...user, [e.target.name]: e.target.value })
 		setErrors(validateFields({ ...user, [e.target.name]: e.target.value }))
@@ -219,12 +218,12 @@ const FormUser = () => {
 						<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
 							Registrarse
 						</button>
-						<button type='button'
+						{/* <button type='button'
 							className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 							onClick={() => setUser({ name: "Scarlet Jhohanson", email: "scarlet@henry.com", password: "Hola5", retypepass: "Hola5", country: "Colombia", city: "Cali", address: "", card_number: "", isAdmin: false })}
 						>
 							Cargar datos de pueba
-						</button>
+						</button> */}
 						<button type='button'
 							className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 							onClick={() => {
