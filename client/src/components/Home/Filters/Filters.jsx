@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -14,54 +14,65 @@ import {
 } from "@heroicons/react/20/solid";
 import {
   filterBrand,
-  filterStorage,
-  resetFilter,
+  // filterStorage,
+  // resetFilter,
 } from "../../../redux/actions";
 
 const Filters = () => {
+  const dispatch = useDispatch();
+
+  const cellPhoneList = useSelector(s => s.allProducts)
   const marcas = useSelector((state) => state.brands);
-  const almacenamiento = [
-    "4 MB",
-    "32 GB",
-    "64 GB",
-    "128 GB",
-    "256 GB",
-    "512 GB",
-  ];
 
   const [marca, setMarca] = useState("");
   const [storage, setStorage] = useState("");
-  const dispatch = useDispatch();
 
-  function handleMarca(event) {
-    dispatch(resetFilter());
-    setTimeout(() => {
-      dispatch(filterStorage(storage));
-    }, 500);
-    if (marca === event.target.name) {
-      setMarca("");
+  let filteredByBrand = []
+  let filteredByStorage = []
+  let almacenamiento = []
+  cellPhoneList.forEach(e => !almacenamiento.includes(e.internal_storage.replace("GB", "").trim()) && almacenamiento.push(e.internal_storage.replace("GB", "")))
+  console.log("* ", almacenamiento);
+
+
+  function handleMarca(e) {
+    let value = e.target.value;
+    if (value === marca) {
+      if (storage !== "") {
+        filteredByBrand = cellPhoneList.filter(e => e.internal_storage.includes(storage))
+      } else {
+        filteredByBrand = cellPhoneList
+      }
+      setMarca("")
     } else {
-      setMarca(event.target.name);
-      setTimeout(() => {
-        dispatch(filterBrand(event.target.name));
-      }, 500);
+      if (storage !== "") {
+        filteredByBrand = cellPhoneList.filter(e => e.brand.name === value && e.internal_storage.includes(storage))
+      } else {
+        filteredByBrand = cellPhoneList.filter(e => e.brand.name === value)
+      }
+      setMarca(value)
     }
+    dispatch(filterBrand(filteredByBrand))
   }
 
-  function handleStorage(event) {
-    dispatch(resetFilter());
-    setTimeout(() => {
-      dispatch(filterBrand(marca));
-    }, 500);
-    if (storage === event.target.name) {
-      setStorage("");
+  function handleStorage(e) {
+    let value = e.target.value
+    if (marca === "") {
+      filteredByStorage = cellPhoneList.filter(e => e.internal_storage === value)
     } else {
-      setStorage(event.target.name);
-      setTimeout(() => {
-        dispatch(filterStorage(event.target.name));
-      }, 500);
+      filteredByStorage = cellPhoneList.filter(e => e.internal_storage === value && e.brand.name === marca)
     }
+    if (storage === value) {
+      if (marca !== "") {
+        filteredByStorage = cellPhoneList.filter(e => e.brand.name === marca)
+      } else {
+        filteredByStorage = cellPhoneList
+      }
+      setStorage("")
+    }
+    else setStorage(value)
+    dispatch(filterBrand(filteredByStorage))
   }
+
 
   return (
     <form className="hidden lg:block basis-1/4">
@@ -89,8 +100,8 @@ const Filters = () => {
                   <div key={optionIdx} className="flex items-center">
                     <input
                       id={option.id}
-                      name={option.name}
-                      value={"marca"}
+                      name={"marca"}
+                      value={option.name}
                       type="checkbox"
                       checked={option.name === marca ? true : false}
                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -126,19 +137,19 @@ const Filters = () => {
 
             <Disclosure.Panel className="pt-6">
               <div className="space-y-4">
-                {almacenamiento.map((option, optionIdx) => (
-                  <div key={optionIdx} className="flex items-center">
+                {almacenamiento.map((e, i) => (
+                  <div key={i} className="flex items-center">
                     <input
-                      id={option}
-                      name={option}
-                      value="storage"
+                      id={i}
+                      name="storage"
+                      value={e}
                       type="checkbox"
-                      checked={option === storage ? true : false}
+                      checked={e === storage ? true : false}
                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onChange={(e) => handleStorage(e)}
+                      onChange={(event) => handleStorage(event)}
                     />
                     <label className="ml-3 text-sm text-gray-600">
-                      {option}
+                      {e}
                     </label>
                   </div>
                 ))}
@@ -150,5 +161,4 @@ const Filters = () => {
     </form>
   );
 };
-
 export default Filters;

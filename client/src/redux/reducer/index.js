@@ -6,7 +6,7 @@ const initialState = {
   brands: [],
   os: [],
   user: {},
-  historyCarts: []
+  historyCarts: [],
 };
 
 function menorAMayor(a, b) {
@@ -20,30 +20,27 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         allProducts: action.payload,
         showProducts: action.payload,
-        filterProducts: action.payload
+        filterProducts: action.payload,
       };
     case "LIST_BRANDS":
       return {
         ...state,
-        brands: action.payload
-      }
+        brands: action.payload,
+      };
     case "LIST_OS":
       return {
         ...state,
-        os: action.payload
-      }
+        os: action.payload,
+      };
     case "FILTER_BRAND":
-      let filterMarca = state.filterProducts.filter((e) => {
-        return e.brand === action.payload;
-      });
       return {
         ...state,
-        showProducts: filterMarca,
-        filterProducts: filterMarca,
+        showProducts: action.payload,
+        // filterProducts: filterMarca,
       };
     case "FILTER_STORAGE":
       let filterStorage = state.filterProducts.filter((e) => {
-        return e.internal_storage === action.payload;
+        return e.internal_storage.includes(action.payload);
       });
       return {
         ...state,
@@ -73,8 +70,8 @@ const rootReducer = (state = initialState, action) => {
     case "RESET_FILTER":
       return {
         ...state,
-        filterProducts: state.allProducts,
-        showProducts: state.allProducts,
+        filterProducts: [...state.allProducts],
+        showProducts: [...state.allProducts],
       };
     case "GET_NAME":
       return {
@@ -95,31 +92,37 @@ const rootReducer = (state = initialState, action) => {
       };
     case "CREATE_USER":
       return {
-        ...state
+        ...state,
       };
     case "LOGIN":
       console.log("Redux reducer login user", action.payload);
       return {
         ...state,
         user: action.payload.findUser,
-        historyCarts: action.payload.findCarts
+        historyCarts: action.payload.findCarts,
       };
     case "GET_PERFIL":
       return {
         ...state,
         user: action.payload.findUser,
-        historyCarts: action.payload.findCarts
+        historyCarts: action.payload.findCarts,
       };
     case "UPDATE_USER":
       console.log("Redux reducer uptade user", action.payload);
       return {
         ...state,
-        user: action.payload.findUser
-      }
+        user: action.payload.findUser,
+      };
     case "CERRAR_SESION": // validar si es necesario!!!
       return {
         ...state,
-        user: {}
+        user: {},
+      };
+    case "RESET_PRODUCTS":
+      return {
+        ...state,
+        allProducts: action.payload,
+        showProducts: action.payload,
       };
     default:
       return state;

@@ -1,25 +1,25 @@
-const nodemailer = require('nodemailer')
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-	host: 'smtp.gmail.com',
-	port: 465,
-	secure: true,
-	auth: {
-		user: 'devapps2211@gmail.com',
-		pass: 'spxywipsrxjokqig'
-	}
-})
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "devapps2211@gmail.com",
+    pass: "spxywipsrxjokqig",
+  },
+});
 
 transporter.verify().then(() => {
-	console.log("Lista la configuracion para enviar correos");
-})
+  console.log("Lista la configuracion para enviar correos");
+});
 
 const mailActivateAccount = async (name, email, urlserver, token) => {
-	await transporter.sendMail({
-		from: 'PF-Henry <rubendario981@gmail.com',
-		to: email,
-		subject: 'Activa tu cuenta en E-commerce Cell-world',
-		html: `
+  await transporter.sendMail({
+    from: "PF-Henry <rubendario981@gmail.com",
+    to: email,
+    subject: "Activa tu cuenta en E-commerce Cell-world",
+    html: `
 		  <h2>Hola usuario ${name}</h2>
 		  <h4>Gracias por registrarte en nuestra pagina</h4>
 		  <hr />
@@ -31,16 +31,16 @@ const mailActivateAccount = async (name, email, urlserver, token) => {
 			<p>Atentamente</p>
 			<p>Tus amigos de Cell-world</p>
 		  </div>        
-		`
-	})
-}
+		`,
+  });
+};
 
 const mailToRecoveryPassword = async (email, name, urlClient) => {
-	await transporter.sendMail({
-		from: 'PF-Henry <rubendario981@gmail.com',
-		to: email,
-		subject: 'Recuperar contraseña en E-commerce Cell-world',
-		html: `
+  await transporter.sendMail({
+    from: "PF-Henry <rubendario981@gmail.com",
+    to: email,
+    subject: "Recuperar contraseña en E-commerce Cell-world",
+    html: `
 		  <h2>Hola usuario ${name}</h2>
 		  <h4>Has olvidado tu contraseña??</h4>
 		  <hr />
@@ -54,8 +54,32 @@ const mailToRecoveryPassword = async (email, name, urlClient) => {
 		  	<h3>Atentamente</h3>
 			<p>Tus amigos de Cell-world</p>
 		  </div>        
-		`
-	})
-}
+		`,
+  });
+};
 
-module.exports = { transporter, mailActivateAccount, mailToRecoveryPassword }
+const BuyCart = async (email, name, total) => {
+  let a = 4;
+  await transporter.sendMail({
+    from: "PF-Henry <rubendario981@gmail.com",
+    to: email,
+    subject: "Comfirmacion de pago",
+    html: `
+  	  <h2>Hola ${name}</h2>
+  	  <h4>Gracias por la compra en nuestra pagina</h4>
+		<h5>El tiempo estimado para recibir su compra es de 2 semanas.<h5>
+  	  <hr />
+  	  <div>
+		<p>Atentamente</p>
+		<p>Tus amigos de Cell-world</p>
+  	  </div>
+		`,
+  });
+};
+
+module.exports = {
+  transporter,
+  mailActivateAccount,
+  BuyCart,
+  mailToRecoveryPassword,
+};
