@@ -35,4 +35,27 @@ const mailActivateAccount = async (name, email, urlserver, token) => {
 	})
 }
 
-module.exports = { transporter, mailActivateAccount }
+const mailToRecoveryPassword = async (email, name, urlClient) => {
+	await transporter.sendMail({
+		from: 'PF-Henry <rubendario981@gmail.com',
+		to: email,
+		subject: 'Recuperar contraseña en E-commerce Cell-world',
+		html: `
+		  <h2>Hola usuario ${name}</h2>
+		  <h4>Has olvidado tu contraseña??</h4>
+		  <hr />
+		  <div>
+			<p>Parece que has olvidado tu contraseña, pero no imoprta, para recuperar tu cuenta haz clic en el enlace 👇</p>
+			<a href="${urlClient}setNewPassword" target="_blank" rel="noopener noreferrer">
+			Recupera tu cuenta aqui!!!
+			</a>
+			<p>El enlace tiene una validez de 10 minutos</p>
+		  	<hr />
+		  	<h3>Atentamente</h3>
+			<p>Tus amigos de Cell-world</p>
+		  </div>        
+		`
+	})
+}
+
+module.exports = { transporter, mailActivateAccount, mailToRecoveryPassword }

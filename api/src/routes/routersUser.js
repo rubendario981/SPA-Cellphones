@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { registerUser, updateUser, login, userInfo, creatDatosPrueba, registerBuy, activateAccount } = require('../controllers/user.controllers');
+const { registerUser, updateUser, login, userInfo, creatDatosPrueba, registerBuy, activateAccount, recoveryPassword, sendMailToRecoveryPassword, setNewPasswordUser } = require('../controllers/user.controllers');
 const router = Router();
 
 router.post('/create', async (req, res) => {
@@ -23,5 +23,9 @@ router.get('/getProfile', userInfo);
 router.post('/dataTest', creatDatosPrueba )
 
 router.get('/activateAccount', activateAccount )
+
+router.post('/recoveryPassword', recoveryPassword )
+
+router.post('/newPassword', setNewPasswordUser)
 
 module.exports = router;

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
+import Swal from 'sweetalert2'
 // Importar modulos de firebase
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { createUser, login } from '../../../redux/actions';
+import axios from 'axios';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,6 +21,8 @@ const firebaseConfig = {
   appId: "1:316355123917:web:91b6aedd38591aa321e784",
   measurementId: "G-SH5V7XV0CP"
 };
+
+const URL = process.env.REACT_APP_URL || "http://localhost:3001" 
 
 const LoginForm = () => {
   const datosDePrueba = { email: "correo@mail.com", password: "12345" }
@@ -79,6 +83,52 @@ const LoginForm = () => {
             : alert("Error general \n " + error)
     }
   }
+
+  const recoveryPassword = async() => {
+    const data = await Swal.fire({
+      title: 'Ingresa tu correo',
+      input: 'text',
+      value: 'email',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar' ,
+      showLoaderOnConfirm: true,
+    })    
+
+    try {
+      const response = await axios.post(`${URL}/user/recoveryPassword`, { email: data.value })
+      if(response.status === 200){
+        await Swal.fire({
+          icon: 'success',
+          title: 'Proceso exitoso',
+          text: response.data.message,
+          showCancelButton: false,
+          confirmButtonText: "Aceptar"
+        })
+        localStorage.setItem('tokenRestorePasswd', response.data.token)
+      }
+      
+    } catch (error) {
+      if(error.response.data.message){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.response.data.message
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops... Intenta de nuevo',
+          text: "Error al tratar de recuperar tu contraseña"
+        })
+
+      }
+      console.log("Captura error", error);
+    }
+  }
   return (
     <div className='flex justify-center py-6 mb-40'>
       <div className="w-8/12 border-blue-300 shadow-md shadow-blue-300 rounded px-8 pt-6 pb-8 mb-4">
@@ -118,17 +168,27 @@ const LoginForm = () => {
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
               Iniciar sesion
             </button>
-            <button type="button"
+            {/* <button 
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               onClick={() => setInput(datosDePrueba)} >
               Datos de prueba
-            </button>
+            </button> */}
             <button type='reset'
               className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               onClick={() => setInput(initialState)} >
               Limpiar campos
             </button>
           </div>
+
+          <div className='flex flex-col items-center mt-5'>
+            <span>
+              Haz olvidado tu contraseña??
+              <button type='button'
+                className='py-1 px-3 rounded-md ml-3 text-blue-600 hover:text-white hover:bg-blue-600'
+                onClick={recoveryPassword}>👉Click aqui!!👈</button>
+            </span>
+          </div>
+          
           <div className='flex flex-col items-center mt-5'>
             <span>
               Aun no estas registrado?
