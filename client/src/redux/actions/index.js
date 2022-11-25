@@ -39,11 +39,15 @@ export const getListOs = () => {
   };
 };
 
-export const createCellPhone = (cell) => {
-  const data = cell;
+export const createCellPhone = (data) => {
+  // const data = cell;
   return async (dispatch) => {
     try {
-      const response = await axios.post(`${URL}/products/create`, data);
+      const response = await axios.post(`${URL}/products/create`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
       return dispatch({
         type: "CREATE_PRODUCT",
         payload: response.data,

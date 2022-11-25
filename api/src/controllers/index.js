@@ -2,7 +2,8 @@ const axios = require("axios");
 const { Cellphone, Os, Brand } = require("../db.js");
 const { Op } = require("sequelize");
 const { usuariosPrueba, creatDatosPrueba } = require("./user.controllers.js");
-const e = require("express");
+const fs = require("fs-extra");
+const { uploadImage } = require("../config/cloudinary.js");
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts(req, res) {
@@ -122,7 +123,7 @@ async function getProductById(id) {
     return product.length
       ? product
       : "El ID no esta relacionado a ningun producto";
-  } catch (error) {}
+  } catch (error) { }
 }
 
 //Trae todos los productos que en su nombre incluyan el name que se busca
@@ -143,17 +144,25 @@ async function getProductByName(name) {
 //Crea un producto en la base de datos
 async function createProduct(req, res) {
   const { name } = req.body;
+  const { files } = req?.files
 
   try {
+    const response = await uploadImage(files.tempFilePath)
+    await fs.unlink(files.tempFilePath)
     const createCell = await Cellphone.findOrCreate({
       where: { name },
-      defaults: { ...req.body },
+      defaults: { 
+        ...req.body, 
+        image: response.url, 
+        idImage: response.public_id 
+      }
     });
-    createCell
+    return createCell
       ? res.json(createCell)
       : res.status(400).json({ error: "No se pudo crear telefono" });
   } catch (error) {
-    res.status(500).json(error);
+    console.log("Error controller create product", error)
+    return res.status(500).json(error);
   }
 }
 
