@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux';
-import { createCellPhone } from '../../redux/actions';
+import { createBrand, createCellPhone } from '../../redux/actions';
 import Swal from "sweetalert2"
 
 const FormProduct = () => {
@@ -10,7 +10,7 @@ const FormProduct = () => {
   const initialState = { files: '', name: '', cpu: '', ram: '', screen: '', price: '', front_camera: '', rear_camera: '', internal_storage: '', battery: '', oId: '', brandId: '', precio: '', stock: '' }
 
   const [input, setInput] = useState(initialState)
-  const [images, setImages] = useState({files: []})
+  const [images, setImages] = useState({ files: [] })
   const [errors, setErrors] = useState({})
   const formProduct = useRef(null)
   const brands = useSelector(state => state.brands)
@@ -18,9 +18,9 @@ const FormProduct = () => {
   const products = useSelector(state => state.allProducts)
 
   useEffect(() => {
-    
+
   }, [images])
-  
+
 
   const dispatch = useDispatch()
 
@@ -85,8 +85,8 @@ const FormProduct = () => {
 
     setErrors(validateFields({ ...input, [e.target.name]: e.target.value }))
 
-    if(e.target.files){  
-      const files = Array.prototype.slice.call(e.target.files)    
+    if (e.target.files) {
+      const files = Array.prototype.slice.call(e.target.files)
       setImages(files)
     }
   }
@@ -101,8 +101,8 @@ const FormProduct = () => {
         icon: "success",
         title: "Producto creado",
         text: `Se ha creado el producto ${input.name} correctamente`
-      }) 
-      navigate(`/product/${response.payload[0].id}`)      
+      })
+      navigate(`/product/${response.payload[0].id}`)
     } else {
       console.log("Error al crear el producto", response)
       Swal.fire({
@@ -113,10 +113,28 @@ const FormProduct = () => {
     }
   }
 
+  const newBrand = async () => {
+    const brand = await Swal.fire({
+      icon: "question",
+      title: "Crear nueva marca",
+      input: "text",
+      inputPlaceholder: "Nombre nueva marca",
+      customClass: { input: 'capitalize' },
+      showCancelButton: true,
+      confirmButtonText: "Crear marca",
+      cancelButtonText: "Cancelar"
+    })
+    if (brand.value) {
+      const name = { name: brand.value }
+      const response = await dispatch(createBrand(name))
+      Swal.fire(`Nueva marca ${brand.value} creada correctamente`, '', 'success')
+      setInput({...input, brandId: response.payload.id})
+    }
+  }
+
   return (
     <div className='flex justify-center py-6'>
-			<div className="w-8/12 border-2 border-blue-300 shadow-md shadow-blue-300 rounded px-8 pt-6 pb-8 mb-4">
-      {/* <div className="w-8/12 bg-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-4"> */}
+      <div className="w-full mx-6 border-2 border-blue-300 shadow-md shadow-blue-300 rounded px-8 pt-6 pb-8 mb-4">
         <div className='font-bold text-2xl pb-8'>
           <h3>Creacion de producto</h3>
         </div>
@@ -148,10 +166,11 @@ const FormProduct = () => {
               value={input.brandId}
               required
             >
-              <option defaultValue value={''} hidden>Selecciona una opcion </option>
+              <option defaultValue value={''} >Selecciona una opcion </option>
               {brands.map((brand, index) => {
                 return (<option key={index} value={brand.id} >{brand.name}</option>)
               })}
+              <option onClick={newBrand}>Crear nueva marca</option>
             </select>
             {errors.brandId && <span className='text-red-500'>{errors.brandId}</span>}
           </div>
@@ -177,12 +196,12 @@ const FormProduct = () => {
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
               Imagen
             </label>
-            <input 
-              type="file" 
+            <input
+              type="file"
               className="shadow appearance-none border border-gray-500 rounded w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white pl-1 py-2"
               accept='image/*'
               name='files'
-              value={images.files || input.files} 
+              value={images.files || input.files}
               onChange={handleChanges}
               required
             />
@@ -336,7 +355,7 @@ const FormProduct = () => {
             </button> */}
             <button type='reset'
               className="bg-yellow-400 hover:bg-yellow-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              onClick={() =>{
+              onClick={() => {
                 setInput(initialState)
                 setErrors({})
               }} >

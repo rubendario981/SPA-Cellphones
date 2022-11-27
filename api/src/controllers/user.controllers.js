@@ -1,4 +1,4 @@
-const { Users, Cart, Cellphone, DetailCart } = require("../db.js");
+const { Users, Cart, Cellphone, DetailCart, Rating } = require("../db.js");
 const bcrypt = require("bcrypt");
 const Stripe = require("stripe");
 const SECRET_KEY_STRIPE =
@@ -379,14 +379,29 @@ const creatDatosPrueba = async (req, res) => {
       ).price,
       cellphoneId: 1,
     });
-
-    // Se busca los detalles de todos los carritos y se confirman sus datos
-    const findAllCarts = await Cart.findAll({
-      include: Cellphone,
-    });
-
+    
     console.log("Se crearon usuarios de prueba correctamente");
-    // return res.json({ findAllCarts });
+
+    await Rating.create({ cellphoneId: 1, title: "Muy buen producto",   comment: "Un muy buen celular a muy buen precio",         score: 4, userId: 1 })
+    await Rating.create({ cellphoneId: 1, title: "Buen servicio",       comment: "La atencion fue genial",                        score: 5, userId: 3 })
+    await Rating.create({ cellphoneId: 2, title: "No rinde la bateria", comment: "Tengo que cargar el celular cada dos horas",    score: 2, userId: 1 })
+    await Rating.create({ cellphoneId: 2, title: "Va lento al jugar",   comment: "No puedo jugar mi juego favorito, lo demas ok", score: 3, userId: 2 })
+    await Rating.create({ cellphoneId: 2, title: "Memoria muy chica",   comment: "No me alcanza su memoria interna para fotos",   score: 3, userId: 3 })
+    await Rating.create({ cellphoneId: 3, title: "Es lo maximo ",       comment: "El mejor celular que he tenido en la vida ",    score: 5, userId: 4 })
+    await Rating.create({ cellphoneId: 3, title: "Va muy bien",         comment: "Funcionamiento excelente para juegos",          score: 4, userId: 5 })
+    await Rating.create({ cellphoneId: 4, title: "Increible calidad",   comment: "La mejor compra en relacion calidad precio",    score: 4, userId: 1 })
+    await Rating.create({ cellphoneId: 4, title: "Justo lo que espere", comment: "Un amigo lo tiene y funciona muy bien",         score: 4, userId: 2 })
+    await Rating.create({ cellphoneId: 5, title: "Muy buen diseño ",    comment: "Tiene un diseño que me enamoro",                score: 5, userId: 6 })
+    await Rating.create({ cellphoneId: 5, title: "Camaras destacables", comment: "El set de camaras es espectacular",             score: 4, userId: 3 })
+    await Rating.create({ cellphoneId: 6, title: "Buena resolucion",    comment: "Las fotos se ven geniales en todo ambiente",    score: 4, userId: 2 })
+    await Rating.create({ cellphoneId: 6, title: "Pantalla intermite ", comment: "En ocasiones la pantalla enciende apaga",       score: 3, userId: 5 })
+    await Rating.create({ cellphoneId: 6, title: "Tamaño enorme",       comment: "El tamaño es muy grande y se resbala aveces",   score: 3, userId: 6 })
+    await Rating.create({ cellphoneId: 6, title: "Tamaño enorme",       comment: "El tamaño es muy grande y se resbala aveces",   score: 3, userId: 6 })
+    await Rating.create({ cellphoneId: 6, title: "Tamaño enorme",       comment: "El tamaño es muy grande y se resbala aveces",   score: 3, userId: 6 })
+    
+    // const allRatings = await Rating.findAll()
+    
+    console.log("Se crearon las puntuaciones de los celulares correctamente");
   } catch (error) {
     console.log("Error al crear usuarios de prueba", error);
     return res.status(500).json(error);

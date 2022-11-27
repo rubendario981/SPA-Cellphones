@@ -40,7 +40,6 @@ export const getListOs = () => {
 };
 
 export const createCellPhone = (data) => {
-  // const data = cell;
   return async (dispatch) => {
     try {
       const response = await axios.post(`${URL}/products/create`, data, {
@@ -57,6 +56,37 @@ export const createCellPhone = (data) => {
     }
   };
 };
+
+export const editCellphone = (data) =>{
+  return async(dispatch) =>{
+    try {
+      const updateCell = await axios.patch(`${URL}/products/updateCell`, data);
+      return dispatch({
+        type: "EDIT_PRODUCT",
+        payload: updateCell.data
+      })
+    } catch (error) {
+      console.log("Error redux actions edit cellphone", error);
+      return error
+      
+    }
+  }
+}
+
+export const createBrand = (data) =>{
+  return async(dispatch) =>{
+    try {
+      const newBrand = await axios.post(`${URL}/products/new-brand`, data)
+      return dispatch({
+        type: "CREATE_BRAND",
+        payload: newBrand.data[0]
+      })
+    } catch (error) {
+      console.log("Error controller creando marca nueva ", error);
+      return error
+    }
+  }
+}
 
 export function resetFilter() {
   return { type: "RESET_FILTER" };

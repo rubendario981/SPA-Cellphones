@@ -18,6 +18,7 @@ import Perfil from "./components/Perfil/Perfil";
 import Envio from "./components/Cart/Envio/Envio";
 import Pago from "./components/Cart/Pago/Pago";
 import RecoveryPassword from "./components/RecoveryPassword/RecoveryPassword";
+import DashBoard from "./components/DashBoardAdmin/DashBoard";
 
 const stripePromise = loadStripe(
   "pk_test_51M5u48DvLT9vn19qkH7KeTd6Ll4wZAhyGYTlYTLGsF2TVIUfRpl925HNDce6TS8kd4y3Exbei8G6W3NKhKqDmtIH00v4L6YcrT"
@@ -50,12 +51,12 @@ export default function App() {
           <Route exact path={"/register"} element={<FormUser />} />
           <Route exact path={"/login"} element={<LoginForm />} />
           <Route exact path={"/perfil"} element={<Perfil />} />
-          <Route
-            exact
-            path={"/setNewPassword"}
-            element={<RecoveryPassword />}
-          />
+          <Route exact path={"/setNewPassword"} element={<RecoveryPassword />}/>
+          {/* Dashboard Admin */}
+          <Route exact path={"/dashboardAdmin"} element={<DashBoard/>}/>
+
         </Routes>
+
         <Footer />
       </Elements>
     </React.Fragment>

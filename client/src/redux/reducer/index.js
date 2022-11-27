@@ -52,6 +52,16 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         showProducts: state.showProducts.concat(action.payload[0]),
       };
+    case "EDIT_PRODUCT":
+      return {
+        ...state,
+        showProducts: action.payload
+      };
+    case "CREATE_BRAND":
+      return {
+        ...state,
+        brands: state.brands.concat(action.payload)
+      };
 
     case "CLEAN_DETAIL":
       return {

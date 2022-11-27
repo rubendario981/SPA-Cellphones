@@ -144,7 +144,7 @@ async function getProductByName(name) {
 //Crea un producto en la base de datos
 async function createProduct(req, res) {
   const { name } = req.body;
-  const { files } = req?.files
+  const { files } = req?.files;
 
   try {
     const response = await uploadImage(files.tempFilePath)
@@ -159,10 +159,23 @@ async function createProduct(req, res) {
     });
     return createCell
       ? res.json(createCell)
-      : res.status(400).json({ error: "No se pudo crear telefono" });
+      : res.status(400).json({ error: "No se pudo crear telefono" });    
   } catch (error) {
     console.log("Error controller create product", error)
     return res.status(500).json(error);
+  }
+}
+
+const createBrand = async (req, res) => {
+  console.log(req.body);
+  try {
+    const newBrand = await Brand.findOrCreate({ where: { name: req.body.name } });
+    return newBrand 
+      ? res.json(newBrand)
+      : res.status(400).json("no se pudo crear la marca")
+  } catch (error) {
+    console.log("Error controller creando nueva marca", error);
+    return res.status(500).json(error)
   }
 }
 
@@ -199,17 +212,21 @@ async function updateStock(req, res) {
   }
 }
 
-//Crear un usuario.
-// async function createUser(user) {
-//   try {
-//     console.log(user);
-//     await Users.create(user);
-
-//     return `${user.name} creado.`;
-//   } catch (error) {
-//     return error;
-//   }
-// } //Proceso llevado al controlador de usuarios
+const updateCell = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const cellUpdated = await Cellphone.update(
+      { ...req.body },
+      { where: { id }}
+    )
+    return cellUpdated[0] > 0
+      ? res.json(await Cellphone.findAll())
+      : res.status(404).json("Celular no encontrado")
+  } catch (error) {
+    console.log("Error controller update cellphone", error);
+    return res.status(500).json(error)
+  }
+}
 
 module.exports = {
   getAllProducts,
@@ -219,4 +236,6 @@ module.exports = {
   getListBrands,
   getListOs,
   updateStock,
+  updateCell,
+  createBrand,
 };

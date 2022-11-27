@@ -76,7 +76,7 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Cellphone, Bill, Brand, Os, Cart, Users, DetailCart } =
+const { Cellphone, Bill, Brand, Os, Cart, Users, DetailCart, Rating } =
   sequelize.models;
 
 // Aca vendrian las relaciones
@@ -89,14 +89,20 @@ Cart.belongsTo(Users);
 Cart.belongsToMany(Cellphone, { through: DetailCart });
 Cellphone.belongsToMany(Cart, { through: DetailCart });
 
-Bill.belongsToMany(Cellphone, { through: "CellphoneBill" });
-Cellphone.belongsToMany(Bill, { through: "CellphoneBill" });
+// Bill.belongsToMany(Cellphone, { through: "CellphoneBill" }); // Futura funcionalidad 
+// Cellphone.belongsToMany(Bill, { through: "CellphoneBill" }); // Futura funcionalidad
 
 Os.hasMany(Cellphone);
 Cellphone.belongsTo(Os);
 
 Brand.hasMany(Cellphone);
 Cellphone.belongsTo(Brand);
+
+Users.hasMany(Rating);
+Rating.belongsTo(Users);
+
+Cellphone.hasMany(Rating);
+Rating.belongsTo(Cellphone);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

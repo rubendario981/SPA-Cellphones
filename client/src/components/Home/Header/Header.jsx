@@ -87,9 +87,9 @@ const Header = () => {
         {user.status === "Admin" &&
           <Link
             className="px-4 py-2 my-auto rounded-2xl mr-6 bg-blue-600 text-white hover:bg-blue-800 shadow-lg"
-            to={"create"}
+            to={"dashboardAdmin"}
           >
-            Crear producto
+            Panel Administrativo
           </Link>
         }
         <Link
