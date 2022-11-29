@@ -19,6 +19,7 @@ import Envio from "./components/Cart/Envio/Envio";
 import Pago from "./components/Cart/Pago/Pago";
 import RecoveryPassword from "./components/RecoveryPassword/RecoveryPassword";
 import DashBoard from "./components/DashBoardAdmin/DashBoard";
+import Home from "./components/HomeComponent/Home";
 
 const stripePromise = loadStripe(
   "pk_test_51M5u48DvLT9vn19qkH7KeTd6Ll4wZAhyGYTlYTLGsF2TVIUfRpl925HNDce6TS8kd4y3Exbei8G6W3NKhKqDmtIH00v4L6YcrT"
@@ -39,7 +40,8 @@ export default function App() {
         <Header />
         <Routes>
           {/* Productos */}
-          <Route exact path={"/"} element={<Products />} />
+          <Route exact path={"/prods"} element={<Products />} />
+          <Route exact path={"/"} element={<Home />} />
           <Route exact path={"/product/:id"} element={<Detail />} />
           <Route exact path={"/create"} element={<FormProduct />} />
           {/* Carrito */}

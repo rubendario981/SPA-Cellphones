@@ -2,6 +2,7 @@ const initialState = {
   allProducts: [],
   showProducts: [],
   filterProducts: [],
+  listStorage: [],
   detail: {},
   brands: [],
   os: [],
@@ -134,8 +135,38 @@ const rootReducer = (state = initialState, action) => {
         allProducts: action.payload,
         showProducts: action.payload,
       };
+    case "LIST_STORAGE":
+      const almacenamiento = []
+      state.allProducts.map(e => !almacenamiento.includes(e.internal_storage.split("G")[0].trim()) && almacenamiento.push(e.internal_storage.split("G")[0].trim()))
+      almacenamiento.sort((a, b)=> b - a).pop()
+      return {
+        ...state,
+        listStorage: almacenamiento
+      }
+    case "FILTER_BRANDS_CELLS":
+      const filterBrands = action.payload.map(e => state.allProducts.filter(cell => cell.brand.name === e))
+      return {
+        ...state,
+        showProducts: filterBrands.flat()
+      };
+    case "FILTER_STORAGE_CELLS":
+      const filterByStorage = action.payload.map(e => state.allProducts.filter(cell => cell.internal_storage.split("G")[0] === e))
+      return {
+        ...state,
+        showProducts: filterByStorage.flat()
+      };
+    case "FILTER_BY_BRAND_AND_STORAGE":
+      console.log("Redux recibiendo payload", action.payload);
+      const filterByBrand = action.payload[0].map(e => state.allProducts.filter(cell => cell.brand.name === e))
+      const filterByBrandAndStorage = action.payload[1].map(e => filterByBrand.flat().filter(cell => cell.internal_storage.split("G")[0] === e))
+      
+      return {
+        ...state,
+        showProducts: filterByBrandAndStorage.flat(Infinity)
+      };
+
     default:
-      return state;
+      return { ...state };
   }
 };
 

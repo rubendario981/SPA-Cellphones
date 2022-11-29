@@ -57,8 +57,8 @@ export const createCellPhone = (data) => {
   };
 };
 
-export const editCellphone = (data) =>{
-  return async(dispatch) =>{
+export const editCellphone = (data) => {
+  return async (dispatch) => {
     try {
       const updateCell = await axios.patch(`${URL}/products/updateCell`, data);
       return dispatch({
@@ -68,13 +68,13 @@ export const editCellphone = (data) =>{
     } catch (error) {
       console.log("Error redux actions edit cellphone", error);
       return error
-      
+
     }
   }
 }
 
-export const createBrand = (data) =>{
-  return async(dispatch) =>{
+export const createBrand = (data) => {
+  return async (dispatch) => {
     try {
       const newBrand = await axios.post(`${URL}/products/new-brand`, data)
       return dispatch({
@@ -225,3 +225,38 @@ export const resetProducts = (products) => {
     });
   };
 };
+
+export const listStorage = () =>{
+  return async (dispatch) => {
+    return dispatch({
+      type: "LIST_STORAGE"
+    })
+  }
+}
+
+export const filterBrandsCellphones = (data) => {
+  return async (dispatch) => {
+    return dispatch({
+      type: "FILTER_BRANDS_CELLS",
+      payload: data
+    })
+  }
+}
+
+export const filterStorageCellphones = (data) => {
+  return async (dispatch) =>{
+    return dispatch({
+      type: "FILTER_STORAGE_CELLS",
+      payload: data
+    })
+  }
+}
+
+export const filterByBrandAndStorage = (brands, storage) => {
+  return async (dispatch) => {
+    return dispatch({
+      type: "FILTER_BY_BRAND_AND_STORAGE",
+      payload: [brands, storage]
+    })
+  }
+}

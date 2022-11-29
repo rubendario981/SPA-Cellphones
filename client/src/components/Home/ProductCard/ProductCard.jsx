@@ -6,7 +6,7 @@ import withReactContent from 'sweetalert2-react-content'
 
 const MySwal = withReactContent(Swal)
 
-const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId }) => {
+const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, front_camera, rear_camera, cpu, battery, color, description, stock, oId, brandId, brand }) => {
 
   const addCarrito = () => {
     const productos = JSON.parse(localStorage.getItem('products'))
@@ -56,7 +56,6 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
 
   }
 
-
   return (
     <>
       <div id={id}>
@@ -79,8 +78,9 @@ const ProductCard = ({ id, name, image, price, screen, internal_storage, ram, fr
               </h3>
               <p className="mt-1 text-sm text-gray-500">{internal_storage}</p>
             </div>
-            <p className="text-sm font-medium text-gray-900">{price}</p>
+            <p className="text-sm font-medium text-gray-900">$ {price}</p>
           </div>
+          <p className="text-sm font-medium text-gray-900">Marca: {brand}</p>
         </div>
       </div>
     </>
