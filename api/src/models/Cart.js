@@ -7,10 +7,22 @@ module.exports = (sequelize) => {
     "cart",
     {
       status: {
-        type: DataTypes.ENUM("En proceso", "Por despachar", "Despachado", "Entregado"),
+        type: DataTypes.ENUM("Por despachar", "Despachado", "Entregado"),
         allowNull: false,
-        defaultValue: "En proceso"
+        defaultValue: "Por despachar"
       },
+      shipping: {
+        type: DataTypes.STRING,
+        defaultValue: ""
+      },
+      code: {
+        type: DataTypes.STRING,
+        defaultValue: ""
+      },
+      total: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+      }
     },
     { timestamps: false }
   );

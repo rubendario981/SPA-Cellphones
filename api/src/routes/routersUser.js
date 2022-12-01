@@ -11,6 +11,8 @@ const {
   setNewPasswordUser,
   sendEmailBuy,
   createdCartInDb,
+	getAllUsers,
+	manageUsers,
 } = require("../controllers/user.controllers");
 const router = Router();
 
@@ -43,5 +45,9 @@ router.post("/createdCartInDb", createdCartInDb);
 router.post("/recoveryPassword", recoveryPassword);
 
 router.post("/newPassword", setNewPasswordUser);
+
+router.get("/all-users", getAllUsers);
+
+router.post("/manage-users", manageUsers);
 
 module.exports = router;

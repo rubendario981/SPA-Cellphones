@@ -7,7 +7,9 @@ const {
   getListOs,
   updateStock,
   updateCell,
-  createBrand
+  createBrand,
+  getOrders,
+  updateOrder
 } = require("../controllers");
 const Cellphone = require("../models/Cellphone");
 const router = Router();
@@ -17,6 +19,10 @@ router.get("/", getAllProducts);
 router.get("/brands", getListBrands);
 
 router.get("/os", getListOs);
+
+router.get("/get-orders", getOrders);
+
+router.patch("/update-order", updateOrder);
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;

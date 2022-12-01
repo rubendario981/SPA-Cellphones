@@ -12,7 +12,7 @@ const CurrentCart = () => {
 		<div className='mb-16'>
 			<div className="flex mb-4">
 				<h5 className="font-bold text-center">
-					Carrito de compras del local storage
+					Carrito de compras
 				</h5>
 			</div>
 			{elementsCart.map(el => {

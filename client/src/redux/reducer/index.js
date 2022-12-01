@@ -8,6 +8,8 @@ const initialState = {
   os: [],
   user: {},
   historyCarts: [],
+  orders: [],
+	allUsers: []
 };
 
 function menorAMayor(a, b) {
@@ -164,6 +166,29 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         showProducts: filterByBrandAndStorage.flat(Infinity)
       };
+    case "GET_ORDERS":
+      return{
+        ...state,
+        orders: action.payload
+      }
+    case "UPDATE_ORDER":
+      return{
+        ...state,
+        orders: action.payload
+      }
+		case "ALL_USERS":
+			return{
+				...state,
+				allUsers: action.payload
+			}
+		case "MANAGE_USERS":
+			const index = state.allUsers.map(user => user.email).indexOf(action.payload.data.email)
+			const updateListUsers = state.allUsers.splice(index, 1, action.payload.data)
+			return{
+				...state,
+				allUsers: updateListUsers
+			}
+
 
     default:
       return { ...state };

@@ -1,9 +1,10 @@
 const axios = require("axios");
-const { Cellphone, Os, Brand } = require("../db.js");
+const { Cellphone, Os, Brand, Cart, Users } = require("../db.js");
 const { Op } = require("sequelize");
 const { usuariosPrueba, creatDatosPrueba } = require("./user.controllers.js");
 const fs = require("fs-extra");
 const { uploadImage } = require("../config/cloudinary.js");
+const { sendMailCodeShipping, sendMailOrderDelivered } = require("../config/nodemailer.js");
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts(req, res) {
@@ -151,15 +152,15 @@ async function createProduct(req, res) {
     await fs.unlink(files.tempFilePath)
     const createCell = await Cellphone.findOrCreate({
       where: { name },
-      defaults: { 
-        ...req.body, 
-        image: response.url, 
-        idImage: response.public_id 
+      defaults: {
+        ...req.body,
+        image: response.url,
+        idImage: response.public_id
       }
     });
     return createCell
       ? res.json(createCell)
-      : res.status(400).json({ error: "No se pudo crear telefono" });    
+      : res.status(400).json({ error: "No se pudo crear telefono" });
   } catch (error) {
     console.log("Error controller create product", error)
     return res.status(500).json(error);
@@ -170,7 +171,7 @@ const createBrand = async (req, res) => {
   console.log(req.body);
   try {
     const newBrand = await Brand.findOrCreate({ where: { name: req.body.name } });
-    return newBrand 
+    return newBrand
       ? res.json(newBrand)
       : res.status(400).json("no se pudo crear la marca")
   } catch (error) {
@@ -217,7 +218,7 @@ const updateCell = async (req, res) => {
   try {
     const cellUpdated = await Cellphone.update(
       { ...req.body },
-      { where: { id }}
+      { where: { id } }
     )
     return cellUpdated[0] > 0
       ? res.json(await Cellphone.findAll())
@@ -228,6 +229,38 @@ const updateCell = async (req, res) => {
   }
 }
 
+const getOrders = async (req, res) => {
+  try {
+    const orders = await Cart.findAll({
+      include: [{ model: Users }, { model: Cellphone }],
+    })
+    return res.json(orders)
+  } catch (error) {
+    console.log("Error controller on get orders", error);
+    return res.status(500).json(error)
+  }
+}
+
+const updateOrder = async (req, res) => {
+  const { id, status, shipping, code, total, user } = req.body
+  console.log(user.email, user.name);
+  try {
+    const updateCart = await Cart.update(
+      { status, shipping, code, total },
+      { where: { id } }
+    )
+    
+    updateCart[0] > 0 && status === "Despachado" && sendMailCodeShipping(user.email, user.name, total, shipping, code)
+    updateCart[0] > 0 && status === "Entregado" && sendMailOrderDelivered(user.email, user.name, shipping)
+    
+    return updateCart[0] > 0
+      ? res.json(await Cart.findAll({ include: [{ model: Users }, { model: Cellphone }] }))
+      : res.status(404).json("No se encontro el pedido")
+  } catch (error) {
+    console.log("Error controller update order/cart ", error);
+    return res.status(500).json(error)
+  }
+}
 module.exports = {
   getAllProducts,
   getProductById,
@@ -238,4 +271,6 @@ module.exports = {
   updateStock,
   updateCell,
   createBrand,
+  getOrders,
+  updateOrder,
 };

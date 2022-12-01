@@ -260,3 +260,64 @@ export const filterByBrandAndStorage = (brands, storage) => {
     })
   }
 }
+
+export const getOrders = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`${URL}/products/get-orders`);
+      return dispatch({
+        type: "GET_ORDERS",
+        payload: response.data
+      })
+      
+    } catch (error) {
+      console.log("Error Redux actions on get orders", error);
+    }
+  }
+}
+
+export const updateOrder = (data) => {
+  return async (dispatch) =>{
+    try {
+      const response = await axios.patch(`${URL}/products/update-order`, data)
+      return response.status === 200 
+        && dispatch({
+        type: "UPDATE_ORDER",
+        payload: response.data
+      })
+
+    } catch (error) {
+      console.log("Error Redux actions on update order", error);
+      return error
+    }
+  }
+}
+
+export const getAllUsers = () =>{
+	return async (dispatch)=>{
+		try {
+			const response = await axios.get(`${URL}/user/all-users`)
+			return dispatch({
+				type: "ALL_USERS",
+				payload: response.data
+			})
+		} catch (error) {
+			console.log("Error Redux actions on get all users", error);
+		}
+	}
+}
+
+export const manageUsers = (data) =>{
+	return async (dispatch)=>{
+		try {
+			const response = await axios.post(`${URL}/user/manage-users`, data)
+			return dispatch({
+				type: "MANAGE_USERS",
+				payload: response
+			})
+		} catch (error) {
+			console.log("Error Redux actions on manage users", error.response);
+			return error.response
+		}
+	}
+}

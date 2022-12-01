@@ -97,6 +97,16 @@ const login = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) =>{
+	try {
+		const allUsers = await Users.findAll()
+		return res.json(allUsers)
+	} catch (error) {
+		console.log("Error controller user on get all users", error);
+		return res.status(500).json(error)
+	}
+}
+
 const findOrCreateCart = async (req, res) => {
   console.log("creando Carriito", req.body);
   try {
@@ -184,11 +194,12 @@ const userInfo = async (req, res) => {
 
 const creatDatosPrueba = async (req, res) => {
   const crearCarritos = [
-    { userId: 1, status: "En proceso" },
+    { userId: 1, status: "Por despachar" },
     { userId: 1, status: "Entregado" },
     { userId: 2, status: "Por despachar" },
     { userId: 3, status: "Despachado" },
     { userId: 4, status: "Entregado" },
+    { userId: 5, status: "Por despachar" },
   ];
 
   try {
@@ -379,6 +390,30 @@ const creatDatosPrueba = async (req, res) => {
       ).price,
       cellphoneId: 1,
     });
+    await DetailCart.create({
+      cartId: 6,
+      cantidad: 3,
+      valor_unitario: (
+        await Cellphone.findByPk(10, { attributes: ["price"] })
+      ).price,
+      cellphoneId: 10,
+    });
+    await DetailCart.create({
+      cartId: 6,
+      cantidad: 2,
+      valor_unitario: (
+        await Cellphone.findByPk(8, { attributes: ["price"] })
+      ).price,
+      cellphoneId: 8,
+    });
+    await DetailCart.create({
+      cartId: 6,
+      cantidad: 1,
+      valor_unitario: (
+        await Cellphone.findByPk(3, { attributes: ["price"] })
+      ).price,
+      cellphoneId: 3,
+    });
     
     console.log("Se crearon usuarios de prueba correctamente");
 
@@ -467,6 +502,22 @@ const createdCartInDb = async (req, res) => {
   }
 };
 
+const manageUsers = async (req, res) =>{
+	const { email } = req.body;
+	try {
+		const response = await Users.update(
+			{ ...req.body },
+			{ where: { email }}
+		)
+		return response[0] > 0
+			? res.json(await Users.findOne({ where: { email }}))
+			: res.status(404).json(`No se pudo actualizar usuario con email ${email}`)
+	} catch (error) {
+		console.log("Error on controller users on manage user ", error);
+		return res.status(500).json(error)
+	}
+}
+
 module.exports = {
   registerUser,
   updateUser,
@@ -479,4 +530,6 @@ module.exports = {
   setNewPasswordUser,
   sendEmailBuy,
   createdCartInDb,
+	getAllUsers,
+	manageUsers,
 };
