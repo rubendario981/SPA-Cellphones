@@ -5,43 +5,18 @@ const path = require("path");
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 
-// let sequelize =
-//   process.env.NODE_ENV === "production"
-//     ? new Sequelize({
-//         database: DB_NAME,
-//         dialect: "postgres",
-//         host: DB_HOST,
-//         port: 5432,
-//         username: DB_USER,
-//         password: DB_PASSWORD,
-//         pool: {
-//           max: 3,
-//           min: 1,
-//           idle: 10000,
-//         },
-//         dialectOptions: {
-//           ssl: {
-//             require: true,
-//             rejectUnauthorized: false,
-//           },
-//           keepAlive: true,
-//         },
-//         ssl: true,
-//       })
-//     : new Sequelize(
-//         `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-//         {
-//           logging: false,
-//           native: false,
-//         }
-//       );
-
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
   dialect: "postgres",
   logging: false,
   native: false,
+	dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 }); 
 
 const tryConnec = async ()=>{
@@ -80,17 +55,11 @@ const { Cellphone, Bill, Brand, Os, Cart, Users, DetailCart, Rating } =
   sequelize.models;
 
 // Aca vendrian las relaciones
-Users.hasMany(Bill);
-Bill.belongsTo(Users);
-
 Users.hasMany(Cart);
 Cart.belongsTo(Users);
 
 Cart.belongsToMany(Cellphone, { through: DetailCart });
 Cellphone.belongsToMany(Cart, { through: DetailCart });
-
-// Bill.belongsToMany(Cellphone, { through: "CellphoneBill" }); // Futura funcionalidad 
-// Cellphone.belongsToMany(Bill, { through: "CellphoneBill" }); // Futura funcionalidad
 
 Os.hasMany(Cellphone);
 Cellphone.belongsTo(Os);

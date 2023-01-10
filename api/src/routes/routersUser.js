@@ -13,6 +13,7 @@ const {
   createdCartInDb,
 	getAllUsers,
 	manageUsers,
+	nameUser,
 } = require("../controllers/user.controllers");
 const router = Router();
 
@@ -34,8 +35,6 @@ router.post("/registerBuy", registerBuy);
 
 router.get("/getProfile", userInfo);
 
-router.post("/dataTest", creatDatosPrueba);
-
 router.get("/activateAccount", activateAccount);
 
 router.post("/sendEmail", sendEmailBuy);
@@ -49,5 +48,7 @@ router.post("/newPassword", setNewPasswordUser);
 router.get("/all-users", getAllUsers);
 
 router.post("/manage-users", manageUsers);
+
+router.get("/name-user", nameUser)
 
 module.exports = router;

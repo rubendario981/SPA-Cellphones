@@ -1,10 +1,10 @@
 const axios = require("axios");
-const { Cellphone, Os, Brand, Cart, Users } = require("../db.js");
+const { Cellphone, Os, Brand, Cart, Users, Rating } = require("../db.js");
 const { Op } = require("sequelize");
-const { usuariosPrueba, creatDatosPrueba } = require("./user.controllers.js");
 const fs = require("fs-extra");
 const { uploadImage } = require("../config/cloudinary.js");
 const { sendMailCodeShipping, sendMailOrderDelivered } = require("../config/nodemailer.js");
+const { createUsers, createCarts, createRatings } = require("../config/dataTest.js");
 
 //Trae todos los productos de la api y los vuelca a la base de datos
 async function getAllProducts(req, res) {
@@ -80,7 +80,9 @@ async function getAllProducts(req, res) {
       const cellphonesCreated = await Cellphone.findAll({
         include: [{ model: Brand }, { model: Os }],
       });
-      await creatDatosPrueba();
+			await createUsers();
+			await createCarts();
+			await createRatings();
       return res?.json(
         cellphonesCreated.length > 0
           ? cellphonesCreated.sort((a, b) => a.id - b.id)
@@ -115,16 +117,19 @@ const getListOs = async (req, res) => {
 };
 
 //Trae un producto segun su id
-async function getProductById(id) {
+async function getProductById(req, res) {
+	const id = req.params.id
   try {
-    let product = await getProductsWithDB();
-
-    product = product.filter((e) => e.id == id);
-
-    return product.length
-      ? product
-      : "El ID no esta relacionado a ningun producto";
-  } catch (error) { }
+		const findCell = await Cellphone.findByPk(id, {
+			include: [ {model: Brand }, {model: Os}, { model: Rating }]
+		})
+    return findCell 
+			? res.json(findCell)
+			: res.status(404).json(`There are'n cellphone with id ${id}`)
+  } catch (error) {
+		console.log("Error on get product by Id", error);
+		return res.status(500).json(error)
+	}
 }
 
 //Trae todos los productos que en su nombre incluyan el name que se busca
@@ -180,20 +185,6 @@ const createBrand = async (req, res) => {
   }
 }
 
-//Trae de la base de datos todos los productos
-async function getProductsWithDB() {
-  try {
-    let DBInfo = await Cellphone.findAll({
-      include: [{ model: Brand }, { model: Os }],
-    });
-    if (!DBInfo.length) {
-      return "La base de datos se encuentra vacia.";
-    }
-    return DBInfo;
-  } catch (error) {
-    return error;
-  }
-}
 async function updateStock(req, res) {
   const products = req.body;
   try {

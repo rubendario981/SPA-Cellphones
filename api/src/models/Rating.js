@@ -7,15 +7,17 @@ module.exports = (sequelize) => {
     "rating",
     {
       title: {
-        type: DataTypes.STRING,		
+        type: DataTypes.STRING,
+				defaultValue: ''
       },
       comment: {
-        type: DataTypes.STRING,		
+        type: DataTypes.STRING,
+				defaultValue: ''
       },
       score: {
-        type: DataTypes.INTEGER,		
+        type: DataTypes.INTEGER,
+				defaultValue: 0
       }
-    },
-    { timestamps: false }
+    }
   );
 };

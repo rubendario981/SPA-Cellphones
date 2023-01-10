@@ -8,9 +8,11 @@ module.exports = (sequelize) => {
     {
       cantidad: {
         type: DataTypes.INTEGER,
+				defaultValue: 0
       },
       valor_unitario: {
         type: DataTypes.INTEGER,
+				defaultValue: 0
       },
     },
     { timestamps: false }

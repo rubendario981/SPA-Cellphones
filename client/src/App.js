@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getProducts, getListBrands, getListOs } from "./redux/actions";
+import { getProducts, getListBrands, getListOs, listStorage } from "./redux/actions";
 import { Route, Routes } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -26,12 +26,15 @@ const stripePromise = loadStripe(
 );
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();	
+	const cartProduct = localStorage.getItem("products")
+	!cartProduct && localStorage.setItem("products", "[]")
 
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getListBrands());
     dispatch(getListOs());
+		dispatch(listStorage())
   }, [dispatch]);
 
   return (

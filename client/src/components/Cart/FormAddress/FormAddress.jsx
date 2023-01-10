@@ -19,7 +19,7 @@ export default function FormAddress({ update, setUpdate, setBoolean, boolean }) 
 
   return (
     <>
-      <div className="flex flex-col w-full h-screen mr-5 justify-center rounded-3xl items-start border border-blue-500 bg-stone-300/40 border border-blue-500/20">
+      <div className="flex flex-col w-full h-screen mr-5 justify-center rounded-3xl items-start border-blue-500 bg-stone-300/40 border border-blue-500/20">
         <form className="flex m-auto flex-col" onSubmit={(e) => handleSubmit(e)}>
           <h1>Debe ingresar una direccion para el envio de su pedido.</h1>
           <label htmlFor="pais" >Pais</label>

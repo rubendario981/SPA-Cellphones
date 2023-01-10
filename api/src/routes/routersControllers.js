@@ -24,14 +24,7 @@ router.get("/get-orders", getOrders);
 
 router.patch("/update-order", updateOrder);
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    return res.json(await getProductById(id));
-  } catch (error) {
-    res.json(error);
-  }
-});
+router.get("/:id", getProductById);
 
 router.post("/create", createProduct);
 

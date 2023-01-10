@@ -19,7 +19,7 @@ const CurrentCart = () => {
 				return (
 					<div key={el.id} className="w-11/12 ml-3 mx-auto px-4 bg-white border rounded-lg shadow-md dark:border-gray-700 mb-3">
 						<div className="flow-root">
-							<ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
+							<ul className="divide-y divide-gray-200 dark:divide-gray-700">
 								<li className="py-3 sm:py-4">
 									<div className="flex items-center space-x-4">
 										<div className="flex-shrink-0">

@@ -10,6 +10,7 @@ module.exports = (sequelize) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+				defaultValue: ''
       },
       email: {
         type: DataTypes.STRING,
@@ -18,18 +19,23 @@ module.exports = (sequelize) => {
       },
       password: {
         type: DataTypes.STRING,
+				defaultValue: ''
       },
       country: {
         type: DataTypes.STRING,
+				defaultValue: ''
       },
       city: {
         type: DataTypes.STRING,
+				defaultValue: ''
       },
       address: {
         type: DataTypes.STRING,
+				defaultValue: ''
       },
       card_number: {
         type: DataTypes.STRING,
+				defaultValue: ''
       },
       status: {
         type: DataTypes.ENUM("Admin", "Inactivo", "User", "Suspendido", "Eliminado"),

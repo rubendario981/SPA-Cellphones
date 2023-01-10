@@ -1,12 +1,11 @@
 import React from "react";
 import { Fragment, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, FunnelIcon } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
-import { ordenar } from "../../../redux/actions";
+import { sortByName } from "../../../redux/actions";
 import { useDispatch } from "react-redux";
 
 function classNames(...classes) {
@@ -28,12 +27,12 @@ const Order = () => {
   function handleSort(event) {
     setOrden(event.target.value);
     setTimeout(() => {
-      dispatch(ordenar(event.target.value));
+      dispatch(sortByName(event.target.value));
     }, 500);
   }
 
   useEffect(() => {
-    dispatch(ordenar(orden));
+    dispatch(sortByName(orden));
   }, []);
 
   return (
