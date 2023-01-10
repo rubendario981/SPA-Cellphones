@@ -23,7 +23,15 @@ server.use(
   session({ secret: "pf-henry", resave: false, saveUninitialized: false })
 );
 server.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+	const allowedOrigins = [
+		'http://localhost:3000', 
+		'https://spa-cellphones-962wyy6f7-rubendario981.vercel.app'
+	];
+	const origin = req.headers.origin;
+	if (allowedOrigins.includes(origin)) {
+		res.setHeader('Access-Control-Allow-Origin', origin);
+	}
+  // res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
